@@ -18,6 +18,9 @@
     <sprite>sprites\sprBall</sprite>
     <sprite>sprites\sprEnemy</sprite>
     <sprite>sprites\sprButton2</sprite>
+    <sprite>sprites\sprAllianceWall</sprite>
+    <sprite>sprites\sprDrop</sprite>
+    <sprite>sprites\sprite14</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -42,6 +45,7 @@
     <objects name="field">
       <object>objects\objBlock</object>
       <object>objects\objBlocker</object>
+      <object>objects\objAllianceWall</object>
     </objects>
     <object>objects\objButton</object>
     <object>objects\objGear</object>

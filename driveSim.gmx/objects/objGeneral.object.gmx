@@ -29,8 +29,8 @@
 ///general
 
 ///field
-globalvar pixelToCentimeter;
-pixelToCentimeter=1;
+globalvar px2cm;
+px2cm = 1;
 globalvar pixelToEncoder;
 
 ///robot
@@ -86,8 +86,13 @@ globalvar robotTempDir;
           <argument>
             <kind>1</kind>
             <string>///creation stuff
+//general
 texture_set_interpolation(false);
 window_set_fullscreen(true);
+
+//power up field
+instance_create(0, 76 * px2cm, objAllianceWall);
+instance_create(room_width - objAllianceWall.sprite_width, 76 * px2cm, objAllianceWall);
 </string>
           </argument>
         </arguments>
