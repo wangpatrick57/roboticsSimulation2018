@@ -36,9 +36,11 @@ globalvar pixelToEncoder;
 ///robot
 //km
 globalvar topSpd; //this spd is multiplied off of for thrust controls
-topSpd = (880 / room_speed);
+topSpd = (600 / room_speed);
+globalvar currTopSpd;
+currTopSpd = topSpd;
 globalvar baseTurnSpd; //the amount of degrees to turn per degree of steering wheel turn
-baseTurnSpd = 4 / room_speed;
+baseTurnSpd = 2.5 / room_speed;
 globalvar angleGrace;
 angleGrace = 10;
 //other
@@ -51,9 +53,11 @@ iDir = 0;
 globalvar test;
 test=5;
 globalvar time;
+globalvar cubeDropDist;
+cubeDropDist = 80;
 globalvar laserTimer;
-laserTimer=100;
-time=0;
+laserTimer = 100;
+time = 0;
 
 globalvar controlling;
 controlling=true;

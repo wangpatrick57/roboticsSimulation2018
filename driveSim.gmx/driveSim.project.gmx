@@ -7,6 +7,7 @@
   <sounds name="sound"/>
   <sprites name="sprites">
     <sprite>sprites\sprBlueRobot</sprite>
+    <sprite>sprites\sprBlueRobotHoldingCube</sprite>
     <sprite>sprites\sprBlocker</sprite>
     <sprite>sprites\sprTitle</sprite>
     <sprite>sprites\sprLaser</sprite>
@@ -20,7 +21,11 @@
     <sprite>sprites\sprButton2</sprite>
     <sprite>sprites\sprAllianceWall</sprite>
     <sprite>sprites\sprDrop</sprite>
-    <sprite>sprites\sprite14</sprite>
+    <sprite>sprites\sprPowerCube</sprite>
+    <sprite>sprites\sprPickUpCheck</sprite>
+    <sprite>sprites\sprSwitchEndBlue</sprite>
+    <sprite>sprites\sprSwitchEndRed</sprite>
+    <sprite>sprites\sprSwitchInBetween</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -32,11 +37,13 @@
     <script>scripts\scrMakeLasers.gml</script>
     <script>scripts\scrGetEncoderCounts.gml</script>
     <script>scripts\scrBallMove.gml</script>
+    <script>scripts\scrGetOutOfBlock.gml</script>
   </scripts>
   <objects name="objects">
     <objects name="robot">
       <object>objects\objRobot</object>
       <object>objects\objRobotController</object>
+      <object>objects\objPickUpCheck</object>
     </objects>
     <objects name="general">
       <object>objects\objGeneral</object>
@@ -44,8 +51,13 @@
     </objects>
     <objects name="field">
       <object>objects\objBlock</object>
+      <object>objects\objMoveableSolid</object>
       <object>objects\objBlocker</object>
       <object>objects\objAllianceWall</object>
+      <object>objects\objPowerCube</object>
+      <object>objects\objSwitchInBetween</object>
+      <object>objects\objSwitchEnd</object>
+      <object>objects\objCubePlaceable</object>
     </objects>
     <object>objects\objButton</object>
     <object>objects\objGear</object>
@@ -57,6 +69,7 @@
     <object>objects\objButton2</object>
   </objects>
   <rooms name="rooms">
+    <room>rooms\rmTesting</room>
     <room>rooms\rmPowerUp</room>
     <room>rooms\UI</room>
     <room>rooms\obstacle</room>

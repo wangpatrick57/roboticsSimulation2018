@@ -10,7 +10,7 @@ var dDir;
 
 //fake driveSim function for testing before we get the actual one
 dHPos = 0;
-dVPos = thr * topSpd;
+dVPos = thr * currTopSpd;
 
 if (abs(stw) < abs(angleGrace)) {
 dDir = 0;
@@ -36,7 +36,7 @@ var dDir;
 
 //fake driveSim function for testing before we get the actual one
 dHPos = 0;
-dVPos = thr * topSpd;
+dVPos = thr * currTopSpd;
 
 if (abs(stw) < abs(angleGrace)) {
 dDir = 0;

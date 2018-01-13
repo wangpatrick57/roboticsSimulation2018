@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>0</depth>
   <persistent>0</persistent>
-  <parentName>objBlocker</parentName>
+  <parentName>self</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -26,6 +26,10 @@
           <argument>
             <kind>1</kind>
             <string>///creation stuff
+//stats
+mass = 18;
+
+//necessary vars
 cid = robotTempCid; //id of the controller, will use later when making server
 xPos = robotTempXPos; //this variable will be accessed by the controller
 yPos = robotTempYPos; //same
@@ -35,8 +39,15 @@ pYPos = yPos;
 dXPos = 0;
 dYPos = 0;
 dDir = 0;
-depth=-1;
-mass=18;
+depth = -1;
+xVel = 0; //m/s
+yVel = 0; //m/s
+p = 0; //kgm/s
+moveableCollisionId = noone;
+pickUpId = noone;
+holdingId = noone;
+putDown = false;
+
 //initial stuff
 x = scrRound(xPos);
 y = scrRound(yPos);
@@ -64,7 +75,7 @@ image_angle = dir;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///move and turn
+            <string>///actions
 pos = scrMove(id, xPos, yPos, dXPos, dYPos); //moves straight in this dx and dy and handles collisions
 xPos = pos[0];
 yPos = pos[1];
@@ -76,20 +87,36 @@ image_angle = dir;
 
 //restart
 if (keyboard_check_direct(ord("R"))) {
-xPos = iXPos;
-yPos = iYPos;
-dir = iDir;
+    xPos = iXPos;
+    yPos = iYPos;
+    dir = iDir;
 }
+
 if(room==obstacle){
     if(place_meeting(x,y,objLaser)){
-    
         controlling=false;
         instance_destroy();
-    
     }
 }
-if(!place_meeting(x,y,objRubber)){
-    topSpd=220/room_speed;
+
+if (!place_meeting(x,y,objRubber)) {
+    currTopSpd = topSpd;
+}
+
+if (pickUpId != noone &amp;&amp; holdingId == noone) {
+    holdingId = pickUpId;
+    holdingId.x = -50;
+    holdingId.y = -50;
+}
+
+pickUpId = noone;
+
+if (putDown &amp;&amp; holdingId != noone) {
+    holdingId.x = xPos + cubeDropDist * dcos(image_angle);
+    holdingId.y = yPos - cubeDropDist * dsin(image_angle);
+    holdingId.image_angle = image_angle;
+    holdingId = noone;
+    putDown = false;
 }
 
     
@@ -113,7 +140,13 @@ if(!place_meeting(x,y,objRubber)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string></string>
+            <string>///sprite and image
+if (holdingId != noone) {
+    sprite_index = sprBlueRobotHoldingCube;
+} else {
+    sprite_index = sprBlueRobot;
+}
+</string>
           </argument>
         </arguments>
       </action>
