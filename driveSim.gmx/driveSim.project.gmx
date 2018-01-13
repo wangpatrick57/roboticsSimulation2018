@@ -26,6 +26,10 @@
     <sprite>sprites\sprSwitchEndBlue</sprite>
     <sprite>sprites\sprSwitchEndRed</sprite>
     <sprite>sprites\sprSwitchInBetween</sprite>
+    <sprites name="numbers">
+      <sprite>sprites\sprBlueNumber</sprite>
+      <sprite>sprites\sprRedNumber</sprite>
+    </sprites>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -58,6 +62,8 @@
       <object>objects\objSwitchInBetween</object>
       <object>objects\objSwitchEnd</object>
       <object>objects\objCubePlaceable</object>
+      <object>objects\objBlueNumber</object>
+      <object>objects\objRedNumber</object>
     </objects>
     <object>objects\objButton</object>
     <object>objects\objGear</object>

@@ -118,7 +118,6 @@ if(controlling){
     
     if (input[3]) {
         robotId.putDown = true;
-        show_debug_message("put down");
     }
     
     var pEnc = enc;

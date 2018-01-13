@@ -97,6 +97,23 @@ window_set_fullscreen(true);
 //power up field
 instance_create(0, 76 * px2cm, objAllianceWall);
 instance_create(room_width - objAllianceWall.sprite_width, 76 * px2cm, objAllianceWall);
+var temp = instance_create(0, 0, objBlueNumber);
+var numberWidth = temp.sprite_width;
+
+with (temp) {
+    instance_destroy();
+}
+
+var numberInBetweenDist = 10;
+var xOffset = 100;
+var yOffset = 50;
+var numNumbers = 3;
+
+for (var i = 0; i &lt; numNumbers; i++) {
+    var tempX = xOffset + numberWidth / 2 + i * (numberWidth + numberInBetweenDist);
+    instance_create(tempX, yOffset, objBlueNumber);
+    instance_create(room_width - tempX, yOffset, objRedNumber);
+}
 </string>
           </argument>
         </arguments>

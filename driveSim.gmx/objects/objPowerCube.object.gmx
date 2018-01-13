@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>-1</depth>
   <persistent>0</persistent>
-  <parentName>self</parentName>
+  <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -56,6 +56,10 @@ if (endId != noone &amp;&amp; !placed) {
     x = random_range(endId.startX, endId.endX);
     y = random_range(endId.startY, endId.endY);
     placed = true;
+}
+
+if (!placed) {
+    scrGetOutOfBlock();
 }
 </string>
           </argument>

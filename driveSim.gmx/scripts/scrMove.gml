@@ -22,7 +22,7 @@ while (abs(totalDYPos) < abs(maxDYPos) && !place_meeting(tryXPos, tryYPos - 2 * 
     totalDYPos -= yStep;
 }
 
-//scrGetOutOfBlock();
+scrGetOutOfBlock();
 var tryPos;
 tryPos[0] = tryXPos;
 tryPos[1] = tryYPos;
