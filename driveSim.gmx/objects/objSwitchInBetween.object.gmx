@@ -26,25 +26,22 @@
           <argument>
             <kind>1</kind>
             <string>///creation stuff
-var temp = instance_create(0, 0, objSwitchEnd);
-var endHeight = temp.sprite_height;
-
-with (temp) {
-    instance_destroy();
-}
-
-var top = instance_create(x, y - sprite_height / 2 - endHeight / 2, objSwitchEnd);
-var bot = instance_create(x, y + sprite_height / 2 + endHeight / 2, objSwitchEnd);
+var plateHeight = scrGetHeight(objSwitchPlate);
+redCubes = 0;
+blueCubes = 0;
 
 if (random(1) &gt;= 0.5) {
-    top.side = "blue";
-    bot.side = "red";
-    bot.sprite_index = sprSwitchEndRed;
+    topSide = "blue";
+    botSide = "red";
 } else {
-    top.side = "red";
-    bot.side = "blue";
-    top.sprite_index = sprSwitchEndRed;
+    topSide = "red";
+    botSide = "blue";
 }
+
+tempSide = topSide;
+var top = instance_create(id, y - sprite_height / 2 - plateHeight / 2, objSwitchPlate);
+tempSide = botSide;
+var bot = instance_create(id, y + sprite_height / 2 + plateHeight / 2, objSwitchPlate);
 </string>
           </argument>
         </arguments>

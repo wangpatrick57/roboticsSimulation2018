@@ -54,7 +54,13 @@ if (controlScheme == "irl") {
     if (mouse_check_button(mb_left)) {
         stw = 0;
     } else {
-        stw = point_direction(room_width / 2, room_height, mouse_x, mouse_y) - 90;
+        var tempY = mouse_y;
+        
+        if (tempY > room_height) {
+            tempY = room_height;
+        }
+        
+        stw = point_direction(room_width / 2, room_height, mouse_x, tempY) - 90;
     }
 } else {
     show_debug_message("you entered the wrong thing for controlScheme");

@@ -12,12 +12,12 @@ var yStep = maxDYPos / hyp;
 var totalDXPos = 0;
 var totalDYPos = 0;
 
-while (abs(totalDXPos) < abs(maxDXPos) && !place_meeting(tryXPos + 2 * xStep, tryYPos, objBlock)) {
+while (abs(totalDXPos) < abs(maxDXPos) && !place_meeting(tryXPos + 10 * xStep, tryYPos, objBlock)) {
     tryXPos += xStep;
     totalDXPos += xStep;
 }
 
-while (abs(totalDYPos) < abs(maxDYPos) && !place_meeting(tryXPos, tryYPos - 2 * yStep, objBlock)) {
+while (abs(totalDYPos) < abs(maxDYPos) && !place_meeting(tryXPos, tryYPos - 10 * yStep, objBlock)) {
     tryYPos -= yStep;
     totalDYPos -= yStep;
 }

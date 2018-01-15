@@ -23,9 +23,10 @@
     <sprite>sprites\sprDrop</sprite>
     <sprite>sprites\sprPowerCube</sprite>
     <sprite>sprites\sprPickUpCheck</sprite>
-    <sprite>sprites\sprSwitchEndBlue</sprite>
-    <sprite>sprites\sprSwitchEndRed</sprite>
+    <sprite>sprites\sprBluePlate</sprite>
+    <sprite>sprites\sprRedPlate</sprite>
     <sprite>sprites\sprSwitchInBetween</sprite>
+    <sprite>sprites\sprScaleInBetween</sprite>
     <sprites name="numbers">
       <sprite>sprites\sprBlueNumber</sprite>
       <sprite>sprites\sprRedNumber</sprite>
@@ -42,6 +43,10 @@
     <script>scripts\scrGetEncoderCounts.gml</script>
     <script>scripts\scrBallMove.gml</script>
     <script>scripts\scrGetOutOfBlock.gml</script>
+    <script>scripts\scrPow.gml</script>
+    <script>scripts\scrInstancePlaceList.gml</script>
+    <script>scripts\scrGetWidth.gml</script>
+    <script>scripts\scrGetHeight.gml</script>
   </scripts>
   <objects name="objects">
     <objects name="robot">
@@ -60,7 +65,9 @@
       <object>objects\objAllianceWall</object>
       <object>objects\objPowerCube</object>
       <object>objects\objSwitchInBetween</object>
-      <object>objects\objSwitchEnd</object>
+      <object>objects\objScaleInBetween</object>
+      <object>objects\objSwitchPlate</object>
+      <object>objects\objScalePlate</object>
       <object>objects\objCubePlaceable</object>
       <object>objects\objBlueNumber</object>
       <object>objects\objRedNumber</object>

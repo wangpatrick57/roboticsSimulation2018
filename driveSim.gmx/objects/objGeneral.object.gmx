@@ -25,13 +25,28 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///globalvars
+            <string>///vars
+///globalvars
 ///general
 
 ///field
 globalvar px2cm;
 px2cm = 1;
 globalvar pixelToEncoder;
+globalvar blueScore;
+blueScore = 0;
+globalvar redScore;
+redScore = 0;
+globalvar blueSwitchCubes;
+blueSwitchCubes = 0;
+globalvar redSwitchCubes;
+redSwitchCubes = 0;
+globalvar redSwitchScore;
+redSwitchScore = 1;
+globalvar blueSwitchScore;
+blueSwitchScore = 1;
+globalvar scaleScore;
+scaleScore = 1;
 
 ///robot
 //km
@@ -90,20 +105,19 @@ globalvar robotTempDir;
           <argument>
             <kind>1</kind>
             <string>///creation stuff
-//general
+///general
+randomize();
 texture_set_interpolation(false);
 window_set_fullscreen(true);
 
-//power up field
+///power up field
+//walls
 instance_create(0, 76 * px2cm, objAllianceWall);
 instance_create(room_width - objAllianceWall.sprite_width, 76 * px2cm, objAllianceWall);
-var temp = instance_create(0, 0, objBlueNumber);
-var numberWidth = temp.sprite_width;
 
-with (temp) {
-    instance_destroy();
-}
-
+//score
+var numberWidth = scrGetWidth(objRedNumber);
+var numberHeight = scrGetHeight(objRedNumber);
 var numberInBetweenDist = 10;
 var xOffset = 100;
 var yOffset = 50;
@@ -111,8 +125,48 @@ var numNumbers = 3;
 
 for (var i = 0; i &lt; numNumbers; i++) {
     var tempX = xOffset + numberWidth / 2 + i * (numberWidth + numberInBetweenDist);
-    instance_create(tempX, yOffset, objBlueNumber);
-    instance_create(room_width - tempX, yOffset, objRedNumber);
+    var a = instance_create(tempX, yOffset + numberHeight / 2, objRedNumber);
+    a.tenPower = numNumbers - i - 1;
+    a = instance_create(room_width - tempX, yOffset + numberHeight / 2, objBlueNumber);
+    a.tenPower = i;
+}
+
+//switches and scale
+var switchXOffset = 427;
+var switchWidth = scrGetWidth(objSwitchInBetween);
+var switchHeight = scrGetHeight(objSwitchInBetween);
+redSwitch = instance_create(switchXOffset + switchWidth / 2, room_height / 2, objSwitchInBetween);
+blueSwitch = instance_create(room_width - switchXOffset - switchWidth / 2, room_height / 2, objSwitchInBetween);
+scale = instance_create(room_width / 2, room_height / 2, objScaleInBetween);
+
+//cubes
+var cubeSize = scrGetWidth(objPowerCube);
+var switchTotalHeight = 2 * scrGetHeight(objSwitchPlate) + switchHeight;
+var numCubes = 6;
+var cubeInBetween = (switchTotalHeight - cubeSize) / (numCubes - 1);
+var looksGoodOffset = 3;
+
+for (var i = 0; i &lt; numCubes; i++) {
+    var tempX = switchXOffset + switchWidth + cubeSize / 2 + looksGoodOffset;
+    var tempY = (room_height - switchTotalHeight) / 2 + cubeSize / 2 + cubeInBetween * i;
+    instance_create(tempX, tempY, objPowerCube);
+    instance_create(room_width - tempX, tempY, objPowerCube);
+}
+
+var pyramidSize = 3;
+
+for (var layer = pyramidSize; layer &gt; 0; layer--) {
+    for (var i = 0; i &lt; layer; i++) {
+        var tempX = switchXOffset - (i + 0.5) * cubeSize - looksGoodOffset;
+    
+        for (var j = 0; j &lt; layer - i; j++) {
+            var tempY = room_height / 2 - (layer - i - 1) * cubeSize / 2 + j * cubeSize;
+            var a = instance_create(tempX, tempY, objPowerCube);
+            a.depth = layer - pyramidSize - 1;
+            a = instance_create(room_width - tempX, tempY, objPowerCube);
+            a.depth = layer - pyramidSize - 1;
+        }
+    }
 }
 </string>
           </argument>
@@ -136,7 +190,8 @@ for (var i = 0; i &lt; numNumbers; i++) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>time++;
+            <string>///stuff
+time++;
 if(room==robots){
     if(random(200)&lt;1){
         instance_create(random(room_height),random(room_width),objGear);
@@ -149,6 +204,40 @@ if(room==obstacle){
     }
 }
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///score
+if (redSwitch.redCubes &gt; redSwitch.blueCubes) {
+    redScore += redSwitchScore / room_speed;
+}
+
+if (blueSwitch.blueCubes &gt; blueSwitch.redCubes) {
+    blueScore += blueSwitchScore / room_speed;
+}
+
+if (scale.redCubes &gt; scale.blueCubes) {
+    redScore += scaleScore / room_speed;
+} else if (scale.blueCubes &gt; scale.redCubes) {
+    blueScore += scaleScore / room_speed;
+}
 </string>
           </argument>
         </arguments>
