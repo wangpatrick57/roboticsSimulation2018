@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>///creation vars
-controlScheme = "km"; //km is keyboard mouse, irl is irl controller
+controlScheme = "ko"; //km is keyboard mouse, irl is irl controller
 //irl controller is standard controls
 //km is mouse as steering wheel and 1234 as thrust
 enc = 0;
@@ -53,13 +53,7 @@ dEnc = 0;
           <argument>
             <kind>1</kind>
             <string>///creation stuff
-robotTempCid = -1; //filler
-show_debug_message("controller");
-robotTempXPos = iXPos;
-robotTempYPos = iYPos;
-robotTempDir = iDir;
-globalvar robotId;
-robotId = instance_create(0, 0, objRobot); //the id of the robot
+robotId = instance_create(x, y, objRobot); //the id of the robot
 globalvar grid;
 grid=mp_grid_create(0,0,room_width/32, room_height/32,32,32);
 globalvar path;
@@ -88,42 +82,40 @@ path=path_add();
           <argument>
             <kind>1</kind>
             <string>///driveSim function
-if(controlling){
-    input = scrGetInput(id, controlScheme); //output of script: 0 thrust, 1 is steering wheel, 2 is pick up block, 3 is put down block
-    var dir = robotId.dir;
-    output = scrDriveSim(input[0], input[1], dEnc, dir); //output of script: 0 is xPos, 1 is yPos, 2 is dir //maybe use pid
-    var dHPos = output[0];
-    var dVPos = output[1];
-    var dXPos = dHPos * dcos(dir - 90) + dVPos * dcos(dir);
-    var dYPos = dHPos * dsin(dir - 90) + dVPos * dsin(dir);
-    var dDir = output[2];
-    robotId.dXPos = dXPos;
-    robotId.dYPos = dYPos;
-    robotId.dDir = dDir;
+input = scrGetInput(id, controlScheme); //output of script: 0 thrust, 1 is steering wheel, 2 is pick up block, 3 is put down block
+var dir = robotId.dir;
+output = scrDriveSim(input[0], input[1], dEnc, dir); //output of script: 0 is xPos, 1 is yPos, 2 is dir //maybe use pid
+var dHPos = output[0];
+var dVPos = output[1];
+var dXPos = dHPos * dcos(dir - 90) + dVPos * dcos(dir);
+var dYPos = dHPos * dsin(dir - 90) + dVPos * dsin(dir);
+var dDir = output[2];
+robotId.dXPos = dXPos;
+robotId.dYPos = dYPos;
+robotId.dDir = dDir;
+
+if (input[2]) {
+    var check = instance_create(robotId.xPos, robotId.yPos, objPickUpCheck);
+    check.image_angle = robotId.image_angle;
+    collisionId = noone;
     
-    if (input[2]) {
-        var check = instance_create(robotId.xPos, robotId.yPos, objPickUpCheck);
-        check.image_angle = robotId.image_angle;
-        collisionId = noone;
-        
-        with (check) {
-            other.collisionId = instance_place(x, y, objPowerCube);
-            instance_destroy();
-        }
-        
-        if (collisionId != noone) {
-            robotId.pickUpId = collisionId;
-        }
+    with (check) {
+        other.collisionId = instance_place(x, y, objPowerCube);
+        instance_destroy();
     }
     
-    if (input[3]) {
-        robotId.putDown = true;
+    if (collisionId != noone) {
+        robotId.pickUpId = collisionId;
     }
-    
-    var pEnc = enc;
-    enc = scrGetEncoderCounts();
-    dEnc = enc - pEnc;
 }
+
+if (input[3]) {
+    robotId.putDown = true;
+}
+
+var pEnc = enc;
+enc = scrGetEncoderCounts();
+dEnc = enc - pEnc;
 
 </string>
           </argument>

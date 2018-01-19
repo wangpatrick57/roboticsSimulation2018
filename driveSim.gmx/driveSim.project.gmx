@@ -7,7 +7,13 @@
   <sounds name="sound"/>
   <sprites name="sprites">
     <sprite>sprites\sprBlueRobot</sprite>
+    <sprite>sprites\sprBlueRobotPickingUp</sprite>
     <sprite>sprites\sprBlueRobotHoldingCube</sprite>
+    <sprite>sprites\sprRedRobot</sprite>
+    <sprite>sprites\sprRedRobotPickingUp</sprite>
+    <sprite>sprites\sprRedRobotHoldingCube</sprite>
+    <sprite>sprites\sprBluePickingUpSymbol</sprite>
+    <sprite>sprites\sprBluePuttingDownSymbol</sprite>
     <sprite>sprites\sprBlocker</sprite>
     <sprite>sprites\sprTitle</sprite>
     <sprite>sprites\sprLaser</sprite>
@@ -20,7 +26,6 @@
     <sprite>sprites\sprEnemy</sprite>
     <sprite>sprites\sprButton2</sprite>
     <sprite>sprites\sprAllianceWall</sprite>
-    <sprite>sprites\sprDrop</sprite>
     <sprite>sprites\sprPowerCube</sprite>
     <sprite>sprites\sprPickUpCheck</sprite>
     <sprite>sprites\sprBluePlate</sprite>
@@ -31,6 +36,15 @@
       <sprite>sprites\sprBlueNumber</sprite>
       <sprite>sprites\sprRedNumber</sprite>
     </sprites>
+    <sprite>sprites\sprLine</sprite>
+    <sprite>sprites\sprBlueAllianceWall</sprite>
+    <sprite>sprites\sprBluePortal</sprite>
+    <sprite>sprites\sprBluePortal2</sprite>
+    <sprite>sprites\sprRedAllianceWall</sprite>
+    <sprite>sprites\sprRedPortal</sprite>
+    <sprite>sprites\sprRedPortal2</sprite>
+    <sprite>sprites\sprDrop</sprite>
+    <sprite>sprites\sprWall</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -53,6 +67,8 @@
       <object>objects\objRobot</object>
       <object>objects\objRobotController</object>
       <object>objects\objPickUpCheck</object>
+      <object>objects\objBluePickingUpSymbol</object>
+      <object>objects\objBluePuttingDownSymbol</object>
     </objects>
     <objects name="general">
       <object>objects\objGeneral</object>
@@ -71,6 +87,15 @@
       <object>objects\objCubePlaceable</object>
       <object>objects\objBlueNumber</object>
       <object>objects\objRedNumber</object>
+      <object>objects\objLine</object>
+      <object>objects\objBlueAllianceWall</object>
+      <object>objects\objBluePortal</object>
+      <object>objects\objBluePortal2</object>
+      <object>objects\objDrop</object>
+      <object>objects\objRedAllianceWall</object>
+      <object>objects\objRedPortal</object>
+      <object>objects\objRedPortal2</object>
+      <object>objects\objWall</object>
     </objects>
     <object>objects\objButton</object>
     <object>objects\objGear</object>

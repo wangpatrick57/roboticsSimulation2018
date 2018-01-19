@@ -60,16 +60,14 @@ globalvar angleGrace;
 angleGrace = 10;
 //other
 globalvar iXPos;
-iXPos = 100;
+iXPos = 150;
 globalvar iYPos;
-iYPos = 100;
+iYPos = 150;
 globalvar iDir;
 iDir = 0;
 globalvar test;
 test=5;
 globalvar time;
-globalvar cubeDropDist;
-cubeDropDist = 80;
 globalvar laserTimer;
 laserTimer = 100;
 time = 0;
@@ -109,6 +107,13 @@ globalvar robotTempDir;
 randomize();
 texture_set_interpolation(false);
 window_set_fullscreen(true);
+var robotOffset = 150;
+var redController = instance_create(robotOffset, room_height / 2, objRobotController);
+redController.controlScheme = "ko";
+redController.robotId.side = "red";
+var blueController = instance_create(room_width - robotOffset, room_height / 2, objRobotController);
+blueController.controlScheme = "mo";
+redController.robotId.side = "blue";
 
 ///power up field
 //walls
@@ -132,9 +137,9 @@ for (var i = 0; i &lt; numNumbers; i++) {
 }
 
 //switches and scale
-var switchXOffset = 427;
 var switchWidth = scrGetWidth(objSwitchInBetween);
 var switchHeight = scrGetHeight(objSwitchInBetween);
+var switchXOffset = 356;
 redSwitch = instance_create(switchXOffset + switchWidth / 2, room_height / 2, objSwitchInBetween);
 blueSwitch = instance_create(room_width - switchXOffset - switchWidth / 2, room_height / 2, objSwitchInBetween);
 scale = instance_create(room_width / 2, room_height / 2, objScaleInBetween);
@@ -168,6 +173,42 @@ for (var layer = pyramidSize; layer &gt; 0; layer--) {
         }
     }
 }
+
+//lines
+var autoDist = 305;
+instance_create(autoDist, room_height / 2, objLine);
+instance_create(room_width - autoDist, room_height / 2, objLine);
+instance_create(room_width / 2, room_height / 2, objLine);
+
+//walls
+dropWidth=40;
+redAllianceDrop=instance_create(75-dropWidth/2,room_height/2-100,objDrop);
+redAllianceDrop.image_angle+=90;
+blueAllianceDrop=instance_create(room_width-75+dropWidth/2,room_height/2+100,objDrop);
+blueAllianceDrop.image_angle-=90;
+instance_create(75/2, room_height/2 , objRedAllianceWall);
+instance_create(room_width-75/2, room_height/2 , objBlueAllianceWall);
+portalWidth=196;
+portalHeight=38;
+blue1Portal1=instance_create(portalWidth/2,portalHeight/2,objBluePortal);
+blue1Portal2=instance_create(portalWidth/2,3*portalHeight/2,objBluePortal2);
+red1Portal1=instance_create(room_width-portalWidth/2,portalHeight/2,objRedPortal);
+red1Portal2=instance_create(room_width-portalWidth/2,3*portalHeight/2,objRedPortal2);
+red1Portal1.image_xscale*=-1;
+red1Portal2.image_xscale*=-1;
+blue2Portal1=instance_create(portalWidth/2,room_height-portalHeight/2,objBluePortal);
+blue2Portal2=instance_create(portalWidth/2,room_height-3*portalHeight/2,objBluePortal2);
+red2Portal1=instance_create(room_width-portalWidth/2,room_height-portalHeight/2,objRedPortal);
+red2Portal2=instance_create(room_width-portalWidth/2,room_height-3*portalHeight/2,objRedPortal2);
+blue2Portal1.image_yscale*=-1;
+blue2Portal2.image_yscale*=-1;
+red2Portal1.image_xscale*=-1;
+red2Portal2.image_xscale*=-1;
+red2Portal1.image_yscale*=-1;
+red2Portal2.image_yscale*=-1;
+wallTop=instance_create(room_width/2,portalHeight/2,objWall);
+wallBottom=instance_create(room_width/2,room_height-portalHeight/2,objWall);
+wallBottom.image_yscale*=-1;
 </string>
           </argument>
         </arguments>

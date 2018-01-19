@@ -62,6 +62,64 @@ if (controlScheme == "irl") {
         
         stw = point_direction(room_width / 2, room_height, mouse_x, tempY) - 90;
     }
+} else if (controlScheme == "ko") {
+    pickUp = keyboard_check_direct(ord("E"));
+    putDown = keyboard_check_direct(ord("Q"));
+    
+    if (keyboard_check_direct(ord("W"))) {
+        thr = 3 / 4;
+    } else if (keyboard_check_direct(ord("S"))) {
+        thr = 1 / 2;
+    } else {
+        thr = 0;
+    }
+    
+    if (keyboard_check(ord("A"))) {
+        stw = 90;
+    } else if (keyboard_check(ord("D"))) {
+        stw = -90;
+    } else {
+        stw = 0;
+    }
+} else if (controlScheme == "mo") {
+    pickUp = keyboard_check_direct(ord("O"));
+    putDown = keyboard_check_direct(ord("P"));
+
+    if (mouse_check_button(mb_left)) {
+        thr = 3 / 4;
+    } else if (mouse_check_button(mb_right)) {
+        thr = 1 / 2;
+    } else {
+        thr = 0;
+    }
+    
+    var angleToMouse = point_direction(robotId.xPos, robotId.yPos, mouse_x, mouse_y);
+    var robotAngle = robotId.image_angle;
+    var grace = 10;
+    var stwSign = 0;
+    var diffAngle = robotAngle - angleToMouse;
+    
+    /*if (total < 180) {
+        if (angleToMouse > robotAngle) {
+            stwSign = -1;
+        } else if (angleToMouse < robotAngle) {
+            stwSign = 1;
+        }
+    } else {
+        if (angleToMouse > 0) {
+            stwSign = -1;
+        } else {
+            
+        }
+    }*/
+    
+    if (dsin(diffAngle) > 0) {
+        stwSign = -1;
+    } else {
+        stwSign = 1;
+    }
+    
+    stw = stwSign * 90;
 } else {
     show_debug_message("you entered the wrong thing for controlScheme");
 }

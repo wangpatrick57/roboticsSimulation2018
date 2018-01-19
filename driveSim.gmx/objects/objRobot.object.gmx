@@ -3,7 +3,7 @@
   <spriteName>sprBlueRobot</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -27,19 +27,22 @@
             <kind>1</kind>
             <string>///creation stuff
 //stats
-mass = 18;
+pickUpTime = 0.8 * room_speed;
+putDownGroundTime = 0.3 * room_speed;
+putDownSwitchTime = 0.8 * room_speed;
+putDownScaleTime = 1.2 * room_speed;
+cubeDropDist = 80;
 
 //necessary vars
-cid = robotTempCid; //id of the controller, will use later when making server
-xPos = robotTempXPos; //this variable will be accessed by the controller
-yPos = robotTempYPos; //same
-dir = robotTempDir; //same, also, is in degrees
+cid = -1; //id of the controller, will use later when making server
+xPos = x; //this variable will be accessed by the controller
+yPos = y; //same
+dir = 0; //same, also, is in degrees
 pXPos = xPos;
 pYPos = yPos;
 dXPos = 0;
 dYPos = 0;
 dDir = 0;
-depth = -1;
 xVel = 0; //m/s
 yVel = 0; //m/s
 p = 0; //kgm/s
@@ -47,6 +50,28 @@ moveableCollisionId = noone;
 pickUpId = noone;
 holdingId = noone;
 putDown = false;
+state = "driving";
+pickUpPre = 0;
+putDownPre = 0;
+symbolId = noone;
+setPutDownTime = false;
+putDownTime = 999;
+
+if (x &lt; room_width / 2) {
+    side = "red";
+} else {
+    side = "blue";
+}
+
+if (side == "red") {
+    noneSprite = sprRedRobot;
+    pickingUpSprite = sprRedRobotPickingUp;
+    holdingSprite = sprRedRobotHoldingCube;
+} else {
+    noneSprite = sprBlueRobot;
+    pickingUpSprite = sprBlueRobotPickingUp;
+    holdingSprite = sprBlueRobotHoldingCube;
+}
 
 //initial stuff
 x = scrRound(xPos);
@@ -76,14 +101,16 @@ image_angle = dir;
           <argument>
             <kind>1</kind>
             <string>///actions
-pos = scrMove(id, xPos, yPos, dXPos, dYPos); //moves straight in this dx and dy and handles collisions
-xPos = pos[0];
-yPos = pos[1];
-x = scrRound(xPos);
-y = scrRound(yPos);
-dir += dDir;
-dir %= 360;
-image_angle = dir;
+if (state == "driving") {
+    pos = scrMove(id, xPos, yPos, dXPos, dYPos); //moves straight in this dx and dy and handles collisions
+    xPos = pos[0];
+    yPos = pos[1];
+    x = scrRound(xPos);
+    y = scrRound(yPos);
+    dir += dDir;
+    dir %= 360;
+    image_angle = dir;
+}
 
 //restart
 if (keyboard_check_direct(ord("R"))) {
@@ -104,6 +131,15 @@ if (!place_meeting(x,y,objRubber)) {
 }
 
 if (pickUpId != noone) {
+    if (!pickUpId.placed) {
+        pickUpPre++;
+        state = "pickingUp";
+    } else {
+        pickUpId = noone;
+    }
+}
+
+if (pickUpPre &gt;= pickUpTime) {
     if (holdingId == noone) {
         holdingId = pickUpId;
         holdingId.x = -50;
@@ -111,20 +147,54 @@ if (pickUpId != noone) {
     }
     
     pickUpId = noone;
+    pickUpPre = 0;
+    state = "driving";
 }
 
 if (putDown) {
     if (holdingId != noone) {
-        holdingId.x = xPos + cubeDropDist * dcos(image_angle);
-        holdingId.y = yPos - cubeDropDist * dsin(image_angle);
-        holdingId.image_angle = image_angle;
-        holdingId = noone;
+        putDownPre++;
+        state = "puttingDown";
+        
+        if (!setPutDownTime) {
+            with (holdingId) {
+                var tempX = other.xPos + other.cubeDropDist * dcos(other.image_xscale);
+                var tempY = other.yPos - other.cubeDropDist * dsin(other.image_xscale);
+                var collisionId = instance_place(tempX, tempY, objCubePlaceable);
+                //use place_meeting();
+                var tempTime;
+                
+                if (collisionId != noone) {
+                    show_debug_message(collisionId.object_index);
+                }
+                
+                if (collisionId == noone) {
+                    tempTime = other.putDownGroundTime;
+                } else if (collisionId.object_index == objSwitchPlate) {
+                    tempTime = other.putDownSwitchTime;
+                } else if (collisionId.object_index == objScalePlate) {
+                    tempTime = other.putDownScaleTime;
+                }
+                
+                other.putDownTime = tempTime;
+                other.setPutDownTime = true;
+            }
+        }
+    } else {
+        putDown = false;
     }
-    
-    putDown = false;
 }
 
-    
+if (putDownPre &gt;= putDownTime) {
+    holdingId.x = xPos + cubeDropDist * dcos(image_angle);
+    holdingId.y = yPos - cubeDropDist * dsin(image_angle);
+    holdingId.image_angle = image_angle;
+    holdingId = noone;
+    putDownPre = 0;
+    putDown = false;
+    state = "driving";
+    setPutDownTime = false;
+}   
 </string>
           </argument>
         </arguments>
@@ -146,10 +216,34 @@ if (putDown) {
           <argument>
             <kind>1</kind>
             <string>///sprite and image
+if (state == "driving") {
+    sprite_index = noneSprite;
+    
+    if (symbolId != noone) {
+        with (symbolId) {
+            instance_destroy();
+        }
+        
+        symbolId = noone;
+    }
+} else if (state == "pickingUp") {
+    sprite_index = pickingUpSprite;
+    
+    if (symbolId == noone) {
+        symbolId = instance_create(x, y, objBluePickingUpSymbol);
+    }
+} else if (state == "puttingDown") {
+    sprite_index = pickingUpSprite;
+    
+    if (symbolId == noone) {
+        symbolId = instance_create(x, y, objBluePuttingDownSymbol);
+    }
+}
+
 if (holdingId != noone) {
-    sprite_index = sprBlueRobotHoldingCube;
+    sprite_index = holdingSprite;
 } else {
-    sprite_index = sprBlueRobot;
+    sprite_index = noneSprite;
 }
 </string>
           </argument>
