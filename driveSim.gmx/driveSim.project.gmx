@@ -45,6 +45,7 @@
     <sprite>sprites\sprRedPortal2</sprite>
     <sprite>sprites\sprDrop</sprite>
     <sprite>sprites\sprWall</sprite>
+    <sprite>sprites\sprCollisionCheck</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -61,18 +62,28 @@
     <script>scripts\scrInstancePlaceList.gml</script>
     <script>scripts\scrGetWidth.gml</script>
     <script>scripts\scrGetHeight.gml</script>
+    <script>scripts\scrStep.gml</script>
+    <script>scripts\scrValid.gml</script>
+    <script>scripts\scrDecDistPath.gml</script>
+    <script>scripts\scrFindTurnPoints.gml</script>
+    <script>scripts\scrCleanPath.gml</script>
+    <script>scripts\scrSetPaths.gml</script>
   </scripts>
   <objects name="objects">
     <objects name="robot">
       <object>objects\objRobot</object>
+      <object>objects\objRobotPuppet</object>
       <object>objects\objRobotController</object>
+      <object>objects\objRobotAI</object>
       <object>objects\objPickUpCheck</object>
       <object>objects\objBluePickingUpSymbol</object>
       <object>objects\objBluePuttingDownSymbol</object>
+      <object>objects\objPoint</object>
     </objects>
     <objects name="general">
       <object>objects\objGeneral</object>
       <object>objects\README</object>
+      <object>objects\objClient</object>
     </objects>
     <objects name="field">
       <object>objects\objBlock</object>

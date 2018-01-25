@@ -47,6 +47,11 @@ globalvar blueSwitchScore;
 blueSwitchScore = 1;
 globalvar scaleScore;
 scaleScore = 1;
+globalvar collisionArray;
+globalvar chunkSize;
+chunkSize = 20;
+globalvar robotSize;
+robotSize = 32;
 
 ///robot
 //km
@@ -103,17 +108,18 @@ globalvar robotTempDir;
           <argument>
             <kind>1</kind>
             <string>///creation stuff
+/*var temp = ds_list_create();
+var subTemp = ds_list_create();
+ds_list_add(subTemp, 3);
+ds_list_add(temp, subTemp);
+show_debug_message(ds_list_find_value(ds_list_find_value(temp, 0), 0));
+ds_list_add(ds_list_find_value(temp, 0), 5);
+show_debug_message(ds_list_find_value(ds_list_find_value(temp, 0), 1));*/
+
 ///general
 randomize();
 texture_set_interpolation(false);
 window_set_fullscreen(true);
-var robotOffset = 150;
-var redController = instance_create(robotOffset, room_height / 2, objRobotController);
-redController.controlScheme = "ko";
-redController.robotId.side = "red";
-var blueController = instance_create(room_width - robotOffset, room_height / 2, objRobotController);
-blueController.controlScheme = "mo";
-redController.robotId.side = "blue";
 
 ///power up field
 //walls
@@ -209,6 +215,43 @@ red2Portal2.image_yscale*=-1;
 wallTop=instance_create(room_width/2,portalHeight/2,objWall);
 wallBottom=instance_create(room_width/2,room_height-portalHeight/2,objWall);
 wallBottom.image_yscale*=-1;
+
+var width = ceil(room_width / chunkSize);
+var height = ceil(room_height / chunkSize);
+mask_index = sprCollisionCheck;
+
+for (r = 0; r &lt; height; r++) {
+    for (c = 0; c &lt; width; c++) {
+        if (place_meeting(c * chunkSize, r * chunkSize, objBlock)) {
+            collisionArray[r, c] = 1;
+        } else {
+            collisionArray[r, c] = 0;
+        }
+    }
+}
+
+var tempArray;
+
+for (r = 0; r &lt; height; r++) {
+    for (c = 0; c &lt; width; c++) {
+        if (scrValid(c * chunkSize, r * chunkSize, 0)) {
+            tempArray[r, c] = 0;
+        } else {
+            tempArray[r, c] = 1;
+        }
+    }
+}
+
+///robots
+var robotOffset = 150;
+var redController = instance_create(robotOffset, room_height / 2, objRobotController);
+redController.controlScheme = "ko";
+redController.robotId.side = "red";
+var blueController = instance_create(room_width - robotOffset, room_height / 2, objRobotController);
+blueController.controlScheme = "mo";
+redController.robotId.side = "blue";
+var redAI1 = instance_create(robotOffset, robotOffset, objRobotAI);
+redAI1.robotId.side = "red";
 </string>
           </argument>
         </arguments>

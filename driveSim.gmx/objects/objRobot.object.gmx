@@ -107,7 +107,14 @@ if (state == "driving") {
     yPos = pos[1];
     x = scrRound(xPos);
     y = scrRound(yPos);
-    dir += dDir;
+    var angleDiff = image_angle - point_direction(xPos, yPos, mouse_x, mouse_y);
+    
+    if (controllerId.controlScheme == "mo" &amp;&amp; abs(dDir) &gt; abs(darcsin(dsin(angleDiff)))) {
+        dir = point_direction(xPos, yPos, mouse_x, mouse_y);
+    } else {
+        dir += dDir;
+    }
+    
     dir %= 360;
     image_angle = dir;
 }
@@ -140,7 +147,16 @@ if (pickUpId != noone) {
 }
 
 if (pickUpPre &gt;= pickUpTime) {
-    if (holdingId == noone) {
+    var check = instance_create(xPos, yPos, objPickUpCheck);
+    check.image_angle = image_angle;
+    checkCollisionId = noone;
+    
+    with (check) {
+        other.checkCollisionId = instance_place(x, y, objPowerCube);
+        instance_destroy();
+    }
+
+    if (holdingId == noone &amp;&amp; checkCollisionId != noone) {
         holdingId = pickUpId;
         holdingId.x = -50;
         holdingId.y = -50;
@@ -158,22 +174,16 @@ if (putDown) {
         
         if (!setPutDownTime) {
             with (holdingId) {
-                var tempX = other.xPos + other.cubeDropDist * dcos(other.image_xscale);
-                var tempY = other.yPos - other.cubeDropDist * dsin(other.image_xscale);
-                var collisionId = instance_place(tempX, tempY, objCubePlaceable);
-                //use place_meeting();
+                var tempX = other.xPos + other.cubeDropDist * dcos(other.image_angle);
+                var tempY = other.yPos - other.cubeDropDist * dsin(other.image_angle);
                 var tempTime;
                 
-                if (collisionId != noone) {
-                    show_debug_message(collisionId.object_index);
-                }
-                
-                if (collisionId == noone) {
-                    tempTime = other.putDownGroundTime;
-                } else if (collisionId.object_index == objSwitchPlate) {
+                if (place_meeting(tempX, tempY, objSwitchPlate)) {
                     tempTime = other.putDownSwitchTime;
-                } else if (collisionId.object_index == objScalePlate) {
+                } else if (place_meeting(tempX, tempY, objScalePlate)) {
                     tempTime = other.putDownScaleTime;
+                } else {
+                    tempTime = other.putDownGroundTime;
                 }
                 
                 other.putDownTime = tempTime;
