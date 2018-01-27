@@ -75,15 +75,18 @@ for (var i = 0; i &lt; numRobots; i++) {
           <argument>
             <kind>1</kind>
             <string>///send data
-bufferToSend = buffer_create(256, buffer_fixed, 1);
-
-for (var i = 0; i &lt; numRobots; i++) {
-    buffer_write(bufferToSend, buffer_f32, xPoses[i]);
-    buffer_write(bufferToSend, buffer_f32, yPoses[i]);
+for (var i = 0; i &lt; ds_list_size(ipList); i++) {
+    bufferToSend = buffer_create(256, buffer_fixed, 1);
+    buffer_write(bufferToSend, buffer_string, "r");
+    
+    for (var j = 0; j &lt; numRobots; j++) {
+        buffer_write(bufferToSend, buffer_f32, xPoses[j]);
+        buffer_write(bufferToSend, buffer_f32, yPoses[j]);
+    }
+    
+    network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
+    buffer_delete(bufferToSend);
 }
-
-network_send_udp(serverSocket, ip, port, bufferToSend, buffer_tell(bufferToSend));
-buffer_delete(bufferToSend);
 </string>
           </argument>
         </arguments>
