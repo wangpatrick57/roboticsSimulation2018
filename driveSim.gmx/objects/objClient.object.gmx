@@ -29,7 +29,7 @@
 globalvar PORT_NUM;
 PORT_NUM = 54796;
 globalvar IP_NUM;
-IP_NUM = "127.0.0.1";
+IP_NUM = "10.19.81.25";
 globalvar clientSocket;
 clientSocket = network_create_socket(network_socket_udp);
 globalvar connectedToServer;
@@ -64,24 +64,21 @@ if (!connectedToServer) {
     network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
     buffer_delete(bufferToSend);
 } else {
-    bufferToSend = buffer_create(256, buffer_fixed, 1);
-    buffer_seek(bufferToSend, buffer_seek_start, 0);
-    buffer_write(bufferToSend, buffer_string, "r"); //robot
-    //buffer_write(bufferToSend, buffer_u8, numInControl);
     
     //send data
     for (var i = 0; i &lt; numRobots; i++) {
         if (thisInControl[i]) {
+            bufferToSend = buffer_create(256, buffer_fixed, 1);
+            buffer_seek(bufferToSend, buffer_seek_start, 0);
+            buffer_write(bufferToSend, buffer_string, "r");
             var robotId = robotIds[i];
             buffer_write(bufferToSend, buffer_u8, i);
             buffer_write(bufferToSend, buffer_f32, robotId.xPos);
             buffer_write(bufferToSend, buffer_f32, robotId.yPos);
-            break;
+            network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
+            buffer_delete(bufferToSend);
         }
     }
-    
-    network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
-    buffer_delete(bufferToSend);
     
 }
 

@@ -279,7 +279,7 @@ tempYPoses[3] = tempYPos;
 tempYPos = room_height / 2;
 tempYPoses[1] = tempYPos;
 tempYPoses[4] = tempYPos;
-tempYPose = room_height / 2 + robotYDiff;
+tempYPos = room_height / 2 + robotYDiff;
 tempYPoses[2] = tempYPos;
 tempYPoses[5] = tempYPos;
 

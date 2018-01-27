@@ -112,7 +112,6 @@ port = ds_map_find_value(async_load, "port");
 buffer = ds_map_find_value(async_load, "buffer");
 buffer_seek(buffer, buffer_seek_start, 0);
 var type = buffer_read(buffer, buffer_string);
-show_debug_message(type);
 
 if (type == "c") { //connection
     if (ds_list_find_index(ipList, ip) == -1) {
