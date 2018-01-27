@@ -76,9 +76,11 @@ globalvar time;
 globalvar laserTimer;
 laserTimer = 100;
 time = 0;
-
 globalvar controlling;
 controlling=true;
+globalvar numRobots;
+numRobots = 6;
+globalvar robotIds;
 
 ///useless stuff
 //stuff needed to make robot be able to take parameters cuz game maker shit
@@ -119,7 +121,8 @@ show_debug_message(ds_list_find_value(ds_list_find_value(temp, 0), 1));*/
 ///general
 randomize();
 texture_set_interpolation(false);
-window_set_fullscreen(true);
+window_set_fullscreen(false);
+instance_create(0, 0, objClient);
 
 ///power up field
 //walls
@@ -243,15 +246,64 @@ for (r = 0; r &lt; height; r++) {
 }
 
 ///robots
-var robotOffset = 150;
-var redController = instance_create(robotOffset, room_height / 2, objRobotController);
-redController.controlScheme = "ko";
-redController.robotId.side = "red";
-var blueController = instance_create(room_width - robotOffset, room_height / 2, objRobotController);
-blueController.controlScheme = "mo";
-redController.robotId.side = "blue";
-var redAI1 = instance_create(robotOffset, robotOffset, objRobotAI);
-redAI1.robotId.side = "red";
+var robotXOffset = 150;
+var robotYDiff = 200;
+globalvar positions;
+positions[0] = "rt";
+positions[1] = "rm";
+positions[2] = "rb";
+positions[3] = "bt";
+positions[4] = "bm";
+positions[5] = "bb";
+globalvar thisInControl;
+thisInControl[0] = false;
+thisInControl[1] = true;
+thisInControl[2] = false;
+thisInControl[3] = false;
+thisInControl[4] = true;
+thisInControl[5] = false;
+var tempXPoses;
+
+for (var i = 0; i &lt; numRobots; i++) {
+    if (i &lt; numRobots / 2) {
+        tempXPoses[i] = robotXOffset;
+    } else {
+        tempXPoses[i] = room_width - robotXOffset;
+    }
+}
+
+var tempYPoses;
+var tempYPos = room_height / 2 - robotYDiff;
+tempYPoses[0] = tempYPos;
+tempYPoses[3] = tempYPos;
+tempYPos = room_height / 2;
+tempYPoses[1] = tempYPos;
+tempYPoses[4] = tempYPos;
+tempYPose = room_height / 2 + robotYDiff;
+tempYPoses[2] = tempYPos;
+tempYPoses[5] = tempYPos;
+
+for (var i = 0; i &lt; numRobots; i++) {
+    if (!thisInControl[i]) {
+        robotIds[i] = instance_create(tempXPoses[i], tempYPoses[i], objRobotPuppet);
+        
+        if (i &lt; numRobots / 2) {
+            robotIds[i].sprite_index = sprRedRobot;
+        } else {
+            robotIds[i].sprite_index = sprBlueRobot;
+        }
+    } else {
+        controllerIds[i] = instance_create(tempXPoses[i], tempYPoses[i], objRobotController);
+    
+        if (i == 1) {
+            controllerIds[i].controlScheme = "ko";
+            controllerIds[i].robotId.side = "red";
+        } else if (i == 4) {
+            controllerIds[i].controlScheme = "mo";
+            controllerIds[i].robotId.side = "blue";
+        }
+    }
+}
 </string>
           </argument>
         </arguments>

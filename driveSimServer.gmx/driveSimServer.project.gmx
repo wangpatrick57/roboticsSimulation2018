@@ -12,6 +12,9 @@
     <object>objects\objServer</object>
     <object>objects\objData</object>
   </objects>
+  <rooms name="rooms">
+    <room>rooms\rmServer</room>
+  </rooms>
   <help>
     <rtf>help.rtf</rtf>
   </help>
