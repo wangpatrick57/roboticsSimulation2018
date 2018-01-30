@@ -64,7 +64,6 @@ if (!connectedToServer) {
     network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
     buffer_delete(bufferToSend);
 } else {
-    
     //send data
     for (var i = 0; i &lt; numRobots; i++) {
         if (thisInControl[i]) {
@@ -75,11 +74,12 @@ if (!connectedToServer) {
             buffer_write(bufferToSend, buffer_u8, i);
             buffer_write(bufferToSend, buffer_f32, robotId.xPos);
             buffer_write(bufferToSend, buffer_f32, robotId.yPos);
+            buffer_write(bufferToSend, buffer_f32, robotId.image_angle);
+            show_debug_message(string(i) + " " + string(robotId.xPos) + " " + string(robotId.yPos));
             network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
         }
     }
-    
 }
 
 </string>
@@ -120,9 +120,11 @@ if (socketId == clientSocket) {
                 if (!thisInControl[i]) {
                     var xPos = buffer_read(receivedBuffer, buffer_f32);
                     var yPos = buffer_read(receivedBuffer, buffer_f32);
+                    var imageAngle = buffer_read(receivedBuffer, buffer_f32);
                     var robotId = robotIds[i];
                     robotId.x = xPos;
                     robotId.y = yPos;
+                    robotId.image_angle = imageAngle;
                 }
             }
         }

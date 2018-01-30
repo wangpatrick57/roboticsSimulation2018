@@ -257,9 +257,9 @@ positions[4] = "bm";
 positions[5] = "bb";
 globalvar thisInControl;
 thisInControl[0] = false;
-thisInControl[1] = true;
+thisInControl[1] = false;
 thisInControl[2] = false;
-thisInControl[3] = false;
+thisInControl[3] = true;
 thisInControl[4] = true;
 thisInControl[5] = false;
 var tempXPoses;
@@ -295,13 +295,19 @@ for (var i = 0; i &lt; numRobots; i++) {
     } else {
         controllerIds[i] = instance_create(tempXPoses[i], tempYPoses[i], objRobotController);
     
-        if (i == 1) {
+        if (i == 3) {
             controllerIds[i].controlScheme = "ko";
-            controllerIds[i].robotId.side = "red";
         } else if (i == 4) {
             controllerIds[i].controlScheme = "mo";
+        }
+        
+        if (i &lt; numRobots / 2) {
+            controllerIds[i].robotId.side = "red";
+        } else {
             controllerIds[i].robotId.side = "blue";
         }
+        
+        robotIds[i] = controllerIds[i].robotId;
     }
 }
 </string>
