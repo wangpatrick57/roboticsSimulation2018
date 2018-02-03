@@ -28,6 +28,8 @@
             <string>///vars
 ///globalvars
 ///general
+globalvar mode;
+mode = "online";
 
 ///field
 globalvar px2cm;
@@ -52,6 +54,8 @@ globalvar chunkSize;
 chunkSize = 20;
 globalvar robotSize;
 robotSize = 32;
+globalvar thisManipulatedCubeIds;
+thisManipulatedCubeIds = ds_list_create();
 
 ///robot
 //km
@@ -81,6 +85,8 @@ controlling=true;
 globalvar numRobots;
 numRobots = 6;
 globalvar robotIds;
+globalvar cubeIds;
+cubeIds = ds_list_create();
 
 ///useless stuff
 //stuff needed to make robot be able to take parameters cuz game maker shit
@@ -179,6 +185,7 @@ for (var layer = pyramidSize; layer &gt; 0; layer--) {
             a.depth = layer - pyramidSize - 1;
             a = instance_create(room_width - tempX, tempY, objPowerCube);
             a.depth = layer - pyramidSize - 1;
+            ds_list_add(cubeIds, a);
         }
     }
 }

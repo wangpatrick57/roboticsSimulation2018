@@ -29,7 +29,7 @@
 globalvar PORT_NUM;
 PORT_NUM = 54796;
 globalvar IP_NUM;
-IP_NUM = "10.19.81.25";
+IP_NUM = "10.19.89.69";
 globalvar clientSocket;
 clientSocket = network_create_socket(network_socket_udp);
 globalvar connectedToServer;
@@ -58,16 +58,16 @@ connectedToServer = false;
             <kind>1</kind>
             <string>///server stuff
 if (!connectedToServer) {
-    bufferToSend = buffer_create(256, buffer_fixed, 1);
+    var bufferToSend = buffer_create(256, buffer_fixed, 1);
     buffer_seek(bufferToSend, buffer_seek_start, 0);
     buffer_write(bufferToSend, buffer_string, "c"); //connection
     network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
     buffer_delete(bufferToSend);
 } else {
-    //send data
+    //robot
     for (var i = 0; i &lt; numRobots; i++) {
         if (thisInControl[i]) {
-            bufferToSend = buffer_create(256, buffer_fixed, 1);
+            var bufferToSend = buffer_create(256, buffer_fixed, 1);
             buffer_seek(bufferToSend, buffer_seek_start, 0);
             buffer_write(bufferToSend, buffer_string, "r");
             var robotId = robotIds[i];
@@ -75,11 +75,41 @@ if (!connectedToServer) {
             buffer_write(bufferToSend, buffer_f32, robotId.xPos);
             buffer_write(bufferToSend, buffer_f32, robotId.yPos);
             buffer_write(bufferToSend, buffer_f32, robotId.image_angle);
-            show_debug_message(string(i) + " " + string(robotId.xPos) + " " + string(robotId.yPos));
+            buffer_write(bufferToSend, buffer_u32, robotId.sprite_index);
             network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
         }
     }
+    
+    //pick up
+    for (var i = 0; i &lt; numRobots; i++) {
+        if (thisInControl[i] &amp;&amp; robotIds[i].pickUpId != noone) {
+            var bufferToSend = buffer_create(256, buffer_fixed, 1);
+            buffer_seek(bufferToSend, buffer_seek_start, 0);
+            buffer_write(bufferToSend, buffer_string, "pu");
+            buffer_write(bufferToSend, buffer_u8, i);
+            buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, robotIds[i].pickUpId));
+            network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
+            buffer_delete(bufferToSend);
+        }
+    }
+    
+    //cubes
+    var bufferToSend = buffer_create(256, buffer_fixed, 1);
+    buffer_seek(bufferToSend, buffer_seek_start, 0);
+    buffer_write(bufferToSend, buffer_string, "cb"); //cubes
+    buffer_write(bufferToSend, buffer_u32, ds_list_size(thisManipulatedCubeIds));
+    
+    for (var i = 0; i &lt; ds_list_size(thisManipulatedCubeIds); i++) {
+        var tempCube = ds_list_find_value(thisManipulatedCubeIds, i);
+        buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, tempCube));
+        buffer_write(bufferToSend, buffer_f32, tempCube.x);
+        buffer_write(bufferToSend, buffer_f32, tempCube.y);
+        buffer_write(bufferToSend, buffer_f32, tempCube.image_angle);
+    }
+    
+    network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
+    buffer_delete(bufferToSend);
 }
 
 </string>
@@ -115,17 +145,38 @@ if (socketId == clientSocket) {
     if (type == "c") { //connection
         connectedToServer = true;
     } else if (connectedToServer) {
-        if (type == "r") { //player
+        if (type == "r") { //robot
             for (var i = 0; i &lt; numRobots; i++) {
                 if (!thisInControl[i]) {
                     var xPos = buffer_read(receivedBuffer, buffer_f32);
                     var yPos = buffer_read(receivedBuffer, buffer_f32);
                     var imageAngle = buffer_read(receivedBuffer, buffer_f32);
+                    var spriteIndex = buffer_read(receivedBuffer, buffer_u32);
                     var robotId = robotIds[i];
                     robotId.x = xPos;
                     robotId.y = yPos;
                     robotId.image_angle = imageAngle;
+                    robotId.sprite_index = spriteIndex;
                 }
+            }
+        } else if (type == "pu") { //pick up
+            var position = buffer_read(receivedBuffer, buffer_u8);
+            
+            if (thisInControl[position]) {
+               robotIds[position].pickUpAuthorized = true;
+            }
+        } else if (type == "cb") { //cube
+            var num = buffer_read(receivedBuffer, buffer_u8);
+            
+            for (var i = 0; i &lt; num; i++) {
+                var cubeNum = buffer_read(bufferToSend, buffer_u32);
+                var xPos = buffer_read(bufferToSend, buffer_u32);
+                var yPos = buffer_read(bufferToSend, buffer_u32);
+                var imageAngle = buffer_read(bufferToSend, buffer_u32);
+                var cubeId = ds_list_find_value(cubeIds, cubeNum);
+                cubeId.x = xPos;
+                cubeId.y = yPos;
+                cubeId.image_angle = imageAngle;
             }
         }
     }

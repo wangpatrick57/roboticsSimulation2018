@@ -56,6 +56,7 @@ putDownPre = 0;
 symbolId = noone;
 setPutDownTime = false;
 putDownTime = 999;
+pickUpAuthorized = false;
 
 if (x &lt; room_width / 2) {
     side = "red";
@@ -126,7 +127,7 @@ if (keyboard_check_direct(ord("R"))) {
     dir = iDir;
 }
 
-if(room==obstacle){
+if(room == obstacle){
     if(place_meeting(x,y,objLaser)){
         controlling=false;
         instance_destroy();
@@ -138,11 +139,11 @@ if (!place_meeting(x,y,objRubber)) {
 }
 
 if (pickUpId != noone) {
-    if (!pickUpId.placed) {
-        pickUpPre++;
-        state = "pickingUp";
-    } else {
-        pickUpId = noone;
+    if (mode == "offline" || mode == "online" &amp;&amp; pickUpAuthorized) {
+        if (!pickUpId.placed) {
+            pickUpPre++;
+            state = "pickingUp";
+        }
     }
 }
 
@@ -160,14 +161,18 @@ if (pickUpPre &gt;= pickUpTime) {
         holdingId = pickUpId;
         holdingId.x = -50;
         holdingId.y = -50;
+        ds_list_add(thisManipulatedCubeIds, holdingId);
     }
     
     pickUpId = noone;
     pickUpPre = 0;
     state = "driving";
+    pickUpAuthorized = false;
 }
 
 if (putDown) {
+    show_debug_message("a");
+
     if (holdingId != noone) {
         putDownPre++;
         state = "puttingDown";
