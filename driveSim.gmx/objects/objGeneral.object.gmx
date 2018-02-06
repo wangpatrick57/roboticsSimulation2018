@@ -309,8 +309,6 @@ for (var i = 0; i &lt; numRobots; i++) {
         } else {
             robotIds[i].sprite_index = sprBlueRobot;
         }
-        
-        show_debug_message(i);
     } else {
         controllerIds[i] = instance_create(tempXPoses[i], tempYPoses[i], objRobotController);
         controllerIds[i].controlScheme = controlSchemes[i];

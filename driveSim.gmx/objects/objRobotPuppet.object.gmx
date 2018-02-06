@@ -26,7 +26,6 @@
           <argument>
             <kind>1</kind>
             <string>///testing
-show_debug_message(x);
 </string>
           </argument>
         </arguments>

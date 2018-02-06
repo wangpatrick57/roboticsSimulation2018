@@ -32,7 +32,6 @@ putDownGroundTime = 0.3 * room_speed;
 putDownSwitchTime = 0.8 * room_speed;
 putDownScaleTime = 1.2 * room_speed;
 cubeDropDist = 80;
-show_debug_message("A");
 
 //necessary vars
 cid = -1; //id of the controller, will use later when making server
@@ -172,8 +171,6 @@ if (pickUpPre &gt;= pickUpTime) {
 }
 
 if (putDown) {
-    show_debug_message("a");
-
     if (holdingId != noone) {
         putDownPre++;
         state = "puttingDown";
