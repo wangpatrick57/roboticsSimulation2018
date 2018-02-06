@@ -37,6 +37,7 @@ cubeDropDist = 80;
 cid = -1; //id of the controller, will use later when making server
 xPos = x; //this variable will be accessed by the controller
 yPos = y; //same
+show_debug_message(x);
 dir = 0; //same, also, is in degrees
 pXPos = xPos;
 pYPos = yPos;

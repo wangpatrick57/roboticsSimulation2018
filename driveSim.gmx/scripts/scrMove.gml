@@ -32,7 +32,7 @@ if (hyp != 0) {
     return tryPos;
 }
 var garbage;
-garbage[0] = 0;
-garbage[1] = 0;
+garbage[0] = startXPos;
+garbage[1] = startYPos;
 return garbage;
 
