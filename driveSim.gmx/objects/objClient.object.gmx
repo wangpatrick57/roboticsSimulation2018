@@ -147,11 +147,12 @@ if (socketId == clientSocket) {
     } else if (connectedToServer) {
         if (type == "r") { //robot
             for (var i = 0; i &lt; numRobots; i++) {
+                var xPos = buffer_read(receivedBuffer, buffer_f32);
+                var yPos = buffer_read(receivedBuffer, buffer_f32);
+                var imageAngle = buffer_read(receivedBuffer, buffer_f32);
+                var spriteIndex = buffer_read(receivedBuffer, buffer_u32);
+                
                 if (!thisInControl[i]) {
-                    var xPos = buffer_read(receivedBuffer, buffer_f32);
-                    var yPos = buffer_read(receivedBuffer, buffer_f32);
-                    var imageAngle = buffer_read(receivedBuffer, buffer_f32);
-                    var spriteIndex = buffer_read(receivedBuffer, buffer_u32);
                     var robotId = robotIds[i];
                     robotId.x = xPos;
                     robotId.y = yPos;

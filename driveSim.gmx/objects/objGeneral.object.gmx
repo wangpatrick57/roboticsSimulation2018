@@ -264,15 +264,15 @@ positions[4] = "bm";
 positions[5] = "bb";
 
 for (var i = 0; i &lt; numRobots; i++) {
-    controlScheme[i] = "none";
+    controlSchemes[i] = "none";
 }
 
-controlScheme[3] = "mo";
-controlScheme[4] = "ko";
+controlSchemes[3] = "mo";
+controlSchemes[4] = "ko";    
 globalvar thisInControl;
 
 for (var i = 0; i &lt; numRobots; i++) {
-    if (controlScheme[i] == "none") {
+    if (controlSchemes[i] == "none") {
         thisInControl[i] = false;
     } else {
         thisInControl[i] = true;
@@ -309,14 +309,11 @@ for (var i = 0; i &lt; numRobots; i++) {
         } else {
             robotIds[i].sprite_index = sprBlueRobot;
         }
+        
+        show_debug_message(i);
     } else {
         controllerIds[i] = instance_create(tempXPoses[i], tempYPoses[i], objRobotController);
-    
-        if (i == 3) {
-            controllerIds[i].controlScheme = "ko";
-        } else if (i == 4) {
-            controllerIds[i].controlScheme = "mo";
-        }
+        controllerIds[i].controlScheme = controlSchemes[i];
         
         if (i &lt; numRobots / 2) {
             controllerIds[i].robotId.side = "red";

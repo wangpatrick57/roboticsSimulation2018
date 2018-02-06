@@ -16,7 +16,6 @@ if (controlScheme == "irl") {
     var three = keyboard_check_direct(ord("3"));
     var four = keyboard_check_direct(ord("4"));
     pickUp = keyboard_check_direct(ord("C"));
-    putDown = keyboard_check_direct(ord("V"));
     var thrTotal = 0;
     var numPressed = 0;
     
@@ -64,7 +63,6 @@ if (controlScheme == "irl") {
     }
 } else if (controlScheme == "ko") {
     pickUp = keyboard_check_direct(ord("E"));
-    putDown = keyboard_check_direct(ord("Q"));
     
     if (keyboard_check_direct(ord("W"))) {
         thr = 3 / 4;
@@ -83,7 +81,6 @@ if (controlScheme == "irl") {
     }
 } else if (controlScheme == "mo") {
     pickUp = keyboard_check_direct(ord("O"));
-    putDown = keyboard_check_direct(ord("P"));
 
     if (mouse_check_button(mb_left)) {
         thr = 3 / 4;
@@ -120,6 +117,24 @@ if (controlScheme == "irl") {
     }
     
     stw = stwSign * 90;
+} else if (controlScheme == "kr") {
+    pickUp = keyboard_check_direct(ord("L"));
+    
+    if (keyboard_check_direct(vk_up)) {
+        thr = 3 / 4;
+    } else if (keyboard_check_direct(vk_down)) {
+        thr = 1 / 2;
+    } else {
+        thr = 0;
+    }
+    
+    if (keyboard_check(vk_left)) {
+        stw = 90;
+    } else if (keyboard_check(vk_right)) {
+        stw = -90;
+    } else {
+        stw = 0;
+    }
 } else {
     show_debug_message("you entered the wrong thing for controlScheme");
 }
@@ -129,6 +144,5 @@ var output;
 output[0] = thr;
 output[1] = stw;
 output[2] = pickUp;
-output[3] = putDown;
 return output;
 
