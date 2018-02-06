@@ -267,8 +267,8 @@ for (var i = 0; i &lt; numRobots; i++) {
     controlSchemes[i] = "none";
 }
 
-controlSchemes[3] = "mo";
-controlSchemes[4] = "ko";    
+//controlSchemes[3] = "mo";
+//controlSchemes[4] = "ko";    
 globalvar thisInControl;
 
 for (var i = 0; i &lt; numRobots; i++) {
