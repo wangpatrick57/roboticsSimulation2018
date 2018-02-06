@@ -52,6 +52,7 @@ for (var i = 0; i &lt; numRobots; i++) {
     xPoses[i] = 0;
     yPoses[i] = 0;
     imageAngles[i] = 0;
+    spriteIndexes[i] = 0;
     pickUpNumbers[i] = -1;
 }
 
@@ -93,6 +94,7 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
         buffer_write(bufferToSend, buffer_f32, xPoses[j]);
         buffer_write(bufferToSend, buffer_f32, yPoses[j]);
         buffer_write(bufferToSend, buffer_f32, imageAngles[j]);
+        buffer_write(bufferToSend, buffer_u32, spriteIndexes[j]);
     }
     
     network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
@@ -189,9 +191,11 @@ if (type == "c") { //connection
     var xPos = buffer_read(receivedBuffer, buffer_f32);
     var yPos = buffer_read(receivedBuffer, buffer_f32);
     var imageAngle = buffer_read(receivedBuffer, buffer_f32);
+    var spriteIndex = buffer_read(receivedBuffer, buffer_u32);
     xPoses[position] = xPos;
     yPoses[position] = yPos;
     imageAngles[position] = imageAngle;
+    spriteIndexes[position] = spriteIndex;
 } else if (type == "pu") { //pick up
     var position = buffer_read(receivedBuffer, buffer_u8);
     var blockNumber = buffer_read(receivedBuffer, buffer_u32);
