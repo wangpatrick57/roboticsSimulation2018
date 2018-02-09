@@ -129,12 +129,12 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     buffer_seek(bufferToSend, buffer_seek_start, 0);
     buffer_write(bufferToSend, buffer_string, "cb");
     buffer_write(bufferToSend, buffer_u32, numChanged);
-    show_debug_message(numChanged);
 
     for (var j = 0; j &lt; numCubes; j++) {
         var dataId = changedCubes[j];
         
         if (dataId != noone) {
+            show_debug_message("B");
             buffer_write(bufferToSend, buffer_u32, j);
             buffer_write(bufferToSend, buffer_u32, dataId.xPos);
             buffer_write(bufferToSend, buffer_u32, dataId.yPos);
@@ -144,6 +144,7 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     
     network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
     buffer_delete(bufferToSend);
+    show_debug_message("N" + string(numChanged));
 }
 
 </string>
@@ -206,6 +207,7 @@ if (type == "c") { //connection
     
     for (var i = 0; i &lt; num; i++) {
         var cubeNum = buffer_read(bufferToSend, buffer_u32);
+        show_debug_message("CB" + string(cubeNum));
         var xPos = buffer_read(bufferToSend, buffer_f32);
         var yPos = buffer_read(bufferToSend, buffer_f32);
         var imageAngle = buffer_read(bufferToSend, buffer_f32);
@@ -215,7 +217,7 @@ if (type == "c") { //connection
             dataId.xPos = xPos;
             dataId.yPos = yPos;
             dataId.imageAngle = imageAngle;
-            changeCubes[cubeNum] = dataId;
+            changedCubes[cubeNum] = dataId;
         }
     }
 }

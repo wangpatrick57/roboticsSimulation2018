@@ -103,7 +103,7 @@ if (!connectedToServer) {
     
     for (var i = 0; i &lt; num; i++) {
         var tempCube = ds_list_find_value(thisManipulatedCubeIds, i);
-        buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, tempCube));
+        buffer_write(bufferToSend, buffer_u32, i);
         buffer_write(bufferToSend, buffer_f32, tempCube.x);
         buffer_write(bufferToSend, buffer_f32, tempCube.y);
         buffer_write(bufferToSend, buffer_f32, tempCube.image_angle);
@@ -169,12 +169,13 @@ if (socketId == clientSocket) {
             }
         } else if (type == "cb") { //cube
             var num = buffer_read(receivedBuffer, buffer_u32);
+            show_debug_message("A" + string(num));
             
             for (var i = 0; i &lt; num; i++) {
-                var cubeNum = buffer_read(bufferToSend, buffer_u32);
-                var xPos = buffer_read(bufferToSend, buffer_u32);
-                var yPos = buffer_read(bufferToSend, buffer_u32);
-                var imageAngle = buffer_read(bufferToSend, buffer_u32);
+                var cubeNum = buffer_read(receivedBuffer, buffer_u32);
+                var xPos = buffer_read(receivedBuffer, buffer_u32);
+                var yPos = buffer_read(receivedBuffer, buffer_u32);
+                var imageAngle = buffer_read(receivedBuffer, buffer_u32);
                 var cubeId = ds_list_find_value(cubeIds, cubeNum);
                 cubeId.x = xPos;
                 cubeId.y = yPos;
