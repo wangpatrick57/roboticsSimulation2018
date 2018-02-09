@@ -29,7 +29,7 @@
 globalvar PORT_NUM;
 PORT_NUM = 54796;
 globalvar IP_NUM;
-IP_NUM = "10.19.82.175";
+IP_NUM = "10.19.91.45";
 globalvar clientSocket;
 clientSocket = network_create_socket(network_socket_udp);
 globalvar connectedToServer;
@@ -98,9 +98,10 @@ if (!connectedToServer) {
     var bufferToSend = buffer_create(256, buffer_fixed, 1);
     buffer_seek(bufferToSend, buffer_seek_start, 0);
     buffer_write(bufferToSend, buffer_string, "cb"); //cubes
-    buffer_write(bufferToSend, buffer_u32, ds_list_size(thisManipulatedCubeIds));
+    var num = ds_list_size(thisManipulatedCubeIds);
+    buffer_write(bufferToSend, buffer_u32, num);
     
-    for (var i = 0; i &lt; ds_list_size(thisManipulatedCubeIds); i++) {
+    for (var i = 0; i &lt; num; i++) {
         var tempCube = ds_list_find_value(thisManipulatedCubeIds, i);
         buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, tempCube));
         buffer_write(bufferToSend, buffer_f32, tempCube.x);
@@ -167,7 +168,7 @@ if (socketId == clientSocket) {
                robotIds[position].pickUpAuthorized = true;
             }
         } else if (type == "cb") { //cube
-            var num = buffer_read(receivedBuffer, buffer_u8);
+            var num = buffer_read(receivedBuffer, buffer_u32);
             
             for (var i = 0; i &lt; num; i++) {
                 var cubeNum = buffer_read(bufferToSend, buffer_u32);
@@ -179,6 +180,8 @@ if (socketId == clientSocket) {
                 cubeId.y = yPos;
                 cubeId.image_angle = imageAngle;
             }
+            
+            show_debug_message(num);
         }
     }
 }

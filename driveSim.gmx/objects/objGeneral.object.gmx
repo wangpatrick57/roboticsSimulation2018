@@ -128,7 +128,6 @@ show_debug_message(ds_list_find_value(ds_list_find_value(temp, 0), 1));*/
 randomize();
 texture_set_interpolation(false);
 window_set_fullscreen(false);
-instance_create(0, 0, objClient);
 
 ///power up field
 //walls
@@ -267,8 +266,8 @@ for (var i = 0; i &lt; numRobots; i++) {
     controlSchemes[i] = "none";
 }
 
-controlSchemes[3] = "mo";
-controlSchemes[4] = "ko";    
+controlSchemes[1] = "mo";
+controlSchemes[2] = "ko";    
 globalvar thisInControl;
 
 for (var i = 0; i &lt; numRobots; i++) {
@@ -322,6 +321,8 @@ for (var i = 0; i &lt; numRobots; i++) {
         robotIds[i] = controllerIds[i].robotId;
     }
 }
+
+instance_create(0, 0, objClient);
 </string>
           </argument>
         </arguments>
