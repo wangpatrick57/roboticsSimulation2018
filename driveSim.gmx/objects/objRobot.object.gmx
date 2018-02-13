@@ -161,7 +161,8 @@ if (pickUpPre &gt;= pickUpTime) {
         holdingId = pickUpId;
         holdingId.x = -50;
         holdingId.y = -50;
-        ds_list_add(thisManipulatedCubeIds, holdingId);
+        var cubePos = ds_list_find_index(cubeIds, holdingId);
+        ds_list_add(thisManipulatedCubeIds, cubePos);
     }
     
     pickUpId = noone;

@@ -29,7 +29,7 @@
 globalvar PORT_NUM;
 PORT_NUM = 54796;
 globalvar IP_NUM;
-IP_NUM = "10.19.91.45";
+IP_NUM = "10.19.88.189";
 globalvar clientSocket;
 clientSocket = network_create_socket(network_socket_udp);
 globalvar connectedToServer;
@@ -102,8 +102,9 @@ if (!connectedToServer) {
     buffer_write(bufferToSend, buffer_u32, num);
     
     for (var i = 0; i &lt; num; i++) {
-        var tempCube = ds_list_find_value(thisManipulatedCubeIds, i);
-        buffer_write(bufferToSend, buffer_u32, i);
+        var cubePos = ds_list_find_value(thisManipulatedCubeIds, i);
+        var tempCube = ds_list_find_value(cubeIds, cubePos);
+        buffer_write(bufferToSend, buffer_u32, cubePos);
         buffer_write(bufferToSend, buffer_f32, tempCube.x);
         buffer_write(bufferToSend, buffer_f32, tempCube.y);
         buffer_write(bufferToSend, buffer_f32, tempCube.image_angle);
@@ -169,7 +170,6 @@ if (socketId == clientSocket) {
             }
         } else if (type == "cb") { //cube
             var num = buffer_read(receivedBuffer, buffer_u32);
-            show_debug_message("A" + string(num));
             
             for (var i = 0; i &lt; num; i++) {
                 var cubeNum = buffer_read(receivedBuffer, buffer_u32);
@@ -181,8 +181,6 @@ if (socketId == clientSocket) {
                 cubeId.y = yPos;
                 cubeId.image_angle = imageAngle;
             }
-            
-            show_debug_message(num);
         }
     }
 }
