@@ -138,39 +138,23 @@ if (!place_meeting(x,y,objRubber)) {
     currTopSpd = topSpd;
 }
 
+//pick up
 if (pickUpId != noone) {
     if (mode == "offline" || mode == "online" &amp;&amp; pickUpAuthorized) {
-        if (!pickUpId.placed) {
-            pickUpPre++;
-            state = "pickingUp";
-        }
+        pickUpPre++;
+        state = "pickingUp";
     }
 }
 
 if (pickUpPre &gt;= pickUpTime) {
-    var check = instance_create(xPos, yPos, objPickUpCheck);
-    check.image_angle = image_angle;
-    checkCollisionId = noone;
-    
-    with (check) {
-        other.checkCollisionId = instance_place(x, y, objPowerCube);
-        instance_destroy();
-    }
-
-    if (holdingId == noone &amp;&amp; checkCollisionId != noone) {
-        holdingId = pickUpId;
-        holdingId.x = -50;
-        holdingId.y = -50;
-        var cubePos = ds_list_find_index(cubeIds, holdingId);
-        ds_list_add(thisManipulatedCubeIds, cubePos);
-    }
-    
+    holdingId = pickUpId;
     pickUpId = noone;
     pickUpPre = 0;
     state = "driving";
     pickUpAuthorized = false;
 }
 
+//put down
 if (putDown) {
     if (holdingId != noone) {
         putDownPre++;

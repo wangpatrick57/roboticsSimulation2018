@@ -88,7 +88,10 @@ if (!connectedToServer) {
             buffer_seek(bufferToSend, buffer_seek_start, 0);
             buffer_write(bufferToSend, buffer_string, "pu");
             buffer_write(bufferToSend, buffer_u8, i);
-            buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, robotIds[i].pickUpId));
+            var blockNumber = ds_list_find_index(cubeIds, robotIds[i].pickUpId);
+            show_debug_message("A" + string(robotIds[i].pickUpId));
+            show_debug_message(blockNumber);
+            buffer_write(bufferToSend, buffer_u32, blockNumber);
             network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
         }
@@ -169,9 +172,9 @@ if (socketId == clientSocket) {
                robotIds[position].pickUpAuthorized = true;
             }
         } else if (type == "cb") { //cube
-            var num = buffer_read(receivedBuffer, buffer_u32);
-            
-            for (var i = 0; i &lt; num; i++) {
+            var numChanged = buffer_read(receivedBuffer, buffer_u32);
+        
+            for (var i = 0; i &lt; numChanged; i++) {
                 var cubeNum = buffer_read(receivedBuffer, buffer_u32);
                 var xPos = buffer_read(receivedBuffer, buffer_u32);
                 var yPos = buffer_read(receivedBuffer, buffer_u32);

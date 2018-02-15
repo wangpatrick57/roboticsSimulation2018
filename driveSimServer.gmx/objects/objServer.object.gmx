@@ -25,7 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///create the server !!!NOTE: MAKE NOTE OF LINE 31
+            <string>///create the server !!!NOTE: MAKE NOTE OF NUM_CUBES
 PORT_NUM = 54796;
 serverSocket = network_create_socket_ext(network_socket_udp, PORT_NUM);
 
@@ -60,6 +60,10 @@ numCubes = 32;
 
 for (var i = 0; i &lt; numCubes; i++) {
     changedCubes[i] = noone;
+    pickUpPositions[i] = -1;
+    blockXPoses[i] = -1;
+    blockYPoses[i] = -1;
+    blockImageAngles[i] = 0;
 }
 </string>
           </argument>
@@ -103,12 +107,13 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
 
 //pick up
 for (var i = 0; i &lt; ds_list_size(ipList); i++) {
-    for (var j = 0; j &lt; numRobots; j++) {
-        if (pickUpNumbers[j] != -1) {
+    for (var j = 0; j &lt; numCubes; j++) {
+        if (pickUpPositions[j] != -1) {
             bufferToSend = buffer_create(256, buffer_fixed, 1);
             buffer_seek(bufferToSend, buffer_seek_start, 0);
             buffer_write(bufferToSend, buffer_string, "pu");
-            buffer_write(bufferToSend, buffer_u8, j);
+            buffer_write(bufferToSend, buffer_u8, pickUpPositions[j]);
+            show_debug_message(pickUpPositions[j]);
             network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
         }
@@ -118,13 +123,13 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
 //cubes
 for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     var numChanged = 0;
-
+    
     for (var j = 0; j &lt; numCubes; j++) {
         if (changedCubes[j] != noone) {
             numChanged++;
         }
     }
-    
+
     bufferToSend = buffer_create(256, buffer_fixed, 1);
     buffer_seek(bufferToSend, buffer_seek_start, 0);
     buffer_write(bufferToSend, buffer_string, "cb");
@@ -134,7 +139,6 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
         var dataId = changedCubes[j];
         
         if (dataId != noone) {
-            show_debug_message("B");
             buffer_write(bufferToSend, buffer_u32, j);
             buffer_write(bufferToSend, buffer_u32, dataId.xPos);
             buffer_write(bufferToSend, buffer_u32, dataId.yPos);
@@ -144,7 +148,6 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     
     network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
     buffer_delete(bufferToSend);
-    show_debug_message("N" + string(numChanged));
 }
 
 </string>
@@ -200,14 +203,21 @@ if (type == "c") { //connection
     spriteIndexes[position] = spriteIndex;
 } else if (type == "pu") { //pick up
     var position = buffer_read(receivedBuffer, buffer_u8);
-    var blockNumber = buffer_read(receivedBuffer, buffer_u32);
-    pickUpNumbers[position] = blockNumber;
+    var cubeNum = buffer_read(receivedBuffer, buffer_u32);
+    
+    if (pickUpPositions[cubeNum] == -1) {
+        pickUpPositions[cubeNum] = position;
+        var dataId = instance_create(0, 0, objData);
+        dataId.xPos = -50;
+        dataId.yPos = -50;
+        dataId.imageAngle = 0;
+        changedCubes[cubeNum] = dataId;
+    }
 } else if (type == "cb") { //cube
     var num = buffer_read(receivedBuffer, buffer_u32);
     
     for (var i = 0; i &lt; num; i++) {
         var cubeNum = buffer_read(bufferToSend, buffer_u32);
-        show_debug_message("CB" + string(cubeNum));
         var xPos = buffer_read(bufferToSend, buffer_f32);
         var yPos = buffer_read(bufferToSend, buffer_f32);
         var imageAngle = buffer_read(bufferToSend, buffer_f32);

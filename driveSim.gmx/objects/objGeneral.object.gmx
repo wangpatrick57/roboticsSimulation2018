@@ -168,8 +168,10 @@ var looksGoodOffset = 3;
 for (var i = 0; i &lt; numCubes; i++) {
     var tempX = switchXOffset + switchWidth + cubeSize / 2 + looksGoodOffset;
     var tempY = (room_height - switchTotalHeight) / 2 + cubeSize / 2 + cubeInBetween * i;
-    instance_create(tempX, tempY, objPowerCube);
-    instance_create(room_width - tempX, tempY, objPowerCube);
+    var a = instance_create(tempX, tempY, objPowerCube);
+    ds_list_add(cubeIds, a);
+    a = instance_create(room_width - tempX, tempY, objPowerCube);
+    ds_list_add(cubeIds, a);
 }
 
 var pyramidSize = 3;
@@ -181,10 +183,11 @@ for (var layer = pyramidSize; layer &gt; 0; layer--) {
         for (var j = 0; j &lt; layer - i; j++) {
             var tempY = room_height / 2 - (layer - i - 1) * cubeSize / 2 + j * cubeSize;
             var a = instance_create(tempX, tempY, objPowerCube);
+            ds_list_add(cubeIds, a);
             a.depth = layer - pyramidSize - 1;
             a = instance_create(room_width - tempX, tempY, objPowerCube);
-            a.depth = layer - pyramidSize - 1;
             ds_list_add(cubeIds, a);
+            a.depth = layer - pyramidSize - 1;
         }
     }
 }

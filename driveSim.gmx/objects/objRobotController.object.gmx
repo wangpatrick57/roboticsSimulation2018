@@ -106,7 +106,7 @@ if (input[2]) {
             instance_destroy();
         }
         
-        if (collisionId != noone) {
+        if (collisionId != noone &amp;&amp; !collisionId.placed) {
             robotId.pickUpId = collisionId;
         }
     } else {
