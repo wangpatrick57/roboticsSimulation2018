@@ -97,17 +97,19 @@ robotId.dDir = dDir;
 
 if (input[2]) {
     if (robotId.holdingId == noone) {
-        var check = instance_create(robotId.xPos, robotId.yPos, objPickUpCheck);
-        check.image_angle = robotId.image_angle;
-        collisionId = noone;
-        
-        with (check) {
-            other.collisionId = instance_place(x, y, objPowerCube);
-            instance_destroy();
-        }
-        
-        if (collisionId != noone &amp;&amp; !collisionId.placed) {
-            robotId.pickUpId = collisionId;
+        if (robotId.pickUpId == noone) {
+            var check = instance_create(robotId.xPos, robotId.yPos, objPickUpCheck);
+            check.image_angle = robotId.image_angle;
+            collisionId = noone;
+            
+            with (check) {
+                other.collisionId = instance_place(x, y, objPowerCube);
+                instance_destroy();
+            }
+            
+            if (collisionId != noone &amp;&amp; !collisionId.placed) {
+                robotId.pickUpId = collisionId;
+            }
         }
     } else {
         robotId.putDown = true;

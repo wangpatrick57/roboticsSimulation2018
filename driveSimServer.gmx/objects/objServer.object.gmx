@@ -113,7 +113,6 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
             buffer_seek(bufferToSend, buffer_seek_start, 0);
             buffer_write(bufferToSend, buffer_string, "pu");
             buffer_write(bufferToSend, buffer_u8, pickUpPositions[j]);
-            show_debug_message(pickUpPositions[j]);
             network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
         }
@@ -202,17 +201,41 @@ if (type == "c") { //connection
     imageAngles[position] = imageAngle;
     spriteIndexes[position] = spriteIndex;
 } else if (type == "pu") { //pick up
+    show_debug_message("pu");
     var position = buffer_read(receivedBuffer, buffer_u8);
     var cubeNum = buffer_read(receivedBuffer, buffer_u32);
     
     if (pickUpPositions[cubeNum] == -1) {
         pickUpPositions[cubeNum] = position;
-        var dataId = instance_create(0, 0, objData);
+        var dataId;
+        
+        if (changedCubes[cubeNum] == noone) {
+            dataId = instance_create(0, 0, objData);
+        } else {
+            dataId = changedCubes[cubeNum];
+        }
+        
         dataId.xPos = -50;
         dataId.yPos = -50;
         dataId.imageAngle = 0;
         changedCubes[cubeNum] = dataId;
     }
+} else if (type == "pd") { //put down
+    show_debug_message("pd");
+    var cubeNum = buffer_read(receivedBuffer, buffer_u32);
+    var dataId;
+    
+    if (changedCubes[cubeNum] == noone) {
+        dataId = instance_create(0, 0, objData);
+    } else {
+        dataId = changedCubes[cubeNum];
+    }
+    
+    dataId.xPos = buffer_read(receivedBuffer, buffer_u32);
+    dataId.yPos = buffer_read(receivedBuffer, buffer_u32);
+    dataId.imageAngle = buffer_read(receivedBuffer, buffer_u32);
+    pickUpPositions[cubeNum] = -1;
+    changedCubes[cubeNum] = dataId;
 } else if (type == "cb") { //cube
     var num = buffer_read(receivedBuffer, buffer_u32);
     

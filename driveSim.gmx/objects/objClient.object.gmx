@@ -89,9 +89,24 @@ if (!connectedToServer) {
             buffer_write(bufferToSend, buffer_string, "pu");
             buffer_write(bufferToSend, buffer_u8, i);
             var blockNumber = ds_list_find_index(cubeIds, robotIds[i].pickUpId);
-            show_debug_message("A" + string(robotIds[i].pickUpId));
-            show_debug_message(blockNumber);
             buffer_write(bufferToSend, buffer_u32, blockNumber);
+            network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
+            buffer_delete(bufferToSend);
+        }
+    }
+    
+    //put down
+    for (var i = 0; i &lt; numRobots; i++) {
+        var robotId = robotIds[i];    
+    
+        if (thisInControl[i] &amp;&amp; robotId.putDown &amp;&amp; robotId.holdingId != noone) {
+            var bufferToSend = buffer_create(256, buffer_fixed, 1);
+            buffer_seek(bufferToSend, buffer_seek_start, 0);
+            buffer_write(bufferToSend, buffer_string, "pd");
+            buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, robotId.holdingId));
+            buffer_write(bufferToSend, buffer_u32, robotId.putDownX);
+            buffer_write(bufferToSend, buffer_u32, robotId.putDownY);
+            buffer_write(bufferToSend, buffer_u32, robotId.holdingId.image_angle);
             network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
         }

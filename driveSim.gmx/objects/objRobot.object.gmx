@@ -46,6 +46,8 @@ dDir = 0;
 xVel = 0; //m/s
 yVel = 0; //m/s
 p = 0; //kgm/s
+putDownX = 0;
+putDownY = 0;
 moveableCollisionId = noone;
 pickUpId = noone;
 holdingId = noone;
@@ -164,6 +166,8 @@ if (putDown) {
             with (holdingId) {
                 var tempX = other.xPos + other.cubeDropDist * dcos(other.image_angle);
                 var tempY = other.yPos - other.cubeDropDist * dsin(other.image_angle);
+                other.putDownX = tempX;
+                other.putDownY = tempY;
                 var tempTime;
                 
                 if (place_meeting(tempX, tempY, objSwitchPlate)) {
@@ -181,12 +185,11 @@ if (putDown) {
     } else {
         putDown = false;
     }
+    
+    show_debug_message(putDownX);
 }
 
 if (putDownPre &gt;= putDownTime) {
-    holdingId.x = xPos + cubeDropDist * dcos(image_angle);
-    holdingId.y = yPos - cubeDropDist * dsin(image_angle);
-    holdingId.image_angle = image_angle;
     holdingId = noone;
     putDownPre = 0;
     putDown = false;
