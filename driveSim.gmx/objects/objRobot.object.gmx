@@ -185,8 +185,6 @@ if (putDown) {
     } else {
         putDown = false;
     }
-    
-    show_debug_message(putDownX);
 }
 
 if (putDownPre &gt;= putDownTime) {

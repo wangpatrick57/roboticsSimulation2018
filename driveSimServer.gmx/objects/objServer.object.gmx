@@ -65,6 +65,9 @@ for (var i = 0; i &lt; numCubes; i++) {
     blockYPoses[i] = -1;
     blockImageAngles[i] = 0;
 }
+
+randomize();
+rando = irandom(7); //field arrangement
 </string>
           </argument>
         </arguments>
@@ -88,6 +91,16 @@ for (var i = 0; i &lt; numCubes; i++) {
           <argument>
             <kind>1</kind>
             <string>///send data
+//field
+for (var i = 0; i &lt; ds_list_size(ipList); i++) {
+    bufferToSend = buffer_create(256, buffer_fixed, 1);
+    buffer_seek(bufferToSend, buffer_seek_start, 0);
+    buffer_write(bufferToSend, buffer_string, "f");
+    buffer_write(bufferToSend, buffer_u8, rando);
+    network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
+    buffer_delete(bufferToSend);
+}
+
 //robot
 for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     bufferToSend = buffer_create(256, buffer_fixed, 1);

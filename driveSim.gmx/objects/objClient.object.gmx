@@ -29,7 +29,7 @@
 globalvar PORT_NUM;
 PORT_NUM = 54796;
 globalvar IP_NUM;
-IP_NUM = "10.19.88.189";
+IP_NUM = "10.19.81.201";
 globalvar clientSocket;
 clientSocket = network_create_socket(network_socket_udp);
 globalvar connectedToServer;
@@ -106,7 +106,7 @@ if (!connectedToServer) {
             buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, robotId.holdingId));
             buffer_write(bufferToSend, buffer_u32, robotId.putDownX);
             buffer_write(bufferToSend, buffer_u32, robotId.putDownY);
-            buffer_write(bufferToSend, buffer_u32, robotId.holdingId.image_angle);
+            buffer_write(bufferToSend, buffer_u32, robotId.image_angle);
             network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
         }
@@ -165,7 +165,13 @@ if (socketId == clientSocket) {
     if (type == "c") { //connection
         connectedToServer = true;
     } else if (connectedToServer) {
-        if (type == "r") { //robot
+        if (type == "f") { //field
+            var rando = buffer_read(receivedBuffer, buffer_u8);
+            redSwitchTop = rando % 2;
+            blueSwitchTop = (rando / 2) % 2;
+            scaleTop = (rando / 4) % 2;
+            show_debug_message(redSwitchTop);
+        } else if (type == "r") { //robot
             for (var i = 0; i &lt; numRobots; i++) {
                 var xPos = buffer_read(receivedBuffer, buffer_f32);
                 var yPos = buffer_read(receivedBuffer, buffer_f32);

@@ -56,6 +56,10 @@ globalvar robotSize;
 robotSize = 32;
 globalvar thisManipulatedCubeIds;
 thisManipulatedCubeIds = ds_list_create();
+globalvar redSwitchTop, blueSwitchTop, scaleTop;
+redSwitchTop = -1;
+blueSwitchTop = -1;
+scaleTop = -1;
 
 ///robot
 //km
