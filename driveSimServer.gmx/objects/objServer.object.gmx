@@ -234,7 +234,6 @@ if (type == "c") { //connection
         changedCubes[cubeNum] = dataId;
     }
 } else if (type == "pd") { //put down
-    show_debug_message("pd");
     var cubeNum = buffer_read(receivedBuffer, buffer_u32);
     var dataId;
     

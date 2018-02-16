@@ -193,6 +193,8 @@ if (putDownPre &gt;= putDownTime) {
     putDown = false;
     state = "driving";
     setPutDownTime = false;
+    putDownX = -1;
+    putDownY = -1;
 }   
 </string>
           </argument>

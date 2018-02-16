@@ -273,6 +273,7 @@ for (var i = 0; i &lt; numRobots; i++) {
     controlSchemes[i] = "none";
 }
 
+controlSchemes[0] = "kr";
 controlSchemes[1] = "mo";
 controlSchemes[2] = "ko";    
 globalvar thisInControl;

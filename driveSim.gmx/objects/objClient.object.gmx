@@ -106,6 +106,7 @@ if (!connectedToServer) {
             buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, robotId.holdingId));
             buffer_write(bufferToSend, buffer_u32, robotId.putDownX);
             buffer_write(bufferToSend, buffer_u32, robotId.putDownY);
+            show_debug_message(string(robotId.holdingId) + " " + string(robotId.putDownX));
             buffer_write(bufferToSend, buffer_u32, robotId.image_angle);
             network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
