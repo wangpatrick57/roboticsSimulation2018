@@ -170,7 +170,6 @@ if (socketId == clientSocket) {
             redSwitchTop = rando % 2;
             blueSwitchTop = (rando / 2) % 2;
             scaleTop = (rando / 4) % 2;
-            show_debug_message(redSwitchTop);
         } else if (type == "r") { //robot
             for (var i = 0; i &lt; numRobots; i++) {
                 var xPos = buffer_read(receivedBuffer, buffer_f32);
