@@ -80,36 +80,6 @@ if (controlScheme == "irl") {
         stw = 0;
     }
     
-    if (keyboard_check_direct(ord("1"))) {
-        var thisSide = robotId.side;
-        var thisExchangeCube;
-        var thisExchangeCubeId;
-        var thisPowerUp;
-        var thisNumber = 0;
-        var thisAddedCube;
-        
-        if (thisSide == "red") {
-            thisExchangeCube = redExchangeCube;
-            thisPowerUp = redPowerUp;
-            thisAddedCube = redAddedCube;
-            thisExchangeCubeId = redExchangeCubeId;
-        } else if (thisSide == "blue") {
-            thisExchangeCube = blueExchangeCube;
-            thisPowerUp = bluePowerUp;
-            thisAddedCube = blueAddedCube;
-            thisExchangeCubeId = blueExchangeCubeId;
-        }
-        
-        if (thisExchangeCube) {
-            if (thisPowerUp[thisNumber] < 3) {
-                thisAddedCube.typeNum = thisNumber;
-                thisAddedCube.cubeId = thisExchangeCubeId;
-            }
-        } else {
-            
-        }
-    }
-    
     /*if(keyboard_check_pressed(ord("1"))){
         if(redExchangeCube){
             if(redPowerUp[0]<4){
@@ -335,6 +305,41 @@ if (controlScheme == "irl") {
     }
 } else {
     show_debug_message("you entered the wrong thing for controlScheme");
+}
+
+if (robotId.side == "red") {
+    var thisNumber = -1;
+
+    if (keyboard_check_direct(ord("1"))) {
+        thisNumber = 0;
+        /*var thisSide = robotId.side;
+        var thisExchangeCube;
+        var thisExchangeCubeId;
+        var thisPowerUp;
+        var thisAddedCube;
+        
+        if (thisSide == "red") {
+            thisExchangeCube = redExchangeCube;
+            thisPowerUp = redPowerUp;
+            thisAddedCube = redAddedCube;
+            thisExchangeCubeId = redExchangeCubeId;
+        }*/
+    } else if (keyboard_check_direct(ord("2"))) {
+        thisNumber = 1;
+    } else if (keyboard_check_direct(ord("3"))) {
+        thisNumber = 2;
+    }
+    
+    if (thisNumber != -1) {
+        if (redExchangeCube) {
+            if (redPowerUp[thisNumber] < 3) {
+                redAddedCube.typeNum = thisNumber;
+                redAddedCube.cubeId = redExchangeCubeId;
+            }
+        } else {
+            
+        }
+    }
 }
 
 //var stw=gamepad_axis_value(0,gp_axisrv)*pi/2;

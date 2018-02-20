@@ -26,12 +26,26 @@
           <argument>
             <kind>1</kind>
             <string>///creation stuff
-plateHeight = scrGetHeight(objScalePlate);
-plateOffset = 37;
+var plateHeight = scrGetHeight(objScalePlate);
+var plateOffset = 37;
 redCubes = 0;
 blueCubes = 0;
 depth = 1;
-createdAlready = false;
+
+if (random(1) &gt;= 0.5) {
+    topSide = "blue";
+    botSide = "red";
+} else {
+    topSide = "red";
+    botSide = "blue";
+}
+
+tempSide = topSide;
+top = instance_create(id, y - sprite_height / 2 - plateHeight / 2 + plateOffset, objScalePlate);
+top.image_index=2;
+tempSide = botSide;
+bot = instance_create(id, y + sprite_height / 2 + plateHeight / 2 - plateOffset, objScalePlate);
+bot.image_index=2;
 </string>
           </argument>
         </arguments>
@@ -55,7 +69,7 @@ createdAlready = false;
           <argument>
             <kind>1</kind>
             <string>///"creation stuff"
-if (!createdAlready &amp;&amp; scaleTop != -1) {
+/*if (!createdAlready &amp;&amp; scaleTop != -1) {
     if (scaleTop == -0) {
         topSide = "blue";
         botSide = "red";
@@ -69,7 +83,7 @@ if (!createdAlready &amp;&amp; scaleTop != -1) {
     tempSide = botSide;
     var bot = instance_create(id, y + sprite_height / 2 + plateHeight / 2 - plateOffset, objScalePlate);
     createdAlready = true;
-}
+}*/
 </string>
           </argument>
         </arguments>

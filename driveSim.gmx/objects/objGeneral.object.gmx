@@ -442,6 +442,144 @@ instance_create(0, 0, objClient);
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///score
+timeCur++;
+if (redSwitch.redCubes &gt; redSwitch.blueCubes||(powerup=="redForce"&amp;&amp;(redPowerUp[0]==1||redPowerUp[0]==3))) {
+    redScore += redSwitchScore / room_speed;
+}
+if(powerup=="redForce1"||powerup=="redForce3"){
+    if(redSwitch.topSide=="red"){
+        redSwitch.top.image_index=3;
+        
+    }else{
+        redSwitch.bot.image_index=3;
+    }
+    
+}
+
+if (blueSwitch.blueCubes &gt; blueSwitch.redCubes||(powerup=="blueForce"&amp;&amp;(bluePowerUp[0]==1||bluePowerUp[0]==3))) {
+    blueScore += blueSwitchScore / room_speed;
+}
+if(powerup=="blueForce1"||powerup=="blueForce3"){
+    if(blueSwitch.topSide=="blue"){
+        blueSwitch.top.image_index=3;
+    }else{
+        blueSwitch.bot.image_index=3;
+    }
+}
+if (scale.redCubes &gt; scale.blueCubes||(powerup=="redForce"&amp;&amp;(redPowerUp[0]==2||redPowerUp[0]==3))) {
+    redScore += scaleScore / room_speed;
+} else if (scale.blueCubes &gt; scale.redCubes||(powerup="blueForce"&amp;&amp;(bluePowerUp[0]==2||bluePowerUp[0]==3))) {
+    blueScore += scaleScore / room_speed;
+}
+if(powerup=="redForce"&amp;&amp;(redPowerUp[0]==2||redPowerUp[0]==3)){
+    if(scale.topSide=="red"){
+        scale.top.image_index=3;
+    }else{
+        scale.bot.image_index=3;
+    }
+}
+    
+if(powerup=="redBoost"){
+    if(redPowerUp[1]==2||redPowerUp[1]==3){
+        scaleScore=2*baseScaleScore;
+        if(timeCur%6==0){
+            
+                num=scale.top.image_index+1;
+                if(num&gt;1){
+                    scale.top.image_index=0;
+                }else{
+                    scale.top.image_index++;
+                }
+                num=scale.bot.image_index+1;
+                if(num&gt;1){
+                    scale.bot.image_index=0;
+                }else{
+                    scale.bot.image_index++;
+                }
+        }
+    }
+    if(redPowerUp[1]==1||redPowerUp[1]==3){
+        redSwitchScore=2*baseSwitchScore;
+        if(timeCur%6==0){
+                num=redSwitch.top.image_index+1;
+                if(num&gt;1){
+                    redSwitch.top.image_index=0;
+                }else{
+                    redSwitch.top.image_index++;
+                }
+                
+    
+                num=redSwitch.bot.image_index+1;
+                if(num&gt;1){
+                    redSwitch.bot.image_index=0;
+                }else{
+                    redSwitch.bot.image_index++;
+                }
+            
+        }
+    }
+}else if(powerup=="blueBoost"){
+    if(bluePowerUp[1]==2||bluePowerUp[1]==3){
+        scaleScore=2*baseScaleScore;
+        if(timeCur%6==0){
+                num=scale.top.image_index+1;
+                if(num&gt;1){
+                    scale.top.image_index=0;
+                }else{
+                    scale.top.image_index++;
+                }
+                if(num&gt;1){
+                    scale.bot.image_index=0;
+                }else{
+                    scale.bot.image_index++;
+                }
+        }
+    }
+    if(bluePowerUp[1]==1||bluePowerUp[1]==3){
+        blueSwitchScore=2*baseSwitchScore;
+        if(timeCur%6==0){
+                num=blueSwitch.top.image_index+1;
+                if(num&gt;1){
+                    blueSwitch.top.image_index=0;
+                }else{
+                    blueSwitch.top.image_index++;
+                }
+                
+                if(num&gt;1){
+                    blueSwitch.bot.image_index=0;
+                }else{
+                    blueSwitch.bot.image_index++;
+                }
+            }
+    }
+
+}else{
+    scaleScore=baseScaleScore;
+    redSwitchScore=baseSwitchScore;
+    blueSwitchScore=baseSwitchScore;
+}
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>///powerup
 if(powerup!="none"){
     curTime++;
@@ -492,7 +630,6 @@ if(powerup=="redForce"){
     if(curTime&lt;2){
         symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objBoostSymbol);
         bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objRedBar);
-        
     }
     
     bar.image_index=curTime/2-1;
@@ -647,144 +784,6 @@ with(dropBlue2){
         }
     }
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///score
-timeCur++;
-if (redSwitch.redCubes &gt; redSwitch.blueCubes||(powerup=="redForce"&amp;&amp;(redPowerUp[0]==1||redPowerUp[0]==3))) {
-    redScore += redSwitchScore / room_speed;
-}
-if(powerup=="redForce1"||powerup=="redForce3"){
-    if(redSwitch.topSide=="red"){
-        redSwitch.top.image_index=3;
-        
-    }else{
-        redSwitch.bot.image_index=3;
-    }
-    
-}
-
-if (blueSwitch.blueCubes &gt; blueSwitch.redCubes||(powerup=="blueForce"&amp;&amp;(bluePowerUp[0]==1||bluePowerUp[0]==3))) {
-    blueScore += blueSwitchScore / room_speed;
-}
-if(powerup=="blueForce1"||powerup=="blueForce3"){
-    if(blueSwitch.topSide=="blue"){
-        blueSwitch.top.image_index=3;
-    }else{
-        blueSwitch.bot.image_index=3;
-    }
-}
-if (scale.redCubes &gt; scale.blueCubes||(powerup=="redForce"&amp;&amp;(redPowerUp[0]==2||redPowerUp[0]==3))) {
-    redScore += scaleScore / room_speed;
-} else if (scale.blueCubes &gt; scale.redCubes||(powerup="blueForce"&amp;&amp;(bluePowerUp[0]==2||bluePowerUp[0]==3))) {
-    blueScore += scaleScore / room_speed;
-}
-if(powerup=="redForce"&amp;&amp;(redPowerUp[0]==2||redPowerUp[0]==3)){
-    if(scale.topSide=="red"){
-        scale.top.image_index=3;
-    }else{
-        scale.bot.image_index=3;
-    }
-}
-    
-if(powerup=="redBoost"){
-    if(redPowerUp[1]==2||redPowerUp[1]==3){
-        scaleScore=2*baseScaleScore;
-        if(timeCur%6==0){
-            
-                num=scale.top.image_index+1;
-                if(num&gt;1){
-                    scale.top.image_index=0;
-                }else{
-                    scale.top.image_index++;
-                }
-                num=scale.bot.image_index+1;
-                if(num&gt;1){
-                    scale.bot.image_index=0;
-                }else{
-                    scale.bot.image_index++;
-                }
-        }
-    }
-    if(redPowerUp[1]==1||redPowerUp[1]==3){
-        redSwitchScore=2*baseSwitchScore;
-        if(timeCur%6==0){
-                num=redSwitch.top.image_index+1;
-                if(num&gt;1){
-                    redSwitch.top.image_index=0;
-                }else{
-                    redSwitch.top.image_index++;
-                }
-                
-    
-                num=redSwitch.bot.image_index+1;
-                if(num&gt;1){
-                    redSwitch.bot.image_index=0;
-                }else{
-                    redSwitch.bot.image_index++;
-                }
-            
-        }
-    }
-}else if(powerup=="blueBoost"){
-    if(bluePowerUp[1]==2||bluePowerUp[1]==3){
-        scaleScore=2*baseScaleScore;
-        if(timeCur%6==0){
-                num=scale.top.image_index+1;
-                if(num&gt;1){
-                    scale.top.image_index=0;
-                }else{
-                    scale.top.image_index++;
-                }
-                if(num&gt;1){
-                    scale.bot.image_index=0;
-                }else{
-                    scale.bot.image_index++;
-                }
-        }
-    }
-    if(bluePowerUp[1]==1||bluePowerUp[1]==3){
-        blueSwitchScore=2*baseSwitchScore;
-        if(timeCur%6==0){
-                num=blueSwitch.top.image_index+1;
-                if(num&gt;1){
-                    blueSwitch.top.image_index=0;
-                }else{
-                    blueSwitch.top.image_index++;
-                }
-                
-                if(num&gt;1){
-                    blueSwitch.bot.image_index=0;
-                }else{
-                    blueSwitch.bot.image_index++;
-                }
-            }
-    }
-
-}else{
-    scaleScore=baseScaleScore;
-    redSwitchScore=baseSwitchScore;
-    blueSwitchScore=baseSwitchScore;
-}
-
 </string>
           </argument>
         </arguments>

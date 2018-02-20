@@ -165,7 +165,7 @@ if (!connectedToServer) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///receive player data from server
+            <string>///receive data from server
 var socketId = ds_map_find_value(async_load, "id");
 
 if (socketId == clientSocket) {
@@ -217,8 +217,18 @@ if (socketId == clientSocket) {
             }
         } else if (type == "ac") {
             for (var i = 0; i &lt; 3; i++) {
-                redPowerUp[i] = buffer_read(receivedBuffer, buffer_u8);
-                bluePowerUp[i] = buffer_read(receivedBuffer, buffer_u8);
+                var tempRed = buffer_read(receivedBuffer, buffer_u8);
+                var tempBlue = buffer_read(receivedBuffer, buffer_u8);
+                
+                if (tempRed &gt; redPowerUp[i]) {
+                    redScore += 5;
+                    redPowerUp[i] = tempRed;
+                }
+                
+                if (tempBlue &gt; bluePowerUp[i]) {
+                    blueScore += 5;
+                    bluePowerUp[i] = tempBlue;
+                }
             }
         }
     }
