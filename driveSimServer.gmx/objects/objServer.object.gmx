@@ -56,7 +56,7 @@ for (var i = 0; i &lt; numRobots; i++) {
     pickUpNumbers[i] = -1;
 }
 
-numCubes = 32;
+numCubes = 60;
 
 for (var i = 0; i &lt; numCubes; i++) {
     changedCubes[i] = noone;
@@ -68,12 +68,96 @@ for (var i = 0; i &lt; numCubes; i++) {
 
 randomize();
 rando = irandom(7); //field arrangement
+
+///powerup stuff
+for (var i = 0; i &lt; 6; i++) {
+    hasUsedPowerup[i] = false;
+}
+
+currentPowerup = instance_create(0, 0, objData);
+currentPowerup.type = "none"; //f, b
+currentPowerup.side = "none"; //r, b
+currentPowerup.powerLevel = 0;
+inQueuePowerup = instance_create(0, 0, objData);
+inQueuePowerup.type = "none"; //f, b
+inQueuePowerup.side = "none"; //r, b
+inQueuePowerup.powerLevel = 0;
+currentPowerupTime = 0;
+maxPowerupTime = 10 * room_speed;
+
+for (var i = 0; i &lt; 3; i++) {
+    powerupEffects[i] = "none";
+    redPowerupPower[i] = 0;
+    bluePowerupPower[i] = 0;
+}
+
+invalidNums = ds_list_create();
 </string>
           </argument>
         </arguments>
       </action>
     </event>
     <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///mechanics
+if (currentPowerup != "none") {
+    currentPowerupTime++;
+}
+
+if (currentPowerupTime &gt; maxPowerupTime) {
+    currentPowerup.type = inQueuePowerup.type;
+    currentPowerup.side = inQueuePowerup.side;
+    currentPowerup.powerLevel = inQueuePowerup.powerLevel;
+    inQueuePowerup.type = "none";
+    inQueuePowerup.side = "none";
+    inQueuePowerup.powerLevel = 0;
+}
+
+var affected;
+var endd; //misspelled because end is a keyword
+
+for (var i = 0; i &lt; 3; i++) {
+    affected[i] = false;
+}
+
+if (currentPowerup.side == "r") {
+    endd = 0;
+} else {
+    endd = 2;
+}
+
+if (currentPowerup.powerLevel == 1 || currentPowerup.powerLevel == 3) {
+    affected[endd] = true;
+}
+
+if (currentPowerup.powerLevel == 2 || currentPowerup.powerLevel == 3) {
+    affected[1] = true;
+}
+
+for (var i = 0; i &lt; 3; i++) {
+    if (affected[i]) {
+        powerupEffect[i] = currentPowerup.type;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -132,6 +216,20 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     }
 }
 
+//powerup
+for (var i = 0; i &lt; ds_list_size(ipList); i++) {
+    bufferToSend = buffer_create(256, buffer_fixed, 1);
+    buffer_seek(bufferToSend, buffer_seek_start, 0);
+    buffer_write(bufferToSend, buffer_string, "pw");
+    
+    for (var j = 0; j &lt; 3; j++) {
+        buffer_write(bufferToSend, buffer_string, powerupEffects[j]);
+    }
+    
+    network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
+    buffer_delete(bufferToSend);
+}
+
 //cubes
 for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     var numChanged = 0;
@@ -162,6 +260,21 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     buffer_delete(bufferToSend);
 }
 
+
+//powerup power
+for (var i = 0; i &lt; ds_list_size(ipList); i++) {
+    bufferToSend = buffer_create(256, buffer_fixed, 1);
+    buffer_seek(bufferToSend, buffer_seek_start, 0);
+    buffer_write(bufferToSend, buffer_string, "ac");
+    
+    for (var j = 0; j &lt; 3; j++) {
+        buffer_write(bufferToSend, buffer_u8, redPowerupPower[j]);
+        buffer_write(bufferToSend, buffer_u8, bluePowerupPower[j]);
+    }
+    
+    network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
+    buffer_delete(bufferToSend);
+}
 </string>
           </argument>
         </arguments>
@@ -214,7 +327,6 @@ if (type == "c") { //connection
     imageAngles[position] = imageAngle;
     spriteIndexes[position] = spriteIndex;
 } else if (type == "pu") { //pick up
-    show_debug_message("pu");
     var position = buffer_read(receivedBuffer, buffer_u8);
     var cubeNum = buffer_read(receivedBuffer, buffer_u32);
     
@@ -248,6 +360,20 @@ if (type == "c") { //connection
     dataId.imageAngle = buffer_read(receivedBuffer, buffer_u32);
     pickUpPositions[cubeNum] = -1;
     changedCubes[cubeNum] = dataId;
+} else if (type == "pw") { //powerup
+    var type = buffer_read(receivedBuffer, buffer_string);
+    var side = buffer_read(receivedBuffer, buffer_string);
+    var powerLevel = buffer_read(receivedBuffer, buffer_u8);
+    
+    if (currentPowerup.type == "none") {
+        currentPowerup.type = type;
+        currentPowerup.side = side;
+        currentPowerup.powerLevel = powerLevel;
+    } else if (currentPowerup.side != side &amp;&amp; inQueuePowerup.type == "none") {
+        inQueuePowerup.type = type;
+        inQueuePowerup.side = side;
+        inQueuePowerup.powerLevel = powerLevel;
+    }
 } else if (type == "cb") { //cube
     var num = buffer_read(receivedBuffer, buffer_u32);
     
@@ -264,6 +390,31 @@ if (type == "c") { //connection
             dataId.imageAngle = imageAngle;
             changedCubes[cubeNum] = dataId;
         }
+    }
+} else if (type == "ac") { //added cube
+    var redTypeNum = buffer_read(receivedBuffer, buffer_u8);
+    var redNum = buffer_read(receivedBuffer, buffer_u32);
+    var blueTypeNum = buffer_read(receivedBuffer, buffer_u8);
+    var blueNum = buffer_read(receivedBuffer, buffer_u32);
+    
+    if (redTypeNum != 255 &amp;&amp; redNum != noone &amp;&amp; ds_list_find_index(invalidNums, redNum) == -1) { //cuz it's unsigned integer
+        redPowerupPower[redTypeNum]++;
+        ds_list_add(invalidNums, redNum);
+        var dataId = instance_create(0, 0, objData);
+        dataId.xPos = -50;
+        dataId.yPos = -50;
+        dataId.imageAngle = 0;
+        changedCubes[redNum] = dataId;
+    }
+    
+    if (blueTypeNum != 255 &amp;&amp; blueNum != noone &amp;&amp; ds_list_find_index(invalidNums, blueNum) == -1) {
+        bluePowerupPower[blueTypeNum]++;
+        ds_list_add(invalidNums, blueNum);
+        var dataId = instance_create(0, 0, objData);
+        dataId.xPos = -50;
+        dataId.yPos = -50;
+        dataId.imageAngle = 0;
+        changedCubes[blueNum] = dataId;
     }
 }
 </string>

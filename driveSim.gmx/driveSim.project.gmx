@@ -28,8 +28,6 @@
     <sprite>sprites\sprAllianceWall</sprite>
     <sprite>sprites\sprPowerCube</sprite>
     <sprite>sprites\sprPickUpCheck</sprite>
-    <sprite>sprites\sprBluePlate</sprite>
-    <sprite>sprites\sprRedPlate</sprite>
     <sprite>sprites\sprSwitchInBetween</sprite>
     <sprite>sprites\sprScaleInBetween</sprite>
     <sprites name="numbers">
@@ -46,6 +44,16 @@
     <sprite>sprites\sprDrop</sprite>
     <sprite>sprites\sprWall</sprite>
     <sprite>sprites\sprCollisionCheck</sprite>
+    <sprite>sprites\sprTimerNumbers</sprite>
+    <sprite>sprites\sprBlueBoost</sprite>
+    <sprite>sprites\sprBlueForce</sprite>
+    <sprite>sprites\sprBlueLevitate</sprite>
+    <sprite>sprites\sprExchange</sprite>
+    <sprite>sprites\sprRedBoost</sprite>
+    <sprite>sprites\sprRedForce</sprite>
+    <sprite>sprites\sprRedLevitate</sprite>
+    <sprite>sprites\sprBluePlate</sprite>
+    <sprite>sprites\sprRedPlate</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -84,6 +92,7 @@
       <object>objects\objGeneral</object>
       <object>objects\README</object>
       <object>objects\objClient</object>
+      <object>objects\objData</object>
     </objects>
     <objects name="field">
       <object>objects\objBlock</object>
@@ -107,6 +116,21 @@
       <object>objects\objRedPortal</object>
       <object>objects\objRedPortal2</object>
       <object>objects\objWall</object>
+      <object>objects\objExchange</object>
+      <object>objects\objPortalExchange</object>
+      <object>objects\objBlueForce</object>
+      <object>objects\objBlueBoost</object>
+      <object>objects\objBlueLevitate</object>
+      <object>objects\objRedForce</object>
+      <object>objects\objRedBoost</object>
+      <object>objects\objRedLevitate</object>
+      <object>objects\objCubeInExchange</object>
+    </objects>
+    <objects name="timer">
+      <object>objects\objTimerMinutes</object>
+      <object>objects\objTimerSecondOnes</object>
+      <object>objects\objTimerSecondTens</object>
+      <object>objects\objColon</object>
     </objects>
     <object>objects\objButton</object>
     <object>objects\objGear</object>

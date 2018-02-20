@@ -29,7 +29,7 @@
 globalvar PORT_NUM;
 PORT_NUM = 54796;
 globalvar IP_NUM;
-IP_NUM = "10.19.81.201";
+IP_NUM = "10.19.88.202";
 globalvar clientSocket;
 clientSocket = network_create_socket(network_socket_udp);
 globalvar connectedToServer;
@@ -88,8 +88,8 @@ if (!connectedToServer) {
             buffer_seek(bufferToSend, buffer_seek_start, 0);
             buffer_write(bufferToSend, buffer_string, "pu");
             buffer_write(bufferToSend, buffer_u8, i);
-            var blockNumber = ds_list_find_index(cubeIds, robotIds[i].pickUpId);
-            buffer_write(bufferToSend, buffer_u32, blockNumber);
+            var cubeNum = ds_list_find_index(cubeIds, robotIds[i].pickUpId);
+            buffer_write(bufferToSend, buffer_u32, cubeNum);
             network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
         }
@@ -106,7 +106,6 @@ if (!connectedToServer) {
             buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, robotId.holdingId));
             buffer_write(bufferToSend, buffer_u32, robotId.putDownX);
             buffer_write(bufferToSend, buffer_u32, robotId.putDownY);
-            show_debug_message(string(robotId.holdingId) + " " + string(robotId.putDownX));
             buffer_write(bufferToSend, buffer_u32, robotId.image_angle);
             network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
             buffer_delete(bufferToSend);
@@ -129,6 +128,17 @@ if (!connectedToServer) {
         buffer_write(bufferToSend, buffer_f32, tempCube.image_angle);
     }
     
+    network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
+    buffer_delete(bufferToSend);
+    
+    //added cube
+    var bufferToSend = buffer_create(256, buffer_fixed, 1);
+    buffer_seek(bufferToSend, buffer_seek_start, 0);
+    buffer_write(bufferToSend, buffer_string, "ac");
+    buffer_write(bufferToSend, buffer_u8, redAddedCube.typeNum);
+    buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, redAddedCube.cubeId));
+    buffer_write(bufferToSend, buffer_u8, blueAddedCube.typeNum);
+    buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, blueAddedCube.cubeId));
     network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
     buffer_delete(bufferToSend);
 }
@@ -204,6 +214,11 @@ if (socketId == clientSocket) {
                 cubeId.x = xPos;
                 cubeId.y = yPos;
                 cubeId.image_angle = imageAngle;
+            }
+        } else if (type == "ac") {
+            for (var i = 0; i &lt; 3; i++) {
+                redPowerUp[i] = buffer_read(receivedBuffer, buffer_u8);
+                bluePowerUp[i] = buffer_read(receivedBuffer, buffer_u8);
             }
         }
     }

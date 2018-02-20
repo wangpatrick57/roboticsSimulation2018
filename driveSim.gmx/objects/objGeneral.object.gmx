@@ -19,7 +19,7 @@
         <exetype>2</exetype>
         <functionname></functionname>
         <codestring></codestring>
-        <whoName>self</whoName>
+        <whoName>objGeneral</whoName>
         <relative>0</relative>
         <isnot>0</isnot>
         <arguments>
@@ -43,12 +43,15 @@ globalvar blueSwitchCubes;
 blueSwitchCubes = 0;
 globalvar redSwitchCubes;
 redSwitchCubes = 0;
+baseSwitchScore = 1;
 globalvar redSwitchScore;
-redSwitchScore = 1;
+redSwitchScore = baseSwitchScore;
 globalvar blueSwitchScore;
-blueSwitchScore = 1;
+blueSwitchScore = baseSwitchScore;
 globalvar scaleScore;
 scaleScore = 1;
+globalvar baseScaleScore;
+baseScaleScore = scaleScore;
 globalvar collisionArray;
 globalvar chunkSize;
 chunkSize = 20;
@@ -60,6 +63,32 @@ globalvar redSwitchTop, blueSwitchTop, scaleTop;
 redSwitchTop = -1;
 blueSwitchTop = -1;
 scaleTop = -1;
+globalvar powerup;
+powerup = "none";
+timeCur = 0;
+globalvar blueExchangeCube;
+blueExchangeCube = false;
+globalvar redExchangeCube;
+redExchangeCube = false;
+globalvar redPowerUp, lastRedPowerUp, bluePowerUp, lastBluePowerUp;
+
+for (var i = 0; i &lt; 3; i++) {
+    redPowerUp[i] = 0;
+    lastRedPowerUp[i] = 0;
+    bluePowerUp[i] = 0;
+    lastBluePowerUp[i] = 0;
+}
+
+globalvar redAddedCube, blueAddedCube;
+redAddedCube = instance_create(0, 0, objData);
+blueAddedCube = instance_create(0, 0, objData);
+redAddedCube.typeNum = 255;
+redAddedCube.cubeId = noone;
+blueAddedCube.typeNum = 255;
+blueAddedCube.cubeId = noone;
+globalvar redExchangeCubeId, blueExchangeCubeId;
+redExchangeCubeId = noone;
+blueExchangeCubeId = noone;
 
 ///robot
 //km
@@ -120,23 +149,21 @@ globalvar robotTempDir;
           <argument>
             <kind>1</kind>
             <string>///creation stuff
-/*var temp = ds_list_create();
-var subTemp = ds_list_create();
-ds_list_add(subTemp, 3);
-ds_list_add(temp, subTemp);
-show_debug_message(ds_list_find_value(ds_list_find_value(temp, 0), 0));
-ds_list_add(ds_list_find_value(temp, 0), 5);
-show_debug_message(ds_list_find_value(ds_list_find_value(temp, 0), 1));*/
-
 ///general
+globalvar timer;
+timer=0;
+globalvar portalTimer;
+portalTimer=0;
 randomize();
 texture_set_interpolation(false);
-window_set_fullscreen(false);
+window_set_fullscreen(true);
+offset=377;
+var robotOffset = 150;
+
 
 ///power up field
 //walls
-instance_create(0, 76 * px2cm, objAllianceWall);
-instance_create(room_width - objAllianceWall.sprite_width, 76 * px2cm, objAllianceWall);
+
 
 //score
 var numberWidth = scrGetWidth(objRedNumber);
@@ -145,6 +172,27 @@ var numberInBetweenDist = 10;
 var xOffset = 100;
 var yOffset = 50;
 var numNumbers = 3;
+globalvar bluePortalOne;
+globalvar bluePortalTwo;
+globalvar redPortalOne;
+globalvar redPortalTwo;
+
+for(var j=0;j&lt;7;j++){
+    bluePortalOne[j]=instance_create(-50,-50,objPowerCube);
+    ds_list_add(cubeIds, bluePortalOne[j]);
+}
+for(var j=0;j&lt;7;j++){
+    bluePortalTwo[j]=instance_create(-50,-50,objPowerCube);
+    ds_list_add(cubeIds, bluePortalTwo[j]);
+}
+for(var j=0;j&lt;7;j++){
+    redPortalOne[j]=instance_create(-50,-50,objPowerCube);
+    ds_list_add(cubeIds, redPortalOne[j]);
+}
+for(var j=0;j&lt;7;j++){
+    redPortalTwo[j]=instance_create(-50,-50,objPowerCube);
+    ds_list_add(cubeIds, redPortalTwo[j]);  
+}
 
 for (var i = 0; i &lt; numNumbers; i++) {
     var tempX = xOffset + numberWidth / 2 + i * (numberWidth + numberInBetweenDist);
@@ -153,14 +201,18 @@ for (var i = 0; i &lt; numNumbers; i++) {
     a = instance_create(room_width - tempX, yOffset + numberHeight / 2, objBlueNumber);
     a.tenPower = i;
 }
-
+timerOffset=10;
+secondsTens=instance_create(room_width/2,yOffset + numberHeight / 2,objTimerSecondTens);
+secondsOnes=instance_create(room_width/2+numberInBetweenDist+numberWidth,yOffset + numberHeight / 2,objTimerSecondOnes);
+colon=instance_create(room_width/2-numberWidth,yOffset + numberHeight / 2,objColon);
+minutes=instance_create(room_width/2-2*numberWidth,yOffset+numberHeight/2,objTimerMinutes);
 //switches and scale
 var switchWidth = scrGetWidth(objSwitchInBetween);
 var switchHeight = scrGetHeight(objSwitchInBetween);
 var switchXOffset = 356;
-redSwitch = instance_create(switchXOffset + switchWidth / 2, room_height / 2, objSwitchInBetween);
-blueSwitch = instance_create(room_width - switchXOffset - switchWidth / 2, room_height / 2, objSwitchInBetween);
-scale = instance_create(room_width / 2, room_height / 2, objScaleInBetween);
+redSwitch = instance_create(switchXOffset + switchWidth / 2, room_height / 2-offset/2, objSwitchInBetween);
+blueSwitch = instance_create(room_width - switchXOffset - switchWidth / 2, room_height / 2-offset/2, objSwitchInBetween);
+scale = instance_create(room_width / 2, room_height / 2-offset/2, objScaleInBetween);
 
 //cubes
 var cubeSize = scrGetWidth(objPowerCube);
@@ -171,7 +223,7 @@ var looksGoodOffset = 3;
 
 for (var i = 0; i &lt; numCubes; i++) {
     var tempX = switchXOffset + switchWidth + cubeSize / 2 + looksGoodOffset;
-    var tempY = (room_height - switchTotalHeight) / 2 + cubeSize / 2 + cubeInBetween * i;
+    var tempY = (room_height-offset - switchTotalHeight) / 2 + cubeSize / 2 + cubeInBetween * i;
     var a = instance_create(tempX, tempY, objPowerCube);
     ds_list_add(cubeIds, a);
     a = instance_create(room_width - tempX, tempY, objPowerCube);
@@ -185,7 +237,7 @@ for (var layer = pyramidSize; layer &gt; 0; layer--) {
         var tempX = switchXOffset - (i + 0.5) * cubeSize - looksGoodOffset;
     
         for (var j = 0; j &lt; layer - i; j++) {
-            var tempY = room_height / 2 - (layer - i - 1) * cubeSize / 2 + j * cubeSize;
+            var tempY = room_height / 2-offset/2 - (layer - i - 1) * cubeSize / 2 + j * cubeSize;
             var a = instance_create(tempX, tempY, objPowerCube);
             ds_list_add(cubeIds, a);
             a.depth = layer - pyramidSize - 1;
@@ -198,65 +250,101 @@ for (var layer = pyramidSize; layer &gt; 0; layer--) {
 
 //lines
 var autoDist = 305;
-instance_create(autoDist, room_height / 2, objLine);
-instance_create(room_width - autoDist, room_height / 2, objLine);
-instance_create(room_width / 2, room_height / 2, objLine);
+instance_create(autoDist, room_height / 2-offset/2, objLine);
+instance_create(room_width - autoDist, room_height / 2-offset/2, objLine);
+instance_create(room_width / 2, room_height / 2-offset/2, objLine);
 
 //walls
+wallWidth=75;
 dropWidth=40;
-redAllianceDrop=instance_create(75-dropWidth/2,room_height/2-100,objDrop);
+//field
+
+instance_create(wallWidth/2, room_height/2-offset/2 , objRedAllianceWall);
+instance_create(room_width-wallWidth/2, room_height/2-offset/2 , objBlueAllianceWall);
+
+redAllianceDrop=instance_create(wallWidth-dropWidth/2,room_height/2-100-offset/2,objDrop);
 redAllianceDrop.image_angle+=90;
-blueAllianceDrop=instance_create(room_width-75+dropWidth/2,room_height/2+100,objDrop);
+blueAllianceDrop=instance_create(room_width-wallWidth+dropWidth/2,room_height/2+100-offset/2,objDrop);
 blueAllianceDrop.image_angle-=90;
-instance_create(75/2, room_height/2 , objRedAllianceWall);
-instance_create(room_width-75/2, room_height/2 , objBlueAllianceWall);
+redAllianceDrop.depth=-100000;
+blueAllianceDrop.depth=-100000;
+exchangeWidth=60;
+redExchangeZone=instance_create(wallWidth+exchangeWidth/2,room_height/2-100-offset/2,objExchange);
+redExchangeZone.side="red";
+blueExchangeZone=instance_create(room_width-wallWidth-exchangeWidth/2,room_height/2+100-offset/2,objExchange);
+blueExchangeZone.side="blue";
+
+
 portalWidth=196;
 portalHeight=38;
 blue1Portal1=instance_create(portalWidth/2,portalHeight/2,objBluePortal);
+
 blue1Portal2=instance_create(portalWidth/2,3*portalHeight/2,objBluePortal2);
+bluePortal1MidpointX=blue1Portal2.x+37.5;
+bluePortal1MidpointY=blue1Portal2.y;
+globalvar dropBlue1;
+dropBlue1=instance_create(bluePortal1MidpointX+dsin(17.3)*30,bluePortal1MidpointY+dcos(17.3)*30,objPortalExchange);
+dropBlue1.image_angle+=17.3;
+
+
 red1Portal1=instance_create(room_width-portalWidth/2,portalHeight/2,objRedPortal);
 red1Portal2=instance_create(room_width-portalWidth/2,3*portalHeight/2,objRedPortal2);
 red1Portal1.image_xscale*=-1;
 red1Portal2.image_xscale*=-1;
-blue2Portal1=instance_create(portalWidth/2,room_height-portalHeight/2,objBluePortal);
-blue2Portal2=instance_create(portalWidth/2,room_height-3*portalHeight/2,objBluePortal2);
-red2Portal1=instance_create(room_width-portalWidth/2,room_height-portalHeight/2,objRedPortal);
-red2Portal2=instance_create(room_width-portalWidth/2,room_height-3*portalHeight/2,objRedPortal2);
+
+redPortal1MidpointX=red1Portal2.x-37.5;
+redPortal1MidpointY=red1Portal2.y;
+globalvar dropRed1;
+dropRed1=instance_create(redPortal1MidpointX-dsin(17.3)*30,redPortal1MidpointY+dcos(17.3)*30,objPortalExchange);
+dropRed1.image_angle-=17.3;
+
+
+blue2Portal1=instance_create(portalWidth/2,room_height-portalHeight/2-offset,objBluePortal);
+blue2Portal2=instance_create(portalWidth/2,room_height-3*portalHeight/2-offset,objBluePortal2);
 blue2Portal1.image_yscale*=-1;
 blue2Portal2.image_yscale*=-1;
+bluePortal2MidpointX=blue2Portal2.x+37.5;
+bluePortal2MidpointY=blue2Portal2.y;
+globalvar dropBlue2;
+dropBlue2=instance_create(bluePortal2MidpointX+dsin(17.3)*30,bluePortal2MidpointY-dcos(17.3)*30,objPortalExchange);
+dropBlue2.image_angle-=17.3;
+
+red2Portal1=instance_create(room_width-portalWidth/2,room_height-portalHeight/2-offset,objRedPortal);
+red2Portal2=instance_create(room_width-portalWidth/2,room_height-3*portalHeight/2-offset,objRedPortal2);
+redPortal2MidpointX=red2Portal2.x-37.5;
+redPortal2MidpointY=red2Portal2.y;
+globalvar dropRed2;
+dropRed2=instance_create(redPortal2MidpointX-dsin(17.3)*30,redPortal2MidpointY-dcos(17.3)*30,objPortalExchange);
+dropRed2.image_angle+=17.3;
+
 red2Portal1.image_xscale*=-1;
 red2Portal2.image_xscale*=-1;
 red2Portal1.image_yscale*=-1;
 red2Portal2.image_yscale*=-1;
 wallTop=instance_create(room_width/2,portalHeight/2,objWall);
-wallBottom=instance_create(room_width/2,room_height-portalHeight/2,objWall);
+wallBottom=instance_create(room_width/2,room_height-portalHeight/2-offset,objWall);
 wallBottom.image_yscale*=-1;
 
-var width = ceil(room_width / chunkSize);
-var height = ceil(room_height / chunkSize);
-mask_index = sprCollisionCheck;
-
-for (r = 0; r &lt; height; r++) {
-    for (c = 0; c &lt; width; c++) {
-        if (place_meeting(c * chunkSize, r * chunkSize, objBlock)) {
-            collisionArray[r, c] = 1;
-        } else {
-            collisionArray[r, c] = 0;
-        }
-    }
-}
-
-var tempArray;
-
-for (r = 0; r &lt; height; r++) {
-    for (c = 0; c &lt; width; c++) {
-        if (scrValid(c * chunkSize, r * chunkSize, 0)) {
-            tempArray[r, c] = 0;
-        } else {
-            tempArray[r, c] = 1;
-        }
-    }
-}
+//power up UI
+sideOffset=73;
+middleOffset=50;
+globalvar fieldHeight;
+fieldHeight=823;
+height=(1200-fieldHeight)/2+fieldHeight;
+portalWidth=150;
+barWidth=300;
+globalvar redForce;
+globalvar redBoost;
+globalvar redLevitate;
+globalvar blueForce;
+globalvar blueBoost;
+globalvar blueLevitate;
+redForce=instance_create(sideOffset+portalWidth/2,height,objRedForce);
+redBoost=instance_create(sideOffset+portalWidth/2+middleOffset+portalWidth,height,objRedBoost);
+redLevitate=instance_create(sideOffset+portalWidth/2+2*middleOffset+2*portalWidth,height,objRedLevitate);
+blueForce=instance_create(sideOffset+portalWidth/2+4*middleOffset+3*portalWidth+barWidth,height,objBlueForce);
+blueBoost=instance_create(sideOffset+portalWidth/2+5*middleOffset+4*portalWidth+barWidth,height,objBlueBoost);
+blueLevitate=instance_create(sideOffset+portalWidth/2+6*middleOffset+5*portalWidth+barWidth,height,objBlueLevitate);
 
 ///robots
 var robotXOffset = 150;
@@ -273,9 +361,8 @@ for (var i = 0; i &lt; numRobots; i++) {
     controlSchemes[i] = "none";
 }
 
-controlSchemes[0] = "kr";
-controlSchemes[1] = "mo";
-controlSchemes[2] = "ko";    
+controlSchemes[1] = "kr";
+controlSchemes[4] = "ko";  
 globalvar thisInControl;
 
 for (var i = 0; i &lt; numRobots; i++) {
@@ -297,13 +384,13 @@ for (var i = 0; i &lt; numRobots; i++) {
 }
 
 var tempYPoses;
-var tempYPos = room_height / 2 - robotYDiff;
+var tempYPos = (room_height - offset) / 2 - robotYDiff;
 tempYPoses[0] = tempYPos;
 tempYPoses[3] = tempYPos;
-tempYPos = room_height / 2;
+tempYPos = (room_height - offset) / 2;
 tempYPoses[1] = tempYPos;
 tempYPoses[4] = tempYPos;
-tempYPos = room_height / 2 + robotYDiff;
+tempYPos = (room_height - offset) / 2 + robotYDiff;
 tempYPoses[2] = tempYPos;
 tempYPoses[5] = tempYPos;
 
@@ -322,8 +409,10 @@ for (var i = 0; i &lt; numRobots; i++) {
         
         if (i &lt; numRobots / 2) {
             controllerIds[i].robotId.side = "red";
+            controllerIds[i].robotId.image_angle = 0;
         } else {
             controllerIds[i].robotId.side = "blue";
+            controllerIds[i].robotId.image_angle = 180;
         }
         
         robotIds[i] = controllerIds[i].robotId;
@@ -353,19 +442,100 @@ instance_create(0, 0, objClient);
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///stuff
-time++;
-if(room==robots){
-    if(random(200)&lt;1){
-        instance_create(random(room_height),random(room_width),objGear);
+            <string>///powerup
+if(powerup!="none"){
+    curTime++;
+}
+if(powerup=="redForce"){
+    if(curTime&lt;2){
+        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objForceSymbol);
+        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objRedBar);
+    }
+    bar.image_index=curTime/2-1;
+    if(curTime&gt;10*room_speed){
+        curTime=0;
+        powerup=inQueue;
+        inQueue="none";
+        redSwitch.top.image_index=2;
+        redSwitch.bot.image_index=2;
+        scale.top.image_index=2;
+        scale.bot.image_index=2;
+        with(bar){
+            instance_destroy();
+        }
+        with(symbol){
+            instance_destroy();
+        }
+    }
+}else if(powerup=="blueForce"){
+    if(curTime&lt;2){
+        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objForceSymbol);
+        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objBlueBar);
+    }
+    bar.image_index=curTime/2-1;
+    if(curTime&gt;10*room_speed){
+        curTime=0;
+        powerup=inQueue;
+        inQueue="none";
+        blueSwitch.top.image_index=2;
+        blueSwitch.bot.image_index=2;
+        scale.top.image_index=2;
+        scale.bot.image_index=2;
+        with(symbol){
+            instance_destroy();
+        }
+        with(bar){
+            instance_destroy();
+        }
+    }
+}else if(powerup=="redBoost"){
+    if(curTime&lt;2){
+        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objBoostSymbol);
+        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objRedBar);
+        
+    }
+    
+    bar.image_index=curTime/2-1;
+    if(curTime&gt;10*room_speed){
+        curTime=0;
+        powerup=inQueue;
+        inQueue="none";
+        redSwitch.top.image_index=2;
+        redSwitch.bot.image_index=2;
+        scale.top.image_index=2;
+        scale.bot.image_index=2;
+        with(bar){
+            instance_destroy();
+        }
+        with(symbol){
+            instance_destroy();
+        }
+        
+    }
+}else if(powerup=="blueBoost"){
+    if(curTime&lt;2){
+        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objBoostSymbol);
+        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objBlueBar);
+        
+    }
+    bar.image_index=curTime/2-1;
+    if(curTime&gt;10*room_speed){
+        curTime=0;
+        powerup=inQueue;
+        inQueue="none";
+        blueSwitch.top.image_index=2;
+        blueSwitch.bot.image_index=2;
+        scale.top.image_index=2;
+        scale.bot.image_index=2;
+        with(bar){
+            instance_destroy();
+        }
+        with(symbol){
+            instance_destroy();
+        }
     }
 }
-if(room==obstacle){
-    if(time&gt;laserTimer){
-        laserTimer=10000000000000;
-        scrMakeLasers();
-    }
-}
+
 
 </string>
           </argument>
@@ -387,20 +557,234 @@ if(room==obstacle){
         <arguments>
           <argument>
             <kind>1</kind>
+            <string>///timer
+timer++;
+if(timer%room_speed==0){
+    ones=secondsOnes.num+1;
+    if(ones&lt;10){
+        secondsOnes.num++;
+    }else{
+        tens=secondsTens.num+1;
+        if(tens&lt;6){
+            secondsTens.num++;
+            secondsOnes.num=0;
+        }else{
+            minutes.num++;
+            secondsTens.num=0;
+            secondsOnes.num=0;
+        }
+    }
+}
+            
+        
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///portal
+
+with(dropRed1){
+    bot=instance_place(x,y,objRobot);
+    
+    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="red"){
+        
+        if(dropRed1.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){ 
+            
+            dropRed1.numCubes--;
+            bot.pickUpId=redPortalOne[dropRed1.numCubes];
+
+            
+            
+        }
+    }
+    
+}
+with(dropBlue1){
+    bot=instance_place(x,y,objRobot);
+    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="blue"){
+        if(dropBlue1.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){
+          
+            dropBlue1.numCubes--;
+            bot.pickUpId=bluePortalOne[dropBlue1.numCubes];
+        }
+    }
+}
+with(dropRed2){
+    bot=instance_place(x,y,objRobot);
+    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="red"){
+        if(dropRed2.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){
+        
+            dropRed2.numCubes--;
+            bot.pickUpId=redPortalTwo[dropRed2.numCubes];
+            
+        }
+    }
+}
+with(dropBlue2){
+    bot=instance_place(x,y,objRobot);
+    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="blue"){
+        if(dropBlue2.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){
+
+            dropBlue2.numCubes--;
+            bot.pickUpId=bluePortalTwo[dropBlue2.numCubes];
+            
+        }
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
             <string>///score
-if (redSwitch.redCubes &gt; redSwitch.blueCubes) {
+timeCur++;
+if (redSwitch.redCubes &gt; redSwitch.blueCubes||(powerup=="redForce"&amp;&amp;(redPowerUp[0]==1||redPowerUp[0]==3))) {
     redScore += redSwitchScore / room_speed;
 }
+if(powerup=="redForce1"||powerup=="redForce3"){
+    if(redSwitch.topSide=="red"){
+        redSwitch.top.image_index=3;
+        
+    }else{
+        redSwitch.bot.image_index=3;
+    }
+    
+}
 
-if (blueSwitch.blueCubes &gt; blueSwitch.redCubes) {
+if (blueSwitch.blueCubes &gt; blueSwitch.redCubes||(powerup=="blueForce"&amp;&amp;(bluePowerUp[0]==1||bluePowerUp[0]==3))) {
     blueScore += blueSwitchScore / room_speed;
 }
-
-if (scale.redCubes &gt; scale.blueCubes) {
+if(powerup=="blueForce1"||powerup=="blueForce3"){
+    if(blueSwitch.topSide=="blue"){
+        blueSwitch.top.image_index=3;
+    }else{
+        blueSwitch.bot.image_index=3;
+    }
+}
+if (scale.redCubes &gt; scale.blueCubes||(powerup=="redForce"&amp;&amp;(redPowerUp[0]==2||redPowerUp[0]==3))) {
     redScore += scaleScore / room_speed;
-} else if (scale.blueCubes &gt; scale.redCubes) {
+} else if (scale.blueCubes &gt; scale.redCubes||(powerup="blueForce"&amp;&amp;(bluePowerUp[0]==2||bluePowerUp[0]==3))) {
     blueScore += scaleScore / room_speed;
 }
+if(powerup=="redForce"&amp;&amp;(redPowerUp[0]==2||redPowerUp[0]==3)){
+    if(scale.topSide=="red"){
+        scale.top.image_index=3;
+    }else{
+        scale.bot.image_index=3;
+    }
+}
+    
+if(powerup=="redBoost"){
+    if(redPowerUp[1]==2||redPowerUp[1]==3){
+        scaleScore=2*baseScaleScore;
+        if(timeCur%6==0){
+            
+                num=scale.top.image_index+1;
+                if(num&gt;1){
+                    scale.top.image_index=0;
+                }else{
+                    scale.top.image_index++;
+                }
+                num=scale.bot.image_index+1;
+                if(num&gt;1){
+                    scale.bot.image_index=0;
+                }else{
+                    scale.bot.image_index++;
+                }
+        }
+    }
+    if(redPowerUp[1]==1||redPowerUp[1]==3){
+        redSwitchScore=2*baseSwitchScore;
+        if(timeCur%6==0){
+                num=redSwitch.top.image_index+1;
+                if(num&gt;1){
+                    redSwitch.top.image_index=0;
+                }else{
+                    redSwitch.top.image_index++;
+                }
+                
+    
+                num=redSwitch.bot.image_index+1;
+                if(num&gt;1){
+                    redSwitch.bot.image_index=0;
+                }else{
+                    redSwitch.bot.image_index++;
+                }
+            
+        }
+    }
+}else if(powerup=="blueBoost"){
+    if(bluePowerUp[1]==2||bluePowerUp[1]==3){
+        scaleScore=2*baseScaleScore;
+        if(timeCur%6==0){
+                num=scale.top.image_index+1;
+                if(num&gt;1){
+                    scale.top.image_index=0;
+                }else{
+                    scale.top.image_index++;
+                }
+                if(num&gt;1){
+                    scale.bot.image_index=0;
+                }else{
+                    scale.bot.image_index++;
+                }
+        }
+    }
+    if(bluePowerUp[1]==1||bluePowerUp[1]==3){
+        blueSwitchScore=2*baseSwitchScore;
+        if(timeCur%6==0){
+                num=blueSwitch.top.image_index+1;
+                if(num&gt;1){
+                    blueSwitch.top.image_index=0;
+                }else{
+                    blueSwitch.top.image_index++;
+                }
+                
+                if(num&gt;1){
+                    blueSwitch.bot.image_index=0;
+                }else{
+                    blueSwitch.bot.image_index++;
+                }
+            }
+    }
+
+}else{
+    scaleScore=baseScaleScore;
+    redSwitchScore=baseSwitchScore;
+    blueSwitchScore=baseSwitchScore;
+}
+
 </string>
           </argument>
         </arguments>

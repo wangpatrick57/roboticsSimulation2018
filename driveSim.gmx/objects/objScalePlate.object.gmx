@@ -83,7 +83,7 @@ if (instance_exists(middleId)) {
         blueScore += thisCubes - lastThisCubes;
     }
     
-    image_index = (image_number - 1) / 2 + thisCubes - otherCubes;
+    //image_index = (image_number - 1) / 2 + thisCubes - otherCubes;
     lastThisCubes = thisCubes;
 }
 </string>

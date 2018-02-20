@@ -72,20 +72,104 @@ if (controlScheme == "irl") {
         thr = 0;
     }
     
-    if (keyboard_check(ord("A"))) {
+    if (keyboard_check_direct(ord("A"))) {
         stw = 90;
-    } else if (keyboard_check(ord("D"))) {
+    } else if (keyboard_check_direct(ord("D"))) {
         stw = -90;
     } else {
         stw = 0;
     }
+    
+    if (keyboard_check_direct(ord("1"))) {
+        var thisSide = robotId.side;
+        var thisExchangeCube;
+        var thisExchangeCubeId;
+        var thisPowerUp;
+        var thisNumber = 0;
+        var thisAddedCube;
+        
+        if (thisSide == "red") {
+            thisExchangeCube = redExchangeCube;
+            thisPowerUp = redPowerUp;
+            thisAddedCube = redAddedCube;
+            thisExchangeCubeId = redExchangeCubeId;
+        } else if (thisSide == "blue") {
+            thisExchangeCube = blueExchangeCube;
+            thisPowerUp = bluePowerUp;
+            thisAddedCube = blueAddedCube;
+            thisExchangeCubeId = blueExchangeCubeId;
+        }
+        
+        if (thisExchangeCube) {
+            if (thisPowerUp[thisNumber] < 3) {
+                thisAddedCube.typeNum = thisNumber;
+                thisAddedCube.cubeId = thisExchangeCubeId;
+            }
+        } else {
+            
+        }
+    }
+    
+    /*if(keyboard_check_pressed(ord("1"))){
+        if(redExchangeCube){
+            if(redPowerUp[0]<4){
+                if(powerup!="redForce"){
+                    redPowerUp[0]++;
+                    redScore+=5;
+                    redExchangeCube=false;
+                    redForce.image_index++;
+                }
+            }
+        }else{
+            if(redPowerUp[0]>0){
+                if((powerup=="blueBoost"||powerup=="blueForce")&&inQueue=="none"){
+                    inQueue="redForce";
+                    
+                } else if (!powerup=="none"){
+                    powerup="redForce";
+                }
+            }
+        }
+    }
+     if(keyboard_check_pressed(ord("2"))){
+        if(redExchangeCube){
+            if(redPowerUp[1]<4){
+                if(powerup!="redBoost"){
+                    redPowerUp[1]++;
+                    redScore+=5;
+                    redExchangeCube=false;
+                    redBoost.image_index++;
+                }
+            }
+        }else{
+            if(redPowerUp[1]>0){
+                if((powerup=="blueForce"||powerup=="blueBoost")&&inQueue=="none"){
+                    inQueue="redBoost";
+                }else if(!powerup=="blueForce"&&!powerup=="blueBoost"){
+         
+                    powerup="redBoost";
+                }
+            }
+        }
+    }
+     if(keyboard_check_pressed(ord("3"))){
+        if(redExchangeCube){
+            if(redPowerUp[2]<4){
+                redPowerUp[2]++;
+                redScore+=5;
+                redExchangeCube=false;
+                redLevitate.image_index++;
+            }
+        }
+        if(redPowerUp[2]==3){
+            redScore+=25;
+        }
+    }*/
 } else if (controlScheme == "mo") {
-    pickUp = keyboard_check_direct(ord("O"));
+    pickUp = mouse_check_button(mb_right);
 
     if (mouse_check_button(mb_left)) {
         thr = 3 / 4;
-    } else if (mouse_check_button(mb_right)) {
-        thr = 1 / 2;
     } else {
         thr = 0;
     }
@@ -117,6 +201,63 @@ if (controlScheme == "irl") {
     }
     
     stw = stwSign * 90;
+    
+    if(keyboard_check_pressed(ord("8"))){
+        if(blueExchangeCube){
+            if(bluePowerUp[0]<4){
+                if(powerup!="blueForce"){
+                    bluePowerUp[0]++;
+                    blueScore+=5;
+                    blueExchangeCube=false;
+                    blueForce.image_index++;
+                }
+            }
+        }else{
+            if(bluePowerUp[0]>0){
+                if((powerup=="redBoost"||powerup=="redForce")&&inQueue=="none"){
+                    inQueue="blueForce";
+                    
+                }
+                else if(!powerup=="none"){
+                    powerup="blueForce";
+                }
+                
+            }
+        }
+    }
+     if(keyboard_check_pressed(ord("9"))){
+        if(blueExchangeCube){
+            if(bluePowerUp[1]<4){
+                if(powerup!="blueBoost"){
+                    bluePowerUp[1]++;
+                    blueScore+=5;
+                    blueExchangeCube=false;
+                    blueBoost.image_index++;
+                }
+            }
+        }else{
+            if(bluePowerUp[1]>0){
+                if((powerup=="redBoost"||powerup=="redForce")&&inQueue=="none"){
+                    inQueue="blueBoost";
+                }else if(!powerup=="redBoost"&&!powerup=="redForce"){
+                    powerup="blueBoost";
+                }
+            }
+        }
+    }
+    if(keyboard_check_pressed(ord("0"))){
+        if(blueExchangeCube){
+            if(bluePowerUp[2]<4){
+                bluePowerUp[2]++;
+                blueScore+=5;
+                blueExchangeCube=false;
+                blueLevitate.image_index++;
+            }
+        }
+        if(bluePowerUp[2]==3){
+            blueScore+=25;
+        }
+    }
 } else if (controlScheme == "kr") {
     pickUp = keyboard_check_direct(ord("L"));
     
@@ -134,6 +275,63 @@ if (controlScheme == "irl") {
         stw = -90;
     } else {
         stw = 0;
+    }
+    
+    if(keyboard_check_pressed(ord("B"))){
+        if(blueExchangeCube){
+            if(bluePowerUp[0]<4){
+                if(powerup!="blueForce"){
+                    bluePowerUp[0]++;
+                    blueScore+=5;
+                    blueExchangeCube=false;
+                    blueForce.image_index++;
+                }
+            }
+        }else{
+            if(bluePowerUp[0]>0){
+                if((powerup=="redBoost"||powerup=="redForce")&&inQueue=="none"){
+                    inQueue="blueForce";
+                    
+                }
+                else if(!powerup=="none"){
+                    powerup="blueForce";
+                }
+                
+            }
+        }
+    }
+     if(keyboard_check_pressed(ord("N"))){
+        if(blueExchangeCube){
+            if(bluePowerUp[1]<4){
+                if(powerup!="blueBoost"){
+                    bluePowerUp[1]++;
+                    blueScore+=5;
+                    blueExchangeCube=false;
+                    blueBoost.image_index++;
+                }
+            }
+        }else{
+            if(bluePowerUp[1]>0){
+                if((powerup=="redBoost"||powerup=="redForce")&&inQueue=="none"){
+                    inQueue="blueBoost";
+                }else if(!powerup=="redBoost"&&!powerup=="redForce"){
+                    powerup="blueBoost";
+                }
+            }
+        }
+    }
+    if(keyboard_check_pressed(ord("M"))){
+        if(blueExchangeCube){
+            if(bluePowerUp[2]<4){
+                bluePowerUp[2]++;
+                blueScore+=5;
+                blueExchangeCube=false;
+                blueLevitate.image_index++;
+            }
+        }
+        if(bluePowerUp[2]==3){
+            blueScore+=25;
+        }
     }
 } else {
     show_debug_message("you entered the wrong thing for controlScheme");
