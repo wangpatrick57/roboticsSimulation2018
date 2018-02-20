@@ -19,7 +19,7 @@
         <exetype>2</exetype>
         <functionname></functionname>
         <codestring></codestring>
-        <whoName>objGeneral</whoName>
+        <whoName>self</whoName>
         <relative>0</relative>
         <isnot>0</isnot>
         <arguments>
@@ -28,8 +28,6 @@
             <string>///vars
 ///globalvars
 ///general
-globalvar mode;
-mode = "online";
 
 ///field
 globalvar px2cm;
@@ -43,53 +41,21 @@ globalvar blueSwitchCubes;
 blueSwitchCubes = 0;
 globalvar redSwitchCubes;
 redSwitchCubes = 0;
-baseSwitchScore = 1;
+baseSwitchScore=1;
 globalvar redSwitchScore;
-redSwitchScore = baseSwitchScore;
+redSwitchScore = 1;
 globalvar blueSwitchScore;
-blueSwitchScore = baseSwitchScore;
+blueSwitchScore = 1;
 globalvar scaleScore;
 scaleScore = 1;
-globalvar baseScaleScore;
-baseScaleScore = scaleScore;
-globalvar collisionArray;
-globalvar chunkSize;
-chunkSize = 20;
-globalvar robotSize;
-robotSize = 32;
-globalvar thisManipulatedCubeIds;
-thisManipulatedCubeIds = ds_list_create();
-globalvar redSwitchTop, blueSwitchTop, scaleTop;
-redSwitchTop = -1;
-blueSwitchTop = -1;
-scaleTop = -1;
-globalvar powerup;
-powerup = "none";
-timeCur = 0;
+baseScaleScore=scaleScore;
 globalvar blueExchangeCube;
-blueExchangeCube = false;
+blueExchangeCube=false;
 globalvar redExchangeCube;
-redExchangeCube = false;
-globalvar redPowerUp, lastRedPowerUp, bluePowerUp, lastBluePowerUp;
-
-for (var i = 0; i &lt; 3; i++) {
-    redPowerUp[i] = 0;
-    lastRedPowerUp[i] = 0;
-    bluePowerUp[i] = 0;
-    lastBluePowerUp[i] = 0;
-}
-
-globalvar redAddedCube, blueAddedCube;
-redAddedCube = instance_create(0, 0, objData);
-blueAddedCube = instance_create(0, 0, objData);
-redAddedCube.typeNum = 255;
-redAddedCube.cubeId = noone;
-blueAddedCube.typeNum = 255;
-blueAddedCube.cubeId = noone;
-globalvar redExchangeCubeId, blueExchangeCubeId;
-redExchangeCubeId = noone;
-blueExchangeCubeId = noone;
-
+redExchangeCube=false;
+globalvar curTime;
+curTime=0;
+timeCur=0;
 ///robot
 //km
 globalvar topSpd; //this spd is multiplied off of for thrust controls
@@ -113,13 +79,22 @@ globalvar time;
 globalvar laserTimer;
 laserTimer = 100;
 time = 0;
+globalvar powerup;
+powerup="none";
+globalvar inQueue;
+inQueue="none";
+globalvar redPowerUp;
+redPowerUp[0]=0;
+redPowerUp[1]=0;
+redPowerUp[2]=0;
+globalvar bluePowerUp;
+bluePowerUp[0]=0;
+bluePowerUp[1]=0;
+bluePowerUp[2]=0;
+globalvar numRobots;
+numRobots=6;
 globalvar controlling;
 controlling=true;
-globalvar numRobots;
-numRobots = 6;
-globalvar robotIds;
-globalvar cubeIds;
-cubeIds = ds_list_create();
 
 ///useless stuff
 //stuff needed to make robot be able to take parameters cuz game maker shit
@@ -156,7 +131,7 @@ globalvar portalTimer;
 portalTimer=0;
 randomize();
 texture_set_interpolation(false);
-window_set_fullscreen(true);
+window_set_fullscreen(false);
 offset=377;
 var robotOffset = 150;
 
@@ -177,21 +152,20 @@ globalvar bluePortalTwo;
 globalvar redPortalOne;
 globalvar redPortalTwo;
 
+
+
+
 for(var j=0;j&lt;7;j++){
-    bluePortalOne[j]=instance_create(-50,-50,objPowerCube);
-    ds_list_add(cubeIds, bluePortalOne[j]);
+    bluePortalOne[j]=instance_create(-50,-50,objPowerCube);      
 }
 for(var j=0;j&lt;7;j++){
-    bluePortalTwo[j]=instance_create(-50,-50,objPowerCube);
-    ds_list_add(cubeIds, bluePortalTwo[j]);
+    bluePortalTwo[j]=instance_create(-50,-50,objPowerCube);      
 }
 for(var j=0;j&lt;7;j++){
-    redPortalOne[j]=instance_create(-50,-50,objPowerCube);
-    ds_list_add(cubeIds, redPortalOne[j]);
+    redPortalOne[j]=instance_create(-50,-50,objPowerCube);      
 }
 for(var j=0;j&lt;7;j++){
-    redPortalTwo[j]=instance_create(-50,-50,objPowerCube);
-    ds_list_add(cubeIds, redPortalTwo[j]);  
+    redPortalTwo[j]=instance_create(-50,-50,objPowerCube);      
 }
 
 for (var i = 0; i &lt; numNumbers; i++) {
@@ -224,10 +198,8 @@ var looksGoodOffset = 3;
 for (var i = 0; i &lt; numCubes; i++) {
     var tempX = switchXOffset + switchWidth + cubeSize / 2 + looksGoodOffset;
     var tempY = (room_height-offset - switchTotalHeight) / 2 + cubeSize / 2 + cubeInBetween * i;
-    var a = instance_create(tempX, tempY, objPowerCube);
-    ds_list_add(cubeIds, a);
-    a = instance_create(room_width - tempX, tempY, objPowerCube);
-    ds_list_add(cubeIds, a);
+    instance_create(tempX, tempY, objPowerCube);
+    instance_create(room_width - tempX, tempY, objPowerCube);
 }
 
 var pyramidSize = 3;
@@ -239,10 +211,8 @@ for (var layer = pyramidSize; layer &gt; 0; layer--) {
         for (var j = 0; j &lt; layer - i; j++) {
             var tempY = room_height / 2-offset/2 - (layer - i - 1) * cubeSize / 2 + j * cubeSize;
             var a = instance_create(tempX, tempY, objPowerCube);
-            ds_list_add(cubeIds, a);
             a.depth = layer - pyramidSize - 1;
             a = instance_create(room_width - tempX, tempY, objPowerCube);
-            ds_list_add(cubeIds, a);
             a.depth = layer - pyramidSize - 1;
         }
     }
@@ -324,7 +294,6 @@ red2Portal2.image_yscale*=-1;
 wallTop=instance_create(room_width/2,portalHeight/2,objWall);
 wallBottom=instance_create(room_width/2,room_height-portalHeight/2-offset,objWall);
 wallBottom.image_yscale*=-1;
-
 //power up UI
 sideOffset=73;
 middleOffset=50;
@@ -346,7 +315,9 @@ blueForce=instance_create(sideOffset+portalWidth/2+4*middleOffset+3*portalWidth+
 blueBoost=instance_create(sideOffset+portalWidth/2+5*middleOffset+4*portalWidth+barWidth,height,objBlueBoost);
 blueLevitate=instance_create(sideOffset+portalWidth/2+6*middleOffset+5*portalWidth+barWidth,height,objBlueLevitate);
 
-///robots
+//robot
+var robotOffset = 150;
+
 var robotXOffset = 150;
 var robotYDiff = 200;
 globalvar positions;
@@ -356,23 +327,13 @@ positions[2] = "rb";
 positions[3] = "bt";
 positions[4] = "bm";
 positions[5] = "bb";
-
-for (var i = 0; i &lt; numRobots; i++) {
-    controlSchemes[i] = "none";
-}
-
-controlSchemes[1] = "kr";
-controlSchemes[4] = "ko";  
 globalvar thisInControl;
-
-for (var i = 0; i &lt; numRobots; i++) {
-    if (controlSchemes[i] == "none") {
-        thisInControl[i] = false;
-    } else {
-        thisInControl[i] = true;
-    }
-}
-
+thisInControl[0] = false;
+thisInControl[1] = true;
+thisInControl[2] = false;
+thisInControl[3] = false;
+thisInControl[4] = true;
+thisInControl[5] = false;
 var tempXPoses;
 
 for (var i = 0; i &lt; numRobots; i++) {
@@ -384,13 +345,13 @@ for (var i = 0; i &lt; numRobots; i++) {
 }
 
 var tempYPoses;
-var tempYPos = (room_height - offset) / 2 - robotYDiff;
+var tempYPos = room_height / 2-offset/2 - robotYDiff;
 tempYPoses[0] = tempYPos;
 tempYPoses[3] = tempYPos;
-tempYPos = (room_height - offset) / 2;
+tempYPos = room_height / 2-offset/2;
 tempYPoses[1] = tempYPos;
 tempYPoses[4] = tempYPos;
-tempYPos = (room_height - offset) / 2 + robotYDiff;
+tempYPos = room_height / 2-offset/2 + robotYDiff;
 tempYPoses[2] = tempYPos;
 tempYPoses[5] = tempYPos;
 
@@ -405,252 +366,24 @@ for (var i = 0; i &lt; numRobots; i++) {
         }
     } else {
         controllerIds[i] = instance_create(tempXPoses[i], tempYPoses[i], objRobotController);
-        controllerIds[i].controlScheme = controlSchemes[i];
-        
-        if (i &lt; numRobots / 2) {
+    
+        if (i == 1) {
+            controllerIds[i].controlScheme = "ko";
             controllerIds[i].robotId.side = "red";
-            controllerIds[i].robotId.dir = 0;
-        } else {
+        } else if (i == 4) {
+            controllerIds[i].controlScheme = "mo";
             controllerIds[i].robotId.side = "blue";
-            controllerIds[i].robotId.dir = 180;
         }
-        
-        robotIds[i] = controllerIds[i].robotId;
     }
 }
 
-instance_create(0, 0, objClient);
+
 </string>
           </argument>
         </arguments>
       </action>
     </event>
     <event eventtype="3" enumb="0">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///powerup
-if(powerup!="none"){
-    curTime++;
-}
-if(powerup=="redForce"){
-    if(curTime&lt;2){
-        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objForceSymbol);
-        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objRedBar);
-    }
-    bar.image_index=curTime/2-1;
-    if(curTime&gt;10*room_speed){
-        curTime=0;
-        powerup=inQueue;
-        inQueue="none";
-        redSwitch.top.image_index=2;
-        redSwitch.bot.image_index=2;
-        scale.top.image_index=2;
-        scale.bot.image_index=2;
-        with(bar){
-            instance_destroy();
-        }
-        with(symbol){
-            instance_destroy();
-        }
-    }
-}else if(powerup=="blueForce"){
-    if(curTime&lt;2){
-        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objForceSymbol);
-        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objBlueBar);
-    }
-    bar.image_index=curTime/2-1;
-    if(curTime&gt;10*room_speed){
-        curTime=0;
-        powerup=inQueue;
-        inQueue="none";
-        blueSwitch.top.image_index=2;
-        blueSwitch.bot.image_index=2;
-        scale.top.image_index=2;
-        scale.bot.image_index=2;
-        with(symbol){
-            instance_destroy();
-        }
-        with(bar){
-            instance_destroy();
-        }
-    }
-}else if(powerup=="redBoost"){
-    if(curTime&lt;2){
-        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objBoostSymbol);
-        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objRedBar);
-        
-    }
-    
-    bar.image_index=curTime/2-1;
-    if(curTime&gt;10*room_speed){
-        curTime=0;
-        powerup=inQueue;
-        inQueue="none";
-        redSwitch.top.image_index=2;
-        redSwitch.bot.image_index=2;
-        scale.top.image_index=2;
-        scale.bot.image_index=2;
-        with(bar){
-            instance_destroy();
-        }
-        with(symbol){
-            instance_destroy();
-        }
-        
-    }
-}else if(powerup=="blueBoost"){
-    if(curTime&lt;2){
-        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objBoostSymbol);
-        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objBlueBar);
-        
-    }
-    bar.image_index=curTime/2-1;
-    if(curTime&gt;10*room_speed){
-        curTime=0;
-        powerup=inQueue;
-        inQueue="none";
-        blueSwitch.top.image_index=2;
-        blueSwitch.bot.image_index=2;
-        scale.top.image_index=2;
-        scale.bot.image_index=2;
-        with(bar){
-            instance_destroy();
-        }
-        with(symbol){
-            instance_destroy();
-        }
-    }
-}
-
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///timer
-timer++;
-if(timer%room_speed==0){
-    ones=secondsOnes.num+1;
-    if(ones&lt;10){
-        secondsOnes.num++;
-    }else{
-        tens=secondsTens.num+1;
-        if(tens&lt;6){
-            secondsTens.num++;
-            secondsOnes.num=0;
-        }else{
-            minutes.num++;
-            secondsTens.num=0;
-            secondsOnes.num=0;
-        }
-    }
-}
-            
-        
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///portal
-
-with(dropRed1){
-    bot=instance_place(x,y,objRobot);
-    
-    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="red"){
-        
-        if(dropRed1.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){ 
-            
-            dropRed1.numCubes--;
-            bot.pickUpId=redPortalOne[dropRed1.numCubes];
-
-            
-            
-        }
-    }
-    
-}
-with(dropBlue1){
-    bot=instance_place(x,y,objRobot);
-    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="blue"){
-        if(dropBlue1.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){
-          
-            dropBlue1.numCubes--;
-            bot.pickUpId=bluePortalOne[dropBlue1.numCubes];
-        }
-    }
-}
-with(dropRed2){
-    bot=instance_place(x,y,objRobot);
-    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="red"){
-        if(dropRed2.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){
-        
-            dropRed2.numCubes--;
-            bot.pickUpId=redPortalTwo[dropRed2.numCubes];
-            
-        }
-    }
-}
-with(dropBlue2){
-    bot=instance_place(x,y,objRobot);
-    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="blue"){
-        if(dropBlue2.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){
-
-            dropBlue2.numCubes--;
-            bot.pickUpId=bluePortalTwo[dropBlue2.numCubes];
-            
-        }
-    }
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -784,6 +517,232 @@ if(powerup=="redBoost"){
     redSwitchScore=baseSwitchScore;
     blueSwitchScore=baseSwitchScore;
 }
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///timer
+timer++;
+if(timer%room_speed==0){
+    ones=secondsOnes.num+1;
+    if(ones&lt;10){
+        secondsOnes.num++;
+    }else{
+        tens=secondsTens.num+1;
+        if(tens&lt;6){
+            secondsTens.num++;
+            secondsOnes.num=0;
+        }else{
+            minutes.num++;
+            secondsTens.num=0;
+            secondsOnes.num=0;
+        }
+    }
+}
+            
+        
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///portal
+
+with(dropRed1){
+    bot=instance_place(x,y,objRobot);
+    
+    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="red"){
+        
+        if(dropRed1.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){ 
+            
+            dropRed1.numCubes--;
+            bot.pickUpId=redPortalOne[dropRed1.numCubes];
+
+            
+            
+        }
+    }
+    
+}
+with(dropBlue1){
+    bot=instance_place(x,y,objRobot);
+    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="blue"){
+        if(dropBlue1.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){
+          
+            dropBlue1.numCubes--;
+            bot.pickUpId=bluePortalOne[dropBlue1.numCubes];
+            show_debug_message(string(dropBlue1.numCubes));
+        }
+    }
+}
+with(dropRed2){
+    bot=instance_place(x,y,objRobot);
+    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="red"){
+        if(dropRed2.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){
+        
+            dropRed2.numCubes--;
+            bot.pickUpId=redPortalTwo[dropRed2.numCubes];
+            
+        }
+    }
+}
+with(dropBlue2){
+    bot=instance_place(x,y,objRobot);
+    if(bot!=noone&amp;&amp;bot.holdingId==noone&amp;&amp;bot.side=="blue"){
+        if(dropBlue2.numCubes&gt;0&amp;&amp;bot.pickUpId==noone){
+
+            dropBlue2.numCubes--;
+            bot.pickUpId=bluePortalTwo[dropBlue2.numCubes];
+            
+        }
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///powerup
+if(powerup!="none"){
+    curTime++;
+}
+if(powerup=="redForce"){
+    if(curTime&lt;2){
+        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objForceSymbol);
+        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objRedBar);
+    }
+    bar.image_index=curTime/2-1;
+    if(curTime&gt;10*room_speed){
+        curTime=0;
+        powerup=inQueue;
+        inQueue="none";
+        redSwitch.top.image_index=2;
+        redSwitch.bot.image_index=2;
+        scale.top.image_index=2;
+        scale.bot.image_index=2;
+        with(bar){
+            instance_destroy();
+        }
+        with(symbol){
+            instance_destroy();
+        }
+    }
+}else if(powerup=="blueForce"){
+    if(curTime&lt;2){
+        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objForceSymbol);
+        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objBlueBar);
+    }
+    bar.image_index=curTime/2-1;
+    if(curTime&gt;10*room_speed){
+        curTime=0;
+        powerup=inQueue;
+        inQueue="none";
+        blueSwitch.top.image_index=2;
+        blueSwitch.bot.image_index=2;
+        scale.top.image_index=2;
+        scale.bot.image_index=2;
+        with(symbol){
+            instance_destroy();
+        }
+        with(bar){
+            instance_destroy();
+        }
+    }
+}else if(powerup=="redBoost"){
+    if(curTime&lt;2){
+        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objBoostSymbol);
+        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objRedBar);
+        
+    }
+    
+    bar.image_index=curTime/2-1;
+    if(curTime&gt;10*room_speed){
+        curTime=0;
+        powerup=inQueue;
+        inQueue="none";
+        redSwitch.top.image_index=2;
+        redSwitch.bot.image_index=2;
+        scale.top.image_index=2;
+        scale.bot.image_index=2;
+        with(bar){
+            instance_destroy();
+        }
+        with(symbol){
+            instance_destroy();
+        }
+        
+    }
+}else if(powerup=="blueBoost"){
+    if(curTime&lt;2){
+        symbol=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight-100,objBoostSymbol);
+        bar=instance_create(room_width/2,(room_height-fieldHeight)/2+fieldHeight+50,objBlueBar);
+        
+    }
+    bar.image_index=curTime/2-1;
+    if(curTime&gt;10*room_speed){
+        curTime=0;
+        powerup=inQueue;
+        inQueue="none";
+        blueSwitch.top.image_index=2;
+        blueSwitch.bot.image_index=2;
+        scale.top.image_index=2;
+        scale.bot.image_index=2;
+        with(bar){
+            instance_destroy();
+        }
+        with(symbol){
+            instance_destroy();
+        }
+    }
+}
+
 
 </string>
           </argument>
