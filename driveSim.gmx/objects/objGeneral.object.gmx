@@ -71,20 +71,24 @@ blueExchangeCube = false;
 globalvar redExchangeCube;
 redExchangeCube = false;
 globalvar redPowerUp, lastRedPowerUp, bluePowerUp, lastBluePowerUp;
+globalvar powerupEffects;
 
 for (var i = 0; i &lt; 3; i++) {
     redPowerUp[i] = 0;
     lastRedPowerUp[i] = 0;
     bluePowerUp[i] = 0;
     lastBluePowerUp[i] = 0;
+    powerupEffects[i] = instance_create(0, 0, objData);
+    powerupEffects[i].type = 255;
+    powerupEffects[i].side = "none";
 }
 
 globalvar redAddedCube, blueAddedCube;
 redAddedCube = instance_create(0, 0, objData);
 blueAddedCube = instance_create(0, 0, objData);
-redAddedCube.typeNum = 255;
+redAddedCube.type = 255;
 redAddedCube.cubeId = noone;
-blueAddedCube.typeNum = 255;
+blueAddedCube.type = 255;
 blueAddedCube.cubeId = noone;
 globalvar redExchangeCubeId, blueExchangeCubeId;
 redExchangeCubeId = noone;
@@ -164,7 +168,7 @@ globalvar portalTimer;
 portalTimer=0;
 randomize();
 texture_set_interpolation(false);
-window_set_fullscreen(true);
+window_set_fullscreen(false);
 offset=377;
 var robotOffset = 150;
 
@@ -353,6 +357,11 @@ redLevitate=instance_create(sideOffset+portalWidth/2+2*middleOffset+2*portalWidt
 blueForce=instance_create(sideOffset+portalWidth/2+4*middleOffset+3*portalWidth+barWidth,height,objBlueForce);
 blueBoost=instance_create(sideOffset+portalWidth/2+5*middleOffset+4*portalWidth+barWidth,height,objBlueBoost);
 blueLevitate=instance_create(sideOffset+portalWidth/2+6*middleOffset+5*portalWidth+barWidth,height,objBlueLevitate);
+globalvar activatedPowerup;
+activatedPowerup = instance_create(0, 0, objData);
+activatedPowerup.type = 255;
+activatedPowerup.side = "none";
+activatedPowerup.powerLevel = 0;
 
 ///robots
 var robotXOffset = 150;
@@ -445,6 +454,9 @@ instance_create(0, 0, objClient);
           <argument>
             <kind>1</kind>
             <string>///score
+
+
+/*
 timeCur++;
 if (redSwitch.redCubes &gt; redSwitch.blueCubes||(powerup=="redForce"&amp;&amp;(redPowerUp[0]==1||redPowerUp[0]==3))) {
     redScore += redSwitchScore / room_speed;
@@ -560,7 +572,7 @@ if(powerup=="redBoost"){
     scaleScore=baseScaleScore;
     redSwitchScore=baseSwitchScore;
     blueSwitchScore=baseSwitchScore;
-}
+}*/
 
 </string>
           </argument>
@@ -583,6 +595,7 @@ if(powerup=="redBoost"){
           <argument>
             <kind>1</kind>
             <string>///powerup
+/*
 if(powerup!="none"){
     curTime++;
 }
@@ -673,9 +686,7 @@ if(powerup=="redForce"){
             instance_destroy();
         }
     }
-}
-
-
+}*/
 </string>
           </argument>
         </arguments>

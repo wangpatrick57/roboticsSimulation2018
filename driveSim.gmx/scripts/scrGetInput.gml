@@ -79,62 +79,6 @@ if (controlScheme == "irl") {
     } else {
         stw = 0;
     }
-    
-    /*if(keyboard_check_pressed(ord("1"))){
-        if(redExchangeCube){
-            if(redPowerUp[0]<4){
-                if(powerup!="redForce"){
-                    redPowerUp[0]++;
-                    redScore+=5;
-                    redExchangeCube=false;
-                    redForce.image_index++;
-                }
-            }
-        }else{
-            if(redPowerUp[0]>0){
-                if((powerup=="blueBoost"||powerup=="blueForce")&&inQueue=="none"){
-                    inQueue="redForce";
-                    
-                } else if (!powerup=="none"){
-                    powerup="redForce";
-                }
-            }
-        }
-    }
-     if(keyboard_check_pressed(ord("2"))){
-        if(redExchangeCube){
-            if(redPowerUp[1]<4){
-                if(powerup!="redBoost"){
-                    redPowerUp[1]++;
-                    redScore+=5;
-                    redExchangeCube=false;
-                    redBoost.image_index++;
-                }
-            }
-        }else{
-            if(redPowerUp[1]>0){
-                if((powerup=="blueForce"||powerup=="blueBoost")&&inQueue=="none"){
-                    inQueue="redBoost";
-                }else if(!powerup=="blueForce"&&!powerup=="blueBoost"){
-         
-                    powerup="redBoost";
-                }
-            }
-        }
-    }
-     if(keyboard_check_pressed(ord("3"))){
-        if(redExchangeCube){
-            if(redPowerUp[2]<4){
-                redPowerUp[2]++;
-                redScore+=5;
-                redExchangeCube=false;
-                redLevitate.image_index++;
-            }
-        }
-        if(redPowerUp[2]==3){
-            redScore+=25;
-        }
-    }*/
 } else if (controlScheme == "mo") {
     pickUp = mouse_check_button(mb_right);
 
@@ -171,63 +115,6 @@ if (controlScheme == "irl") {
     }
     
     stw = stwSign * 90;
-    
-    if(keyboard_check_pressed(ord("8"))){
-        if(blueExchangeCube){
-            if(bluePowerUp[0]<4){
-                if(powerup!="blueForce"){
-                    bluePowerUp[0]++;
-                    blueScore+=5;
-                    blueExchangeCube=false;
-                    blueForce.image_index++;
-                }
-            }
-        }else{
-            if(bluePowerUp[0]>0){
-                if((powerup=="redBoost"||powerup=="redForce")&&inQueue=="none"){
-                    inQueue="blueForce";
-                    
-                }
-                else if(!powerup=="none"){
-                    powerup="blueForce";
-                }
-                
-            }
-        }
-    }
-     if(keyboard_check_pressed(ord("9"))){
-        if(blueExchangeCube){
-            if(bluePowerUp[1]<4){
-                if(powerup!="blueBoost"){
-                    bluePowerUp[1]++;
-                    blueScore+=5;
-                    blueExchangeCube=false;
-                    blueBoost.image_index++;
-                }
-            }
-        }else{
-            if(bluePowerUp[1]>0){
-                if((powerup=="redBoost"||powerup=="redForce")&&inQueue=="none"){
-                    inQueue="blueBoost";
-                }else if(!powerup=="redBoost"&&!powerup=="redForce"){
-                    powerup="blueBoost";
-                }
-            }
-        }
-    }
-    if(keyboard_check_pressed(ord("0"))){
-        if(blueExchangeCube){
-            if(bluePowerUp[2]<4){
-                bluePowerUp[2]++;
-                blueScore+=5;
-                blueExchangeCube=false;
-                blueLevitate.image_index++;
-            }
-        }
-        if(bluePowerUp[2]==3){
-            blueScore+=25;
-        }
-    }
 } else if (controlScheme == "kr") {
     pickUp = keyboard_check_direct(ord("L"));
     
@@ -246,63 +133,6 @@ if (controlScheme == "irl") {
     } else {
         stw = 0;
     }
-    
-    if(keyboard_check_pressed(ord("B"))){
-        if(blueExchangeCube){
-            if(bluePowerUp[0]<4){
-                if(powerup!="blueForce"){
-                    bluePowerUp[0]++;
-                    blueScore+=5;
-                    blueExchangeCube=false;
-                    blueForce.image_index++;
-                }
-            }
-        }else{
-            if(bluePowerUp[0]>0){
-                if((powerup=="redBoost"||powerup=="redForce")&&inQueue=="none"){
-                    inQueue="blueForce";
-                    
-                }
-                else if(!powerup=="none"){
-                    powerup="blueForce";
-                }
-                
-            }
-        }
-    }
-     if(keyboard_check_pressed(ord("N"))){
-        if(blueExchangeCube){
-            if(bluePowerUp[1]<4){
-                if(powerup!="blueBoost"){
-                    bluePowerUp[1]++;
-                    blueScore+=5;
-                    blueExchangeCube=false;
-                    blueBoost.image_index++;
-                }
-            }
-        }else{
-            if(bluePowerUp[1]>0){
-                if((powerup=="redBoost"||powerup=="redForce")&&inQueue=="none"){
-                    inQueue="blueBoost";
-                }else if(!powerup=="redBoost"&&!powerup=="redForce"){
-                    powerup="blueBoost";
-                }
-            }
-        }
-    }
-    if(keyboard_check_pressed(ord("M"))){
-        if(blueExchangeCube){
-            if(bluePowerUp[2]<4){
-                bluePowerUp[2]++;
-                blueScore+=5;
-                blueExchangeCube=false;
-                blueLevitate.image_index++;
-            }
-        }
-        if(bluePowerUp[2]==3){
-            blueScore+=25;
-        }
-    }
 } else {
     show_debug_message("you entered the wrong thing for controlScheme");
 }
@@ -310,43 +140,56 @@ if (controlScheme == "irl") {
 if (robotId.side == "red") {
     var thisNumber = -1;
 
-    if (keyboard_check_direct(ord("1"))) {
+    if (keyboard_check_pressed(ord("1"))) {
         thisNumber = 0;
-    } else if (keyboard_check_direct(ord("2"))) {
+    } else if (keyboard_check_pressed(ord("2"))) {
         thisNumber = 1;
-    } else if (keyboard_check_direct(ord("3"))) {
+    } else if (keyboard_check_pressed(ord("3"))) {
         thisNumber = 2;
     }
     
     if (thisNumber != -1) {
         if (redExchangeCube) {
             if (redPowerUp[thisNumber] < 3) {
-                redAddedCube.typeNum = thisNumber;
+                redAddedCube.type = thisNumber;
                 redAddedCube.cubeId = redExchangeCubeId;
             }
         } else {
-            
+            if (redPowerUp[thisNumber] > 0) {
+                redActivated = thisNumber;
+            } else {
+                redActivated = -1;
+            }
         }
     }
 } else if (robotId.side == "blue") {
     var thisNumber = -1;
 
-    if (keyboard_check_direct(ord("1"))) {
+    if (keyboard_check_pressed(ord("8"))) {
         thisNumber = 0;
-    } else if (keyboard_check_direct(ord("2"))) {
+    } else if (keyboard_check_pressed(ord("9"))) {
         thisNumber = 1;
-    } else if (keyboard_check_direct(ord("3"))) {
+    } else if (keyboard_check_pressed(ord("0"))) {
         thisNumber = 2;
     }
     
     if (thisNumber != -1) {
         if (blueExchangeCube) {
             if (bluePowerUp[thisNumber] < 3) {
-                blueAddedCube.typeNum = thisNumber;
+                blueAddedCube.type = thisNumber;
                 blueAddedCube.cubeId = blueExchangeCubeId;
             }
         } else {
-            
+            if (bluePowerUp[thisNumber] > 0) {
+                show_debug_message("A");
+                activatedPowerup.type = thisNumber;
+                activatedPowerup.side = "b";
+                activatedPowerup.powerLevel = bluePowerUp[thisNumber];
+            } else {
+                activatedPowerup.type = 255;
+                activatedPowerup.side = "none";
+                activatedPowerup.powerLevel = 0;
+            }
         }
     }
 }

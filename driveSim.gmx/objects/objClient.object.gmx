@@ -135,12 +135,24 @@ if (!connectedToServer) {
     var bufferToSend = buffer_create(256, buffer_fixed, 1);
     buffer_seek(bufferToSend, buffer_seek_start, 0);
     buffer_write(bufferToSend, buffer_string, "ac");
-    buffer_write(bufferToSend, buffer_u8, redAddedCube.typeNum);
+    buffer_write(bufferToSend, buffer_u8, redAddedCube.type);
     buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, redAddedCube.cubeId));
-    buffer_write(bufferToSend, buffer_u8, blueAddedCube.typeNum);
+    buffer_write(bufferToSend, buffer_u8, blueAddedCube.type);
     buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, blueAddedCube.cubeId));
     network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
     buffer_delete(bufferToSend);
+    
+    //powerup
+    if (activatedPowerup.type != 255) {
+        var bufferToSend = buffer_create(256, buffer_fixed, 1);
+        buffer_seek(bufferToSend, buffer_seek_start, 0);
+        buffer_write(bufferToSend, buffer_string, "pw");
+        buffer_write(bufferToSend, buffer_u8, activatedPowerup.type);
+        buffer_write(bufferToSend, buffer_string, activatedPowerup.side);
+        buffer_write(bufferToSend, buffer_u8, activatedPowerup.powerLevel);
+        network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
+        buffer_delete(bufferToSend);
+    }
 }
 
 </string>
@@ -229,6 +241,26 @@ if (socketId == clientSocket) {
                     blueScore += 5;
                     bluePowerUp[i] = tempBlue;
                 }
+            }
+        } else if (type == "pw") {
+            for (var i = 0; i &lt; 3; i++) {
+                var powerupType = buffer_read(receivedBuffer, buffer_u8);
+                var powerupSide = buffer_read(receivedBuffer, buffer_string);
+                
+                if (powerupType != 255) {
+                    powerupEffects[i].type = powerupType;
+                    powerupEffects[i].side = powerupSide;
+                    
+                    if (powerupSide == "r") {
+                        redPowerUp[powerupType] = 0;
+                    } else if (powerupSide == "b") {
+                        bluePowerUp[powerupType] = 0;
+                    } else {
+                        show_debug_message("side wrong 0");
+                    }
+                }
+                
+                //show_debug_message(string(type) + " " + string(side));
             }
         }
     }

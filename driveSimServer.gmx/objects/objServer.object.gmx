@@ -75,18 +75,18 @@ for (var i = 0; i &lt; 6; i++) {
 }
 
 currentPowerup = instance_create(0, 0, objData);
-currentPowerup.type = "none"; //f, b
+currentPowerup.type = 255;
 currentPowerup.side = "none"; //r, b
 currentPowerup.powerLevel = 0;
 inQueuePowerup = instance_create(0, 0, objData);
-inQueuePowerup.type = "none"; //f, b
+inQueuePowerup.type = 255;
 inQueuePowerup.side = "none"; //r, b
 inQueuePowerup.powerLevel = 0;
 currentPowerupTime = 0;
-maxPowerupTime = 10 * room_speed;
+maxPowerupTime = 2 * room_speed;
 
 for (var i = 0; i &lt; 3; i++) {
-    powerupEffects[i] = "none";
+    powerupEffects[i] = instance_create(0, 0, objData);
     redPowerupPower[i] = 0;
     bluePowerupPower[i] = 0;
 }
@@ -115,17 +115,30 @@ invalidNums = ds_list_create();
           <argument>
             <kind>1</kind>
             <string>///mechanics
-if (currentPowerup != "none") {
+show_debug_message("ctype1 " + string(currentPowerup.type));
+
+if (currentPowerup.type != 255) {
     currentPowerupTime++;
+} else {
+    currentPowerupTime = 0;
 }
+
+if (currentPowerup.side == "r") {
+    redPowerupPower[currentPowerup.type] = 0;
+} else if (currentPowerup.side == "b") {
+    bluePowerupPower[currentPowerup.type] = 0;
+}
+
+show_debug_message("time " + string(currentPowerupTime));
 
 if (currentPowerupTime &gt; maxPowerupTime) {
     currentPowerup.type = inQueuePowerup.type;
     currentPowerup.side = inQueuePowerup.side;
     currentPowerup.powerLevel = inQueuePowerup.powerLevel;
-    inQueuePowerup.type = "none";
+    inQueuePowerup.type = 255;
     inQueuePowerup.side = "none";
     inQueuePowerup.powerLevel = 0;
+    show_debug_message("ctype2 " + string(currentPowerup.type));
 }
 
 var affected;
@@ -151,7 +164,11 @@ if (currentPowerup.powerLevel == 2 || currentPowerup.powerLevel == 3) {
 
 for (var i = 0; i &lt; 3; i++) {
     if (affected[i]) {
-        powerupEffect[i] = currentPowerup.type;
+        powerupEffects[i].type = currentPowerup.type;
+        powerupEffects[i].side = currentPowerup.side;
+    } else {
+        powerupEffects[i].type = 255;
+        powerupEffects[i].side = "none";
     }
 }
 </string>
@@ -223,7 +240,9 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     buffer_write(bufferToSend, buffer_string, "pw");
     
     for (var j = 0; j &lt; 3; j++) {
-        buffer_write(bufferToSend, buffer_string, powerupEffects[j]);
+        buffer_write(bufferToSend, buffer_u8, powerupEffects[j].type);
+        buffer_write(bufferToSend, buffer_string, powerupEffects[j].side);
+        show_debug_message("type " + string(powerupEffects[j].type));
     }
     
     network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
@@ -361,19 +380,24 @@ if (type == "c") { //connection
     pickUpPositions[cubeNum] = -1;
     changedCubes[cubeNum] = dataId;
 } else if (type == "pw") { //powerup
-    var type = buffer_read(receivedBuffer, buffer_string);
+    var type = buffer_read(receivedBuffer, buffer_u8);
     var side = buffer_read(receivedBuffer, buffer_string);
     var powerLevel = buffer_read(receivedBuffer, buffer_u8);
     
-    if (currentPowerup.type == "none") {
-        currentPowerup.type = type;
-        currentPowerup.side = side;
-        currentPowerup.powerLevel = powerLevel;
-    } else if (currentPowerup.side != side &amp;&amp; inQueuePowerup.type == "none") {
-        inQueuePowerup.type = type;
-        inQueuePowerup.side = side;
-        inQueuePowerup.powerLevel = powerLevel;
+    if (type != 255 &amp;&amp; powerLevel &gt; 0) {
+        if (currentPowerup.type == 255) {
+            currentPowerup.type = type;
+            currentPowerup.side = side;
+            currentPowerup.powerLevel = powerLevel;
+            show_debug_message("A");
+        } else if (currentPowerup.side != side &amp;&amp; inQueuePowerup.type == 255) {
+            inQueuePowerup.type = type;
+            inQueuePowerup.side = side;
+            inQueuePowerup.powerLevel = powerLevel;
+        }
     }
+    
+    //show_debug_message(string(type) + " " + string(side) + " " + string(powerLevel));
 } else if (type == "cb") { //cube
     var num = buffer_read(receivedBuffer, buffer_u32);
     
@@ -392,13 +416,13 @@ if (type == "c") { //connection
         }
     }
 } else if (type == "ac") { //added cube
-    var redTypeNum = buffer_read(receivedBuffer, buffer_u8);
-    var redNum = buffer_read(receivedBuffer, buffer_u32);
-    var blueTypeNum = buffer_read(receivedBuffer, buffer_u8);
+    var redType = buffer_read(receivedBuffer, buffer_u8);
+    var redNum = buffer_read(receivedBuffer, buffer_u32); //cube number
+    var blueType = buffer_read(receivedBuffer, buffer_u8);
     var blueNum = buffer_read(receivedBuffer, buffer_u32);
     
-    if (redTypeNum != 255 &amp;&amp; redNum != noone &amp;&amp; ds_list_find_index(invalidNums, redNum) == -1) { //cuz it's unsigned integer
-        redPowerupPower[redTypeNum]++;
+    if (redType != 255 &amp;&amp; redNum != noone &amp;&amp; ds_list_find_index(invalidNums, redNum) == -1) { //cuz it's unsigned integer
+        redPowerupPower[redType]++;
         ds_list_add(invalidNums, redNum);
         var dataId = instance_create(0, 0, objData);
         dataId.xPos = -50;
@@ -407,8 +431,8 @@ if (type == "c") { //connection
         changedCubes[redNum] = dataId;
     }
     
-    if (blueTypeNum != 255 &amp;&amp; blueNum != noone &amp;&amp; ds_list_find_index(invalidNums, blueNum) == -1) {
-        bluePowerupPower[blueTypeNum]++;
+    if (blueType != 255 &amp;&amp; blueNum != noone &amp;&amp; ds_list_find_index(invalidNums, blueNum) == -1) {
+        bluePowerupPower[blueType]++;
         ds_list_add(invalidNums, blueNum);
         var dataId = instance_create(0, 0, objData);
         dataId.xPos = -50;
