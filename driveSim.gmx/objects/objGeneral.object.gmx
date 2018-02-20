@@ -149,6 +149,14 @@ globalvar robotTempDir;
           <argument>
             <kind>1</kind>
             <string>///creation stuff
+///configurable
+for (var i = 0; i &lt; numRobots; i++) {
+    controlSchemes[i] = "none";
+}
+
+controlSchemes[1] = "kr";
+controlSchemes[4] = "ko";
+
 ///general
 globalvar timer;
 timer=0;
@@ -356,13 +364,7 @@ positions[2] = "rb";
 positions[3] = "bt";
 positions[4] = "bm";
 positions[5] = "bb";
-
-for (var i = 0; i &lt; numRobots; i++) {
-    controlSchemes[i] = "none";
-}
-
-controlSchemes[1] = "kr";
-controlSchemes[4] = "ko";  
+ 
 globalvar thisInControl;
 
 for (var i = 0; i &lt; numRobots; i++) {

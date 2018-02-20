@@ -312,18 +312,6 @@ if (robotId.side == "red") {
 
     if (keyboard_check_direct(ord("1"))) {
         thisNumber = 0;
-        /*var thisSide = robotId.side;
-        var thisExchangeCube;
-        var thisExchangeCubeId;
-        var thisPowerUp;
-        var thisAddedCube;
-        
-        if (thisSide == "red") {
-            thisExchangeCube = redExchangeCube;
-            thisPowerUp = redPowerUp;
-            thisAddedCube = redAddedCube;
-            thisExchangeCubeId = redExchangeCubeId;
-        }*/
     } else if (keyboard_check_direct(ord("2"))) {
         thisNumber = 1;
     } else if (keyboard_check_direct(ord("3"))) {
@@ -335,6 +323,27 @@ if (robotId.side == "red") {
             if (redPowerUp[thisNumber] < 3) {
                 redAddedCube.typeNum = thisNumber;
                 redAddedCube.cubeId = redExchangeCubeId;
+            }
+        } else {
+            
+        }
+    }
+} else if (robotId.side == "blue") {
+    var thisNumber = -1;
+
+    if (keyboard_check_direct(ord("1"))) {
+        thisNumber = 0;
+    } else if (keyboard_check_direct(ord("2"))) {
+        thisNumber = 1;
+    } else if (keyboard_check_direct(ord("3"))) {
+        thisNumber = 2;
+    }
+    
+    if (thisNumber != -1) {
+        if (blueExchangeCube) {
+            if (bluePowerUp[thisNumber] < 3) {
+                blueAddedCube.typeNum = thisNumber;
+                blueAddedCube.cubeId = blueExchangeCubeId;
             }
         } else {
             
