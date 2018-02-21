@@ -169,7 +169,7 @@ for (var i = 0; i &lt; numRobots; i++) {
     controlSchemes[i] = "none";
 }
 
-controlSchemes[4] = "kr";
+controlSchemes[4] = "mo";
 
 ///general
 globalvar timer;

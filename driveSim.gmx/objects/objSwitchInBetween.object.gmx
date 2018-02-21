@@ -76,6 +76,7 @@ if (!createdAlready &amp;&amp; thisTop != -1) {
     tempSide = botSide;
     bot = instance_create(id, y + sprite_height / 2 + plateHeight / 2, objSwitchPlate);
     bot.image_index = noneII;
+    createdAlready = true;
 }
 </string>
           </argument>
