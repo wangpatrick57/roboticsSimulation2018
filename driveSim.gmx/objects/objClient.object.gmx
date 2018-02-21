@@ -189,7 +189,6 @@ if (socketId == clientSocket) {
     } else if (connectedToServer) {
         if (type == "f") { //field
             var rando = buffer_read(receivedBuffer, buffer_u8);
-            show_debug_message("r" + string(rando));
             redSwitchTop = rando % 2;
             blueSwitchTop = (rando / 2) % 2;
             scaleTop = (rando / 4) % 2;
@@ -210,18 +209,25 @@ if (socketId == clientSocket) {
             }
         } else if (type == "pu") { //pick up
             var position = buffer_read(receivedBuffer, buffer_u8);
+            var cubeNum = buffer_read(receivedBuffer, buffer_u32);
             
             if (thisInControl[position]) {
                robotIds[position].pickUpAuthorized = true;
+            }
+            
+            for (var i = 0; i &lt; numRobots; i++) {
+                if (thisInControl[i] &amp;&amp; robotIds[i].pickUpId == ds_list_find_value(cubeIds, cubeNum) &amp;&amp; i != position) {
+                    robotIds[i].pickUpId = noone;
+                }
             }
         } else if (type == "cb") { //cube
             var numChanged = buffer_read(receivedBuffer, buffer_u32);
         
             for (var i = 0; i &lt; numChanged; i++) {
                 var cubeNum = buffer_read(receivedBuffer, buffer_u32);
-                var xPos = buffer_read(receivedBuffer, buffer_u32);
-                var yPos = buffer_read(receivedBuffer, buffer_u32);
-                var imageAngle = buffer_read(receivedBuffer, buffer_u32);
+                var xPos = buffer_read(receivedBuffer, buffer_s32);
+                var yPos = buffer_read(receivedBuffer, buffer_s32);
+                var imageAngle = buffer_read(receivedBuffer, buffer_s32);
                 var cubeId = ds_list_find_value(cubeIds, cubeNum);
                 cubeId.x = xPos;
                 cubeId.y = yPos;
