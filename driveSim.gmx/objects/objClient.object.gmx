@@ -189,6 +189,7 @@ if (socketId == clientSocket) {
     } else if (connectedToServer) {
         if (type == "f") { //field
             var rando = buffer_read(receivedBuffer, buffer_u8);
+            show_debug_message(rando);
             redSwitchTop = rando % 2;
             blueSwitchTop = (rando / 2) % 2;
             scaleTop = (rando / 4) % 2;

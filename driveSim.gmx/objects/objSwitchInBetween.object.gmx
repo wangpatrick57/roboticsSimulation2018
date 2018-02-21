@@ -30,11 +30,15 @@ var plateHeight = scrGetHeight(objSwitchPlate);
 redCubes = 0;
 blueCubes = 0;
 
-if (random(1) &gt;= 0.5) {
-    topSide = "b";
+if (x &lt; room_width / 2) {
+    topSide = redSwitchTop;
+} else {
+    topSide = blueSwitchTop;
+}
+
+if (topSide == "b") {
     botSide = "r";
 } else {
-    topSide = "r";
     botSide = "b";
 }
 

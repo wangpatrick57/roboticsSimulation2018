@@ -83,7 +83,7 @@ inQueuePowerup.type = 255;
 inQueuePowerup.side = "none"; //r, b
 inQueuePowerup.powerLevel = 0;
 currentPowerupTime = 0;
-maxPowerupTime = 2 * room_speed;
+maxPowerupTime = 10 * room_speed;
 
 for (var i = 0; i &lt; 3; i++) {
     powerupEffects[i] = instance_create(0, 0, objData);
