@@ -30,7 +30,8 @@
 ///general
 globalvar mode;
 mode = "online";
-masterTime = 0;
+globalvar masterTime;
+masterTime = -1;
 
 ///field
 globalvar px2cm;
@@ -169,6 +170,7 @@ for (var i = 0; i &lt; numRobots; i++) {
     controlSchemes[i] = "none";
 }
 
+controlSchemes[0] = "ko";
 controlSchemes[4] = "mo";
 controlSchemes[5] = "kr";
 
@@ -502,7 +504,7 @@ if (masterTime % room_speed == 0) {
     }
 }
 
-masterTime++;
+//masterTime++;
 </string>
           </argument>
         </arguments>
@@ -524,7 +526,9 @@ masterTime++;
           <argument>
             <kind>1</kind>
             <string>///timer
-timer++;
+timer = masterTime;
+show_debug_message(timer);
+
 if(timer%room_speed==0){
     ones=secondsOnes.num+1;
     if(ones&lt;10){
