@@ -170,7 +170,7 @@ for (var i = 0; i &lt; numRobots; i++) {
     controlSchemes[i] = "none";
 }
 
-controlSchemes[0] = "ko";
+controlSchemes[3] = "ko";
 controlSchemes[4] = "mo";
 controlSchemes[5] = "kr";
 
@@ -527,9 +527,8 @@ if (masterTime % room_speed == 0) {
             <kind>1</kind>
             <string>///timer
 timer = masterTime;
-show_debug_message(timer);
 
-if(timer%room_speed==0){
+if(timer != -1 &amp;&amp; timer%room_speed==0){
     ones=secondsOnes.num+1;
     if(ones&lt;10){
         secondsOnes.num++;
