@@ -88,7 +88,6 @@ if(place_meeting(x,y,objBall)){
         if(radiusAngle&lt;0){
             radiusAngle+=360;
         }
-       show_debug_message(string(bMagVelocity));
         
         velocityAngle=darctan2(vv,hv);
         if(velocityAngle&lt;0){
@@ -102,7 +101,6 @@ if(place_meeting(x,y,objBall)){
         bInst.hv=(initialHMomentum-hv)/2;
         bInst.vv=(initialVMomentum-vv)/2;
         
-        show_debug_message(string(sqrt(bInst.hv*bInst.hv+bInst.vv*bInst.vv)));
     }
 } 
     scrBallMove(hv,vv);

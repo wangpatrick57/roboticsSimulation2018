@@ -41,7 +41,7 @@ if (instance_exists(middleId)) {
     lastThisCubes = 0;
     depth = -1;
     
-    if (smallSide == "red") {
+    if (smallSide == "r") {
         sprite_index = sprRedPlate;
     }
 }
@@ -67,15 +67,15 @@ if (instance_exists(middleId)) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///points
+            <string>///points for adding cubes
 if (instance_exists(middleId)) {
-    if (smallSide == "red") {
+    if (smallSide == "r") {
         var cubeList = scrInstancePlaceList(x, y, objPowerCube);
         middleId.redCubes = ds_list_size(cubeList);
         thisCubes = middleId.redCubes;
         otherCubes = middleId.blueCubes;
         redScore += thisCubes - lastThisCubes;
-    } else if (smallSide == "blue") {
+    } else if (smallSide == "b") {
         var cubeList = scrInstancePlaceList(x, y, objPowerCube);
         middleId.blueCubes = ds_list_size(cubeList);
         thisCubes = middleId.blueCubes;
@@ -85,6 +85,45 @@ if (instance_exists(middleId)) {
     
     //image_index = (image_number - 1) / 2 + thisCubes - otherCubes;
     lastThisCubes = thisCubes;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///image_index
+var thisPowerupEffect = powerupEffects[1];
+var thisType = thisPowerupEffect.type;
+var thisSide = thisPowerupEffect.side;
+
+if (thisType != 255) {
+    //index
+    if (thisType == 0) {
+        if (thisSide == smallSide) {
+            image_index = forceII;
+        }
+    } else if (thisType == 1) {
+        if (image_index &lt; boostIIStart || image_index &gt; boostIIEnd) {
+            image_index = boostIIStart;
+        }
+    }
+} else {
+    image_index = noneII;
 }
 </string>
           </argument>

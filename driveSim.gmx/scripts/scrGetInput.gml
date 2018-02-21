@@ -137,8 +137,8 @@ if (controlScheme == "irl") {
     show_debug_message("you entered the wrong thing for controlScheme");
 }
 
-if (robotId.side == "red") {
-    var thisNumber = -1;
+if (robotId.side == "r") {
+   var thisNumber = -1;
 
     if (keyboard_check_pressed(ord("1"))) {
         thisNumber = 0;
@@ -152,17 +152,24 @@ if (robotId.side == "red") {
         if (redExchangeCube) {
             if (redPowerUp[thisNumber] < 3) {
                 redAddedCube.type = thisNumber;
-                redAddedCube.cubeId = redExchangeCubeId;
+                redAddedCube.num = ds_list_find_index(cubeIds, redExchangeCubeId);
             }
         } else {
             if (redPowerUp[thisNumber] > 0) {
-                redActivated = thisNumber;
+                activatedPowerup.type = thisNumber;
+                activatedPowerup.side = "r";
             } else {
-                redActivated = -1;
+                activatedPowerup.type = 255;
+                activatedPowerup.side = "none";
             }
         }
     }
-} else if (robotId.side == "blue") {
+    
+    if (!redExchangeCube) {
+        redAddedCube.type = 255;
+        redAddedCube.num = -1;
+    }
+} else if (robotId.side == "b") {
     var thisNumber = -1;
 
     if (keyboard_check_pressed(ord("8"))) {
@@ -177,20 +184,22 @@ if (robotId.side == "red") {
         if (blueExchangeCube) {
             if (bluePowerUp[thisNumber] < 3) {
                 blueAddedCube.type = thisNumber;
-                blueAddedCube.cubeId = blueExchangeCubeId;
+                blueAddedCube.num = ds_list_find_index(cubeIds, blueExchangeCubeId);
             }
         } else {
             if (bluePowerUp[thisNumber] > 0) {
-                show_debug_message("A");
                 activatedPowerup.type = thisNumber;
                 activatedPowerup.side = "b";
-                activatedPowerup.powerLevel = bluePowerUp[thisNumber];
             } else {
                 activatedPowerup.type = 255;
                 activatedPowerup.side = "none";
-                activatedPowerup.powerLevel = 0;
             }
         }
+    }
+    
+    if (!blueExchangeCube) {
+        blueAddedCube.type = 255;
+        blueAddedCube.num = -1;
     }
 }
 

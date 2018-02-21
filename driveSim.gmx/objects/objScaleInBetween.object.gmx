@@ -33,11 +33,11 @@ blueCubes = 0;
 depth = 1;
 
 if (random(1) &gt;= 0.5) {
-    topSide = "blue";
-    botSide = "red";
+    topSide = "b";
+    botSide = "r";
 } else {
-    topSide = "red";
-    botSide = "blue";
+    topSide = "r";
+    botSide = "b";
 }
 
 tempSide = topSide;
@@ -71,11 +71,11 @@ bot.image_index=2;
             <string>///"creation stuff"
 /*if (!createdAlready &amp;&amp; scaleTop != -1) {
     if (scaleTop == -0) {
-        topSide = "blue";
-        botSide = "red";
+        topSide = "b";
+        botSide = "r";
     } else {
-        topSide = "red";
-        botSide = "blue";
+        topSide = "r";
+        botSide = "b";
     }
     
     tempSide = topSide;

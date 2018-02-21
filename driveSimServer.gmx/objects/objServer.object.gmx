@@ -115,8 +115,6 @@ invalidNums = ds_list_create();
           <argument>
             <kind>1</kind>
             <string>///mechanics
-show_debug_message("ctype1 " + string(currentPowerup.type));
-
 if (currentPowerup.type != 255) {
     currentPowerupTime++;
 } else {
@@ -129,8 +127,6 @@ if (currentPowerup.side == "r") {
     bluePowerupPower[currentPowerup.type] = 0;
 }
 
-show_debug_message("time " + string(currentPowerupTime));
-
 if (currentPowerupTime &gt; maxPowerupTime) {
     currentPowerup.type = inQueuePowerup.type;
     currentPowerup.side = inQueuePowerup.side;
@@ -138,7 +134,6 @@ if (currentPowerupTime &gt; maxPowerupTime) {
     inQueuePowerup.type = 255;
     inQueuePowerup.side = "none";
     inQueuePowerup.powerLevel = 0;
-    show_debug_message("ctype2 " + string(currentPowerup.type));
 }
 
 var affected;
@@ -242,7 +237,6 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     for (var j = 0; j &lt; 3; j++) {
         buffer_write(bufferToSend, buffer_u8, powerupEffects[j].type);
         buffer_write(bufferToSend, buffer_string, powerupEffects[j].side);
-        show_debug_message("type " + string(powerupEffects[j].type));
     }
     
     network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
@@ -280,7 +274,7 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
 }
 
 
-//powerup power
+//powerup power for ui
 for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     bufferToSend = buffer_create(256, buffer_fixed, 1);
     buffer_seek(bufferToSend, buffer_seek_start, 0);
@@ -382,14 +376,20 @@ if (type == "c") { //connection
 } else if (type == "pw") { //powerup
     var type = buffer_read(receivedBuffer, buffer_u8);
     var side = buffer_read(receivedBuffer, buffer_string);
-    var powerLevel = buffer_read(receivedBuffer, buffer_u8);
+    var powerLevel;
+    show_debug_message(random(1));
+    
+    if (side == "r") {
+        powerLevel = redPowerupPower[type];
+    } else if (side == "b") {
+        powerLevel = bluePowerupPower[type];
+    }
     
     if (type != 255 &amp;&amp; powerLevel &gt; 0) {
         if (currentPowerup.type == 255) {
             currentPowerup.type = type;
             currentPowerup.side = side;
             currentPowerup.powerLevel = powerLevel;
-            show_debug_message("A");
         } else if (currentPowerup.side != side &amp;&amp; inQueuePowerup.type == 255) {
             inQueuePowerup.type = type;
             inQueuePowerup.side = side;
@@ -397,7 +397,6 @@ if (type == "c") { //connection
         }
     }
     
-    //show_debug_message(string(type) + " " + string(side) + " " + string(powerLevel));
 } else if (type == "cb") { //cube
     var num = buffer_read(receivedBuffer, buffer_u32);
     

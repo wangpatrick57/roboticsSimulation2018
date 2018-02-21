@@ -136,9 +136,9 @@ if (!connectedToServer) {
     buffer_seek(bufferToSend, buffer_seek_start, 0);
     buffer_write(bufferToSend, buffer_string, "ac");
     buffer_write(bufferToSend, buffer_u8, redAddedCube.type);
-    buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, redAddedCube.cubeId));
+    buffer_write(bufferToSend, buffer_u32, redAddedCube.num);
     buffer_write(bufferToSend, buffer_u8, blueAddedCube.type);
-    buffer_write(bufferToSend, buffer_u32, ds_list_find_index(cubeIds, blueAddedCube.cubeId));
+    buffer_write(bufferToSend, buffer_u32, blueAddedCube.num);
     network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
     buffer_delete(bufferToSend);
     
@@ -149,7 +149,6 @@ if (!connectedToServer) {
         buffer_write(bufferToSend, buffer_string, "pw");
         buffer_write(bufferToSend, buffer_u8, activatedPowerup.type);
         buffer_write(bufferToSend, buffer_string, activatedPowerup.side);
-        buffer_write(bufferToSend, buffer_u8, activatedPowerup.powerLevel);
         network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
         buffer_delete(bufferToSend);
     }
@@ -227,40 +226,39 @@ if (socketId == clientSocket) {
                 cubeId.y = yPos;
                 cubeId.image_angle = imageAngle;
             }
-        } else if (type == "ac") {
+        } else if (type == "ac") { //powerup power level for ui
             for (var i = 0; i &lt; 3; i++) {
                 var tempRed = buffer_read(receivedBuffer, buffer_u8);
                 var tempBlue = buffer_read(receivedBuffer, buffer_u8);
                 
                 if (tempRed &gt; redPowerUp[i]) {
                     redScore += 5;
-                    redPowerUp[i] = tempRed;
                 }
+                
+                redPowerUp[i] = tempRed;
                 
                 if (tempBlue &gt; bluePowerUp[i]) {
                     blueScore += 5;
-                    bluePowerUp[i] = tempBlue;
                 }
+                
+                bluePowerUp[i] = tempBlue;
             }
-        } else if (type == "pw") {
+        } else if (type == "pw") { //powerup
             for (var i = 0; i &lt; 3; i++) {
                 var powerupType = buffer_read(receivedBuffer, buffer_u8);
                 var powerupSide = buffer_read(receivedBuffer, buffer_string);
+                powerupEffects[i].type = powerupType;
+                powerupEffects[i].side = powerupSide;
                 
                 if (powerupType != 255) {
-                    powerupEffects[i].type = powerupType;
-                    powerupEffects[i].side = powerupSide;
-                    
-                    if (powerupSide == "r") {
-                        redPowerUp[powerupType] = 0;
-                    } else if (powerupSide == "b") {
-                        bluePowerUp[powerupType] = 0;
-                    } else {
-                        show_debug_message("side wrong 0");
-                    }
+                    activatedPowerup.type = 255;
                 }
                 
-                //show_debug_message(string(type) + " " + string(side));
+                if (powerupSide == "r") {
+                    redPowerUp[powerupType] = 0;
+                } else if (powerupSide == "b") {
+                    bluePowerUp[powerupType] = 0;
+                }
             }
         }
     }

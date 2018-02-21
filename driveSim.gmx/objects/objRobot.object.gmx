@@ -61,12 +61,12 @@ putDownTime = 999;
 pickUpAuthorized = false;
 
 if (x &lt; room_width / 2) {
-    side = "red";
+    side = "r";
 } else {
-    side = "blue";
+    side = "b";
 }
 
-if (side == "red") {
+if (side == "r") {
     noneSprite = sprRedRobot;
     pickingUpSprite = sprRedRobotPickingUp;
     holdingSprite = sprRedRobotHoldingCube;
