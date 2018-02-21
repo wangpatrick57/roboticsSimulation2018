@@ -116,7 +116,7 @@ if (controlScheme == "irl") {
     
     stw = stwSign * 90;
 } else if (controlScheme == "kr") {
-    pickUp = keyboard_check_direct(ord("L"));
+    pickUp = keyboard_check_direct(vk_shift);
     
     if (keyboard_check_direct(vk_up)) {
         thr = 3 / 4;

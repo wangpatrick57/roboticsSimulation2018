@@ -215,7 +215,6 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
         timeToSend = masterTime - startTime;
     }
     
-    show_debug_message(timeToSend);
     buffer_write(bufferToSend, buffer_u32, timeToSend);
     network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
     buffer_delete(bufferToSend);

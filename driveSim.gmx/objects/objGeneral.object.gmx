@@ -170,7 +170,7 @@ for (var i = 0; i &lt; numRobots; i++) {
     controlSchemes[i] = "none";
 }
 
-controlSchemes[3] = "ko";
+controlSchemes[0] = "ko";
 controlSchemes[4] = "mo";
 controlSchemes[5] = "kr";
 

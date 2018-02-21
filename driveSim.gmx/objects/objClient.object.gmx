@@ -137,6 +137,11 @@ if (!connectedToServer) {
     buffer_write(bufferToSend, buffer_string, "ac");
     buffer_write(bufferToSend, buffer_u8, redAddedCube.type);
     buffer_write(bufferToSend, buffer_u32, redAddedCube.num);
+    
+    if (redAddedCube.type != 255) {
+        show_debug_message(string(redAddedCube.type) + " " + string(redAddedCube.num));
+    }
+    
     buffer_write(bufferToSend, buffer_u8, blueAddedCube.type);
     buffer_write(bufferToSend, buffer_u32, blueAddedCube.num);
     network_send_udp(clientSocket, IP_NUM, PORT_NUM, bufferToSend, buffer_tell(bufferToSend));
@@ -190,7 +195,6 @@ if (socketId == clientSocket) {
         if (type == "f") { //field
             var rando = buffer_read(receivedBuffer, buffer_u8);
             masterTime = buffer_read(receivedBuffer, buffer_u32);
-            show_debug_message(masterTime);
             redSwitchTop = rando % 2;
             blueSwitchTop = (rando / 2) % 2;
             scaleTop = (rando / 4) % 2;
