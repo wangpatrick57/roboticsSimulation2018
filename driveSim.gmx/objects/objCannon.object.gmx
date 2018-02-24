@@ -63,8 +63,7 @@ one=true;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>timer++;
-
+            <string>
 
 if(timer&lt;5&amp;&amp;controlling){
          if(vertical){
@@ -107,7 +106,6 @@ if(one&amp;&amp;controlling){
     one=false;
 }
 if(timer&gt;(lasertime+noLaser)){
-    timer=0;
     if(vertical){
         hv+=.01;
     }else{

@@ -72,8 +72,10 @@ globalvar blueExchangeCube;
 blueExchangeCube = false;
 globalvar redExchangeCube;
 redExchangeCube = false;
-globalvar redPowerUp, lastRedPowerUp, bluePowerUp, lastBluePowerUp;
+globalvar redPowerUp, lastRedPowerUp, bluePowerUp, lastBluePowerUp, redLockedOut, blueLockedOut;
 globalvar powerupEffects;
+globalvar boostImageSpeed;
+boostImageSpeed = 1 / 3;
 
 for (var i = 0; i &lt; 3; i++) {
     redPowerUp[i] = 0;
@@ -83,6 +85,8 @@ for (var i = 0; i &lt; 3; i++) {
     powerupEffects[i] = instance_create(0, 0, objData);
     powerupEffects[i].type = 255;
     powerupEffects[i].side = "none";
+    redLockedOut[i] = false;
+    blueLockedOut[i] = false;
 }
 
 globalvar redAddedCube, blueAddedCube;
@@ -170,13 +174,11 @@ for (var i = 0; i &lt; numRobots; i++) {
     controlSchemes[i] = "none";
 }
 
-controlSchemes[0] = "ko";
+controlSchemes[3] = "ko";
 controlSchemes[4] = "mo";
 controlSchemes[5] = "kr";
 
 ///general
-globalvar timer;
-timer=0;
 globalvar portalTimer;
 portalTimer=0;
 randomize();
@@ -203,18 +205,22 @@ globalvar redPortalTwo;
 
 for(var j=0;j&lt;7;j++){
     bluePortalOne[j]=instance_create(-50,-50,objPowerCube);
+    bluePortalOne[j].side = "b";
     ds_list_add(cubeIds, bluePortalOne[j]);
 }
 for(var j=0;j&lt;7;j++){
     bluePortalTwo[j]=instance_create(-50,-50,objPowerCube);
+    bluePortalTwo[j].side = "b";
     ds_list_add(cubeIds, bluePortalTwo[j]);
 }
 for(var j=0;j&lt;7;j++){
     redPortalOne[j]=instance_create(-50,-50,objPowerCube);
+    redPortalOne[j].side = "r";
     ds_list_add(cubeIds, redPortalOne[j]);
 }
 for(var j=0;j&lt;7;j++){
     redPortalTwo[j]=instance_create(-50,-50,objPowerCube);
+    redPortalTwo[j].side = "r";
     ds_list_add(cubeIds, redPortalTwo[j]);  
 }
 
@@ -249,8 +255,10 @@ for (var i = 0; i &lt; numCubes; i++) {
     var tempX = switchXOffset + switchWidth + cubeSize / 2 + looksGoodOffset;
     var tempY = (room_height-offset - switchTotalHeight) / 2 + cubeSize / 2 + cubeInBetween * i;
     var a = instance_create(tempX, tempY, objPowerCube);
+    a.side = "none";
     ds_list_add(cubeIds, a);
     a = instance_create(room_width - tempX, tempY, objPowerCube);
+    a.side = "none";
     ds_list_add(cubeIds, a);
 }
 
@@ -261,13 +269,15 @@ for (var layer = pyramidSize; layer &gt; 0; layer--) {
         var tempX = switchXOffset - (i + 0.5) * cubeSize - looksGoodOffset;
     
         for (var j = 0; j &lt; layer - i; j++) {
-            var tempY = room_height / 2-offset/2 - (layer - i - 1) * cubeSize / 2 + j * cubeSize;
+            var tempY = room_height / 2 - offset / 2 - (layer - i - 1) * cubeSize / 2 + j * cubeSize;
             var a = instance_create(tempX, tempY, objPowerCube);
-            ds_list_add(cubeIds, a);
+            a.side = "r";
             a.depth = layer - pyramidSize - 1;
+            ds_list_add(cubeIds, a);
             a = instance_create(room_width - tempX, tempY, objPowerCube);
-            ds_list_add(cubeIds, a);
+            a.side = "b";
             a.depth = layer - pyramidSize - 1;
+            ds_list_add(cubeIds, a);
         }
     }
 }
@@ -277,12 +287,14 @@ var autoDist = 305;
 instance_create(autoDist, room_height / 2-offset/2, objLine);
 instance_create(room_width - autoDist, room_height / 2-offset/2, objLine);
 instance_create(room_width / 2, room_height / 2-offset/2, objLine);
+var powerCubeZoneWidth = scrGetWidth(objRedPowerCubeZone);
+instance_create(redSwitch.x - redSwitch.sprite_width / 2 - powerCubeZoneWidth / 2, room_height / 2 - offset / 2, objRedPowerCubeZone);
+instance_create(blueSwitch.x + blueSwitch.sprite_width / 2 + powerCubeZoneWidth / 2, room_height / 2 - offset / 2, objBluePowerCubeZone);
 
 //walls
 wallWidth=75;
 dropWidth=40;
 //field
-
 instance_create(wallWidth/2, room_height/2-offset/2 , objRedAllianceWall);
 instance_create(room_width-wallWidth/2, room_height/2-offset/2 , objBlueAllianceWall);
 
@@ -374,6 +386,8 @@ activatedPowerup = instance_create(0, 0, objData);
 activatedPowerup.type = 255;
 activatedPowerup.side = "none";
 activatedPowerup.powerLevel = 0;
+globalvar powerupBarYPos;
+powerupBarYPos = 1000;
 
 ///robots
 var robotXOffset = 150;
@@ -494,7 +508,7 @@ for (var i = 0; i &lt; 3; i++) {
     }
 }
 
-if (masterTime % room_speed == 0) {
+if (masterTime % room_speed == 1) {
     for (var i = 0; i &lt; 3; i++) {
         if (pointSide[i] == "r") {
             redScore += pointValue[i];
@@ -526,9 +540,7 @@ if (masterTime % room_speed == 0) {
           <argument>
             <kind>1</kind>
             <string>///timer
-timer = masterTime;
-
-if(timer != -1 &amp;&amp; timer%room_speed==0){
+if(masterTime != -1 &amp;&amp; masterTime%room_speed==1){
     ones=secondsOnes.num+1;
     if(ones&lt;10){
         secondsOnes.num++;
@@ -616,6 +628,27 @@ with(dropBlue2){
         }
     }
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///other
 </string>
           </argument>
         </arguments>

@@ -125,7 +125,6 @@ masterTime++;
 if (!startTimeSet &amp;&amp; redOnline &amp;&amp; blueOnline) {
     startTime = masterTime;
     startTimeSet = true;
-    show_debug_message(startTime);
 }
 
 if (currentPowerup.type != 255) {
@@ -134,10 +133,12 @@ if (currentPowerup.type != 255) {
     currentPowerupTime = 0;
 }
 
-if (currentPowerup.side == "r") {
-    redPowerupPower[currentPowerup.type] = 0;
-} else if (currentPowerup.side == "b") {
-    bluePowerupPower[currentPowerup.type] = 0;
+if (currentPowerupTime &lt; 10) {
+    if (currentPowerup.side == "r") {
+        redPowerupPower[currentPowerup.type] = 0;
+    } else if (currentPowerup.side == "b") {
+        bluePowerupPower[currentPowerup.type] = 0;
+    }
 }
 
 if (currentPowerupTime &gt; maxPowerupTime) {

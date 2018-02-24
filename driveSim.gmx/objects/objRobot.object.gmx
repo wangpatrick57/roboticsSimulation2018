@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>-1</depth>
   <persistent>0</persistent>
-  <parentName>self</parentName>
+  <parentName>objBlockAndRobot</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -104,93 +104,95 @@ image_angle = dir;
           <argument>
             <kind>1</kind>
             <string>///actions
-if (state == "driving") {
-    pos = scrMove(id, xPos, yPos, dXPos, dYPos); //moves straight in this dx and dy and handles collisions
-    xPos = pos[0];
-    yPos = pos[1];
-    x = scrRound(xPos);
-    y = scrRound(yPos);
-    var angleDiff = image_angle - point_direction(xPos, yPos, mouse_x, mouse_y);
-    var distToMouse = point_distance(xPos, yPos, mouse_x, mouse_y);
-    var normalizedAngleDiff = darcsin(dsin(angleDiff));
-    
-    if (controllerId.controlScheme == "mo" &amp;&amp; abs(dDir) &gt; abs(normalizedAngleDiff) &amp;&amp; (abs(angleDiff) &lt; 90 || abs(angleDiff) &gt; 270)) {
-        dir = point_direction(xPos, yPos, mouse_x, mouse_y);
-    } else {
-        dir += dDir;
-    }
-    
-    dir %= 360;
-    image_angle = dir;
-}
-
-if(room == obstacle){
-    if(place_meeting(x,y,objLaser)){
-        controlling=false;
-        instance_destroy();
-    }
-}
-
-if (!place_meeting(x,y,objRubber)) {
-    currTopSpd = topSpd;
-}
-
-//pick up
-if (pickUpId != noone) {
-    if (mode == "offline" || mode == "online" &amp;&amp; pickUpAuthorized) {
-        pickUpPre++;
-        state = "pickingUp";
-    }
-}
-
-if (pickUpPre &gt;= pickUpTime) {
-    holdingId = pickUpId;
-    pickUpId = noone;
-    pickUpPre = 0;
-    state = "driving";
-    pickUpAuthorized = false;
-}
-
-//put down
-if (putDown) {
-    if (holdingId != noone) {
-        putDownPre++;
-        state = "puttingDown";
+if (masterTime != 0) {
+    if (state == "driving") {
+        pos = scrRobotMove(id, xPos, yPos, dXPos, dYPos); //moves straight in this dx and dy and handles collisions
+        xPos = pos[0];
+        yPos = pos[1];
+        x = scrRound(xPos);
+        y = scrRound(yPos);
+        var angleDiff = image_angle - point_direction(xPos, yPos, mouse_x, mouse_y);
+        var distToMouse = point_distance(xPos, yPos, mouse_x, mouse_y);
+        var normalizedAngleDiff = darcsin(dsin(angleDiff));
         
-        if (!setPutDownTime) {
-            with (holdingId) {
-                var tempX = other.xPos + other.cubeDropDist * dcos(other.image_angle);
-                var tempY = other.yPos - other.cubeDropDist * dsin(other.image_angle);
-                other.putDownX = tempX;
-                other.putDownY = tempY;
-                var tempTime;
-                
-                if (place_meeting(tempX, tempY, objSwitchPlate)) {
-                    tempTime = other.putDownSwitchTime;
-                } else if (place_meeting(tempX, tempY, objScalePlate)) {
-                    tempTime = other.putDownScaleTime;
-                } else {
-                    tempTime = other.putDownGroundTime;
-                }
-                
-                other.putDownTime = tempTime;
-                other.setPutDownTime = true;
-            }
+        if (controllerId.controlScheme == "mo" &amp;&amp; abs(dDir) &gt; abs(normalizedAngleDiff) &amp;&amp; (abs(angleDiff) &lt; 90 || abs(angleDiff) &gt; 270)) {
+            dir = point_direction(xPos, yPos, mouse_x, mouse_y);
+        } else {
+            dir += dDir;
         }
-    } else {
+        
+        dir %= 360;
+        image_angle = dir;
+    }
+    
+    if(room == obstacle){
+        if(place_meeting(x,y,objLaser)){
+            controlling=false;
+            instance_destroy();
+        }
+    }
+    
+    if (!place_meeting(x,y,objRubber)) {
+        currTopSpd = topSpd;
+    }
+    
+    //pick up
+    if (pickUpId != noone) {
+        if (mode == "offline" || mode == "online" &amp;&amp; pickUpAuthorized) {
+            pickUpPre++;
+            state = "pickingUp";
+        }
+    }
+    
+    if (pickUpPre &gt;= pickUpTime) {
+        holdingId = pickUpId;
+        pickUpId = noone;
+        pickUpPre = 0;
+        state = "driving";
+        pickUpAuthorized = false;
+    }
+    
+    //put down
+    if (putDown) {
+        if (holdingId != noone) {
+            putDownPre++;
+            state = "puttingDown";
+            
+            if (!setPutDownTime) {
+                with (holdingId) {
+                    var tempX = other.xPos + other.cubeDropDist * dcos(other.image_angle);
+                    var tempY = other.yPos - other.cubeDropDist * dsin(other.image_angle);
+                    other.putDownX = tempX;
+                    other.putDownY = tempY;
+                    var tempTime;
+                    
+                    if (place_meeting(tempX, tempY, objSwitchPlate)) {
+                        tempTime = other.putDownSwitchTime;
+                    } else if (place_meeting(tempX, tempY, objScalePlate)) {
+                        tempTime = other.putDownScaleTime;
+                    } else {
+                        tempTime = other.putDownGroundTime;
+                    }
+                    
+                    other.putDownTime = tempTime;
+                    other.setPutDownTime = true;
+                }
+            }
+        } else {
+            putDown = false;
+        }
+    }
+    
+    if (putDownPre &gt;= putDownTime) {
+        holdingId = noone;
+        putDownPre = 0;
         putDown = false;
+        state = "driving";
+        setPutDownTime = false;
+        putDownX = -1;
+        putDownY = -1;
     }
 }
-
-if (putDownPre &gt;= putDownTime) {
-    holdingId = noone;
-    putDownPre = 0;
-    putDown = false;
-    state = "driving";
-    setPutDownTime = false;
-    putDownX = -1;
-    putDownY = -1;
-}   
 </string>
           </argument>
         </arguments>
@@ -212,7 +214,7 @@ if (putDownPre &gt;= putDownTime) {
           <argument>
             <kind>1</kind>
             <string>///sprite and image
-if (state == "driving") {
+if (state == "driving" &amp;&amp; pickUpId == noone) {
     sprite_index = noneSprite;
     
     if (symbolId != noone) {
@@ -222,7 +224,7 @@ if (state == "driving") {
         
         symbolId = noone;
     }
-} else if (state == "pickingUp") {
+} else if (state == "pickingUp" || pickUpId != noone) {
     sprite_index = pickingUpSprite;
     
     if (symbolId == noone) {

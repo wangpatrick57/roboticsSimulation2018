@@ -148,6 +148,10 @@ if (robotId.side == "r") {
         thisNumber = 2;
     }
     
+    if (thisNumber != -1 && redLockedOut[thisNumber]) {
+        thisNumber = -1;
+    }
+    
     if (thisNumber != -1) {
         if (redExchangeCube) {
             if (redPowerUp[thisNumber] < 3) {
@@ -178,6 +182,10 @@ if (robotId.side == "r") {
         thisNumber = 1;
     } else if (keyboard_check_pressed(ord("0"))) {
         thisNumber = 2;
+    }
+    
+    if (thisNumber != -1 && blueLockedOut[thisNumber]) {
+        thisNumber = -1;
     }
     
     if (thisNumber != -1) {

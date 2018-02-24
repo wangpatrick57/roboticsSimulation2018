@@ -29,7 +29,6 @@
 for (var i = 0; i &lt; 3; i++) {
     if (redPowerUp[i] != lastRedPowerUp[i]) {
         redExchangeCube = false;
-        show_debug_message("A");
     }
 
     lastRedPowerUp[i] = redPowerUp[i];

@@ -48,17 +48,26 @@
     <sprite>sprites\sprBlueBoost</sprite>
     <sprite>sprites\sprBlueForce</sprite>
     <sprite>sprites\sprBlueLevitate</sprite>
+    <sprite>sprites\sprBlueLockOut</sprite>
     <sprite>sprites\sprExchange</sprite>
     <sprite>sprites\sprRedBoost</sprite>
     <sprite>sprites\sprRedForce</sprite>
     <sprite>sprites\sprRedLevitate</sprite>
+    <sprite>sprites\sprRedLockOut</sprite>
     <sprite>sprites\sprBluePlate</sprite>
     <sprite>sprites\sprRedPlate</sprite>
+    <sprite>sprites\sprRedPowerCubeZone</sprite>
+    <sprite>sprites\sprBluePowerCubeZone</sprite>
+    <sprite>sprites\sprRedTimer</sprite>
+    <sprite>sprites\sprRedTimerBack</sprite>
+    <sprite>sprites\sprBlueTimer</sprite>
+    <sprite>sprites\sprBlueTimerBack</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
     <script>scripts\scrMove.gml</script>
+    <script>scripts\scrRobotMove.gml</script>
     <script>scripts\scrGetInput.gml</script>
     <script>scripts\scrRound.gml</script>
     <script>scripts\scrDriveSim.gml</script>
@@ -96,6 +105,7 @@
     </objects>
     <objects name="field">
       <object>objects\objBlock</object>
+      <object>objects\objBlockAndRobot</object>
       <object>objects\objMoveableSolid</object>
       <object>objects\objBlocker</object>
       <object>objects\objAllianceWall</object>
@@ -124,7 +134,14 @@
       <object>objects\objRedForce</object>
       <object>objects\objRedBoost</object>
       <object>objects\objRedLevitate</object>
+      <object>objects\objRedLockOut</object>
       <object>objects\objCubeInExchange</object>
+      <object>objects\objRedPowerCubeZone</object>
+      <object>objects\objBluePowerCubeZone</object>
+      <object>objects\objRedTimer</object>
+      <object>objects\objRedTimerBack</object>
+      <object>objects\objBlueTimer</object>
+      <object>objects\objBlueTimerBack</object>
     </objects>
     <objects name="timer">
       <object>objects\objTimerMinutes</object>
