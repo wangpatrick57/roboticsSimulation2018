@@ -39,7 +39,8 @@ for (var i = 0; i &lt; numOptions; i++) {
     controlSchemeIds[i] = noone;
 }
 
-doneButton = instance_create(room_width / 2, room_height / 2, objRobotSelectDoneButton);
+doneButtonYPos = room_height * 3 / 4;
+doneButton = instance_create(room_width / 2, doneButtonYPos, objRobotSelectDoneButton);
 </string>
           </argument>
         </arguments>
@@ -68,6 +69,8 @@ draw_set_halign(fa_center);
 draw_set_valign(fa_center);
 draw_set_font(fnConsolas);
 
+draw_text(room_width / 2, room_height / 7, "Please select which robots you will control:");
+
 if (doneButton.hovering) {
     doneColor = c_white;
 } else {
@@ -75,7 +78,7 @@ if (doneButton.hovering) {
 }
 
 draw_set_color(doneColor);
-draw_text(room_width / 2, room_height / 2, "Done");
+draw_text(room_width / 2, doneButtonYPos, "Done");
 </string>
           </argument>
         </arguments>

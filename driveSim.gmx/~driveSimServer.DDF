@@ -1,0 +1,25 @@
+;Auto-generated Diamond Directive File. Can be deleted without harm.
+.Set CabinetNameTemplate=C:\Users\Patrick\Documents\GameMaker\Projects\frcGame\driveSim.gmx\~driveSimServer.CAB
+.Set CompressionType=LZX
+.Set CompressionLevel=7
+.Set InfFileName=C:\Users\Patrick\Documents\GameMaker\Projects\frcGame\driveSim.gmx\~driveSimServer_LAYOUT.INF
+.Set RptFileName=C:\Users\Patrick\Documents\GameMaker\Projects\frcGame\driveSim.gmx\~driveSimServer.RPT
+.Set MaxDiskSize=CDROM
+.Set ReservePerCabinetSize=0
+.Set InfCabinetLineFormat=*cab#*=Application Source Media,*cabfile*,0
+.Set Compress=on
+.Set CompressionMemory=21
+.Set DiskDirectoryTemplate=
+.Set Cabinet=ON
+.Set MaxCabinetSize=999999999
+.Set InfDiskHeader=
+.Set InfDiskLineFormat=
+.Set InfCabinetHeader=[SourceDisksNames]
+.Set InfFileHeader=
+.Set InfFileHeader1=[SourceDisksFiles]
+.Set InfFileLineFormat=*file*=*cab#*,,*size*,*csum*
+"C:\Users\Patrick\AppData\Local\gm_ttt_95556\gm_ttt_32624\D3DX9_43.dll"
+"C:\Users\Patrick\AppData\Local\gm_ttt_95556\gm_ttt_32624\data.win"
+"C:\Users\Patrick\AppData\Local\gm_ttt_95556\gm_ttt_32624\driveSimServer.exe"
+"C:\Users\Patrick\AppData\Local\gm_ttt_95556\gm_ttt_32624\options.ini"
+"C:\Users\Patrick\AppData\Local\gm_ttt_95556\gm_ttt_32624\splash.png"
