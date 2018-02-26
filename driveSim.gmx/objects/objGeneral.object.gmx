@@ -171,19 +171,12 @@ globalvar robotTempDir;
             <string>///creation stuff
 ///configurable
 for (var i = 0; i &lt; numRobots; i++) {
-    controlSchemes[i] = "none";
+    controlSchemes[i] = objMaster.controlSchemes[i];
 }
-
-controlSchemes[3] = "ko";
-controlSchemes[4] = "mo";
-controlSchemes[5] = "kr";
 
 ///general
 globalvar portalTimer;
 portalTimer=0;
-randomize();
-texture_set_interpolation(false);
-window_set_fullscreen(false);
 offset=377;
 var robotOffset = 150;
 

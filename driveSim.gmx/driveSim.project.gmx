@@ -6,62 +6,79 @@
   <NewExtensions/>
   <sounds name="sound"/>
   <sprites name="sprites">
-    <sprite>sprites\sprBlueRobot</sprite>
-    <sprite>sprites\sprBlueRobotPickingUp</sprite>
-    <sprite>sprites\sprBlueRobotHoldingCube</sprite>
-    <sprite>sprites\sprRedRobot</sprite>
-    <sprite>sprites\sprRedRobotPickingUp</sprite>
-    <sprite>sprites\sprRedRobotHoldingCube</sprite>
-    <sprite>sprites\sprBluePickingUpSymbol</sprite>
-    <sprite>sprites\sprBluePuttingDownSymbol</sprite>
-    <sprite>sprites\sprBlocker</sprite>
-    <sprite>sprites\sprTitle</sprite>
-    <sprite>sprites\sprLaser</sprite>
-    <sprite>sprites\sprCannon</sprite>
-    <sprite>sprites\sprButton</sprite>
-    <sprite>sprites\sprGear</sprite>
-    <sprite>sprites\sprLaserCannon</sprite>
-    <sprite>sprites\sprRubber</sprite>
-    <sprite>sprites\sprBall</sprite>
-    <sprite>sprites\sprEnemy</sprite>
-    <sprite>sprites\sprButton2</sprite>
-    <sprite>sprites\sprAllianceWall</sprite>
-    <sprite>sprites\sprPowerCube</sprite>
-    <sprite>sprites\sprPickUpCheck</sprite>
-    <sprite>sprites\sprSwitchInBetween</sprite>
-    <sprite>sprites\sprScaleInBetween</sprite>
-    <sprites name="numbers">
-      <sprite>sprites\sprBlueNumber</sprite>
-      <sprite>sprites\sprRedNumber</sprite>
+    <sprites name="menu">
+      <sprite>sprites\sprDoneButtonHovering</sprite>
+      <sprite>sprites\sprDoneButton</sprite>
+      <sprite>sprites\sprIpTextBox</sprite>
+      <sprite>sprites\sprKeyboardLeft</sprite>
+      <sprite>sprites\sprKeyboardLeftSelected</sprite>
+      <sprite>sprites\sprKeyboardRight</sprite>
+      <sprite>sprites\sprKeyboardRightSelected</sprite>
+      <sprite>sprites\sprMouse</sprite>
+      <sprite>sprites\sprMouseSelected</sprite>
+      <sprite>sprites\sprRobotChoice</sprite>
     </sprites>
-    <sprite>sprites\sprLine</sprite>
-    <sprite>sprites\sprBlueAllianceWall</sprite>
-    <sprite>sprites\sprBluePortal</sprite>
-    <sprite>sprites\sprBluePortal2</sprite>
-    <sprite>sprites\sprRedAllianceWall</sprite>
-    <sprite>sprites\sprRedPortal</sprite>
-    <sprite>sprites\sprRedPortal2</sprite>
-    <sprite>sprites\sprDrop</sprite>
-    <sprite>sprites\sprWall</sprite>
-    <sprite>sprites\sprCollisionCheck</sprite>
-    <sprite>sprites\sprTimerNumbers</sprite>
-    <sprite>sprites\sprBlueBoost</sprite>
-    <sprite>sprites\sprBlueForce</sprite>
-    <sprite>sprites\sprBlueLevitate</sprite>
-    <sprite>sprites\sprBlueLockOut</sprite>
-    <sprite>sprites\sprExchange</sprite>
-    <sprite>sprites\sprRedBoost</sprite>
-    <sprite>sprites\sprRedForce</sprite>
-    <sprite>sprites\sprRedLevitate</sprite>
-    <sprite>sprites\sprRedLockOut</sprite>
-    <sprite>sprites\sprBluePlate</sprite>
-    <sprite>sprites\sprRedPlate</sprite>
-    <sprite>sprites\sprRedPowerCubeZone</sprite>
-    <sprite>sprites\sprBluePowerCubeZone</sprite>
-    <sprite>sprites\sprRedTimer</sprite>
-    <sprite>sprites\sprRedTimerBack</sprite>
-    <sprite>sprites\sprBlueTimer</sprite>
-    <sprite>sprites\sprBlueTimerBack</sprite>
+    <sprites name="robot">
+      <sprite>sprites\sprBlueRobot</sprite>
+      <sprite>sprites\sprBlueRobotPickingUp</sprite>
+      <sprite>sprites\sprBlueRobotHoldingCube</sprite>
+      <sprite>sprites\sprRedRobot</sprite>
+      <sprite>sprites\sprRedRobotHoldingCube</sprite>
+      <sprite>sprites\sprRedRobotPickingUp</sprite>
+      <sprite>sprites\sprBluePickingUpSymbol</sprite>
+      <sprite>sprites\sprBluePuttingDownSymbol</sprite>
+    </sprites>
+    <sprites name="other">
+      <sprite>sprites\sprEnemy</sprite>
+      <sprite>sprites\sprCollisionCheck</sprite>
+      <sprite>sprites\sprTitle</sprite>
+      <sprite>sprites\sprBlocker</sprite>
+      <sprite>sprites\sprBall</sprite>
+      <sprite>sprites\sprPixel</sprite>
+      <sprite>sprites\sprCannon</sprite>
+      <sprite>sprites\sprButton</sprite>
+      <sprite>sprites\sprLaserCannon</sprite>
+      <sprite>sprites\sprLaser</sprite>
+      <sprite>sprites\sprGear</sprite>
+      <sprite>sprites\sprRubber</sprite>
+      <sprite>sprites\sprButton2</sprite>
+    </sprites>
+    <sprites name="field">
+      <sprite>sprites\sprRedTimer</sprite>
+      <sprite>sprites\sprExchange</sprite>
+      <sprite>sprites\sprBlueNumber</sprite>
+      <sprite>sprites\sprPickUpCheck</sprite>
+      <sprite>sprites\sprAllianceWall</sprite>
+      <sprite>sprites\sprPowerCube</sprite>
+      <sprite>sprites\sprScaleInBetween</sprite>
+      <sprite>sprites\sprSwitchInBetween</sprite>
+      <sprite>sprites\sprRedPortal</sprite>
+      <sprite>sprites\sprRedNumber</sprite>
+      <sprite>sprites\sprLine</sprite>
+      <sprite>sprites\sprBluePortal</sprite>
+      <sprite>sprites\sprBlueAllianceWall</sprite>
+      <sprite>sprites\sprDrop</sprite>
+      <sprite>sprites\sprBluePortal2</sprite>
+      <sprite>sprites\sprRedAllianceWall</sprite>
+      <sprite>sprites\sprWall</sprite>
+      <sprite>sprites\sprRedPortal2</sprite>
+      <sprite>sprites\sprTimerNumbers</sprite>
+      <sprite>sprites\sprBlueForce</sprite>
+      <sprite>sprites\sprBlueBoost</sprite>
+      <sprite>sprites\sprBlueLevitate</sprite>
+      <sprite>sprites\sprBlueLockOut</sprite>
+      <sprite>sprites\sprBluePowerCubeZone</sprite>
+      <sprite>sprites\sprRedBoost</sprite>
+      <sprite>sprites\sprRedPlate</sprite>
+      <sprite>sprites\sprRedLevitate</sprite>
+      <sprite>sprites\sprRedLockOut</sprite>
+      <sprite>sprites\sprRedForce</sprite>
+      <sprite>sprites\sprBlueTimerBack</sprite>
+      <sprite>sprites\sprBluePlate</sprite>
+      <sprite>sprites\sprRedPowerCubeZone</sprite>
+      <sprite>sprites\sprBlueTimer</sprite>
+      <sprite>sprites\sprRedTimerBack</sprite>
+    </sprites>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -86,6 +103,9 @@
     <script>scripts\scrCleanPath.gml</script>
     <script>scripts\scrSetPaths.gml</script>
   </scripts>
+  <fonts name="fonts">
+    <font>fonts\fnConsolas</font>
+  </fonts>
   <objects name="objects">
     <objects name="robot">
       <object>objects\objRobot</object>
@@ -102,6 +122,8 @@
       <object>objects\README</object>
       <object>objects\objClient</object>
       <object>objects\objData</object>
+      <object>objects\objPixel</object>
+      <object>objects\objMaster</object>
     </objects>
     <objects name="field">
       <object>objects\objBlock</object>
@@ -149,17 +171,33 @@
       <object>objects\objTimerSecondTens</object>
       <object>objects\objColon</object>
     </objects>
-    <object>objects\objButton</object>
-    <object>objects\objGear</object>
-    <object>objects\objLaser</object>
-    <object>objects\objCannon</object>
-    <object>objects\objRubber</object>
-    <object>objects\objBall</object>
-    <object>objects\objEnemy</object>
-    <object>objects\objButton2</object>
+    <objects name="menu">
+      <object>objects\objIp</object>
+      <object>objects\objIpTextBox</object>
+      <object>objects\objDoneButton</object>
+      <object>objects\objRobotSelectDoneButton</object>
+      <object>objects\objRobotSelect</object>
+      <object>objects\objRobotChoice</object>
+      <object>objects\objKeyboardLeft</object>
+      <object>objects\objKeyboardRight</object>
+      <object>objects\objMouse</object>
+      <object>objects\objChoice</object>
+    </objects>
+    <objects name="other">
+      <object>objects\objBall</object>
+      <object>objects\objGear</object>
+      <object>objects\objButton</object>
+      <object>objects\objCannon</object>
+      <object>objects\objLaser</object>
+      <object>objects\objButton2</object>
+      <object>objects\objRubber</object>
+      <object>objects\objEnemy</object>
+    </objects>
   </objects>
   <rooms name="rooms">
-    <room>rooms\rmTesting</room>
+    <room>rooms\rmIp</room>
+    <room>rooms\rmRobotSelect</room>
+    <room>rooms\rmGame</room>
     <room>rooms\rmPowerUp</room>
     <room>rooms\UI</room>
     <room>rooms\obstacle</room>

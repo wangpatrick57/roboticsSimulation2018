@@ -67,7 +67,7 @@ if (controlScheme == "irl") {
     if (keyboard_check_direct(ord("W"))) {
         thr = 3 / 4;
     } else if (keyboard_check_direct(ord("S"))) {
-        thr = 1 / 2;
+        thr = -3 / 4;
     } else {
         thr = 0;
     }
@@ -121,7 +121,7 @@ if (controlScheme == "irl") {
     if (keyboard_check_direct(vk_up)) {
         thr = 3 / 4;
     } else if (keyboard_check_direct(vk_down)) {
-        thr = 1 / 2;
+        thr = -3 / 4;
     } else {
         thr = 0;
     }
