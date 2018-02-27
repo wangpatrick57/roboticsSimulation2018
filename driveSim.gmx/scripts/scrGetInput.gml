@@ -11,7 +11,6 @@ if (controlScheme == "irl") {
     var valueThrust=joystick_ypos(1);
     thr=-valueThrust;
     var valueSteer=joystick_xpos(1);
-    show_debug_message(string(valueSteer));
     stw=-valueSteer*90;
     pickUp=joystick_check_button(1,1);
 } else if (controlScheme == "km") {
