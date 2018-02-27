@@ -64,11 +64,11 @@ with (a) {
 }
 
 var strings;
-strings[0] = "ko";
+strings[0] = "irl";
 strings[1] = "kr";
 strings[2] = "mo";
 
-if (hovering &amp;&amp; mouse_check_button_pressed(mb_left)) {
+if (hovering &amp;&amp; mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_enter)) {
     for (var i = 0; i &lt; numRobots; i++) {
         for (var j = 0; j &lt; numOptions; j++) {
             if (objRobotSelect.controlSchemeIds[j] == objRobotSelect.robotChoiceIds[i]) {

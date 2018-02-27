@@ -63,7 +63,7 @@ with (a) {
     instance_destroy();
 }
 
-if (hovering &amp;&amp; mouse_check_button_pressed(mb_left)) {
+if (hovering &amp;&amp; mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_enter)) {
     objMaster.ipString = objIp.ipString;
     room_goto(rmRobotSelect);
 }

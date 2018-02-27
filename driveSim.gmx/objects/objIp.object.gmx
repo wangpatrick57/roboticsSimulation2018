@@ -29,7 +29,7 @@
 ipTextBoxYPos = room_height * 0.4;
 doneYPos = room_height * 0.48;
 ipTextBox = instance_create(room_width / 2, ipTextBoxYPos, objIpTextBox);
-doneButton = instance_create(room_width / 2, doneYPos, objDoneButton);
+doneButton = instance_create(room_width / 2, doneYPos, objIpDoneButton);
 ipString = "";
 
 for (var i = 0; i &lt; 10; i++) {

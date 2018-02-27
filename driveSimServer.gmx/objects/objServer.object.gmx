@@ -67,7 +67,7 @@ for (var i = 0; i &lt; numCubes; i++) {
 }
 
 randomize();
-rando = irandom(7); //field arrangement
+rando = irandom(3); //field arrangement
 
 ///powerup stuff
 for (var i = 0; i &lt; 6; i++) {
@@ -495,7 +495,7 @@ if (type == "c") { //connection
             <string>///draw
 draw_set_halign(fa_center);
 draw_set_valign(fa_center);
-draw_text(room_width / 2, room_height / 2, "Don't worry the server is supposed to look like this");
+draw_text(room_width / 2, room_height / 2, "Don't worry, the server is supposed to look like this.");
 </string>
           </argument>
         </arguments>

@@ -8,7 +8,12 @@ var putDown;
 //var valueThrust=joystick_ypos(1);
 //thr=-valueThrust;
 if (controlScheme == "irl") {
-    //do later
+    var valueThrust=joystick_ypos(1);
+    thr=-valueThrust;
+    var valueSteer=joystick_xpos(1);
+    show_debug_message(string(valueSteer));
+    stw=-valueSteer*90;
+    pickUp=joystick_check_button(1,1);
 } else if (controlScheme == "km") {
     //thrust (keyboard)
     var one = keyboard_check_direct(ord("1"));

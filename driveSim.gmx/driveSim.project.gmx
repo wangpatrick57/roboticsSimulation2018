@@ -68,11 +68,11 @@
       <sprite>sprites\sprBlueLevitate</sprite>
       <sprite>sprites\sprBlueLockOut</sprite>
       <sprite>sprites\sprBluePowerCubeZone</sprite>
-      <sprite>sprites\sprRedBoost</sprite>
       <sprite>sprites\sprRedPlate</sprite>
+      <sprite>sprites\sprRedBoost</sprite>
       <sprite>sprites\sprRedLevitate</sprite>
-      <sprite>sprites\sprRedLockOut</sprite>
       <sprite>sprites\sprRedForce</sprite>
+      <sprite>sprites\sprRedLockOut</sprite>
       <sprite>sprites\sprBlueTimerBack</sprite>
       <sprite>sprites\sprBluePlate</sprite>
       <sprite>sprites\sprRedPowerCubeZone</sprite>
@@ -157,6 +157,7 @@
       <object>objects\objRedBoost</object>
       <object>objects\objRedLevitate</object>
       <object>objects\objRedLockOut</object>
+      <object>objects\objBlueLockOut</object>
       <object>objects\objCubeInExchange</object>
       <object>objects\objRedPowerCubeZone</object>
       <object>objects\objBluePowerCubeZone</object>
@@ -174,7 +175,7 @@
     <objects name="menu">
       <object>objects\objIp</object>
       <object>objects\objIpTextBox</object>
-      <object>objects\objDoneButton</object>
+      <object>objects\objIpDoneButton</object>
       <object>objects\objRobotSelectDoneButton</object>
       <object>objects\objRobotSelect</object>
       <object>objects\objRobotChoice</object>

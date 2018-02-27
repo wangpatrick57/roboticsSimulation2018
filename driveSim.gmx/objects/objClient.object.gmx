@@ -192,9 +192,11 @@ if (socketId == clientSocket) {
         if (type == "f") { //field
             var rando = buffer_read(receivedBuffer, buffer_u8);
             masterTime = buffer_read(receivedBuffer, buffer_u32);
-            redSwitchTop = rando % 2;
-            blueSwitchTop = (rando / 2) % 2;
-            scaleTop = (rando / 4) % 2;
+            rando = 2;
+            switchTop = rando % 2;
+            scaleTop = (rando / 2) % 2;
+            redSwitchTop = switchTop;
+            blueSwitchTop = switchTop;
         } else if (type == "r") { //robot
             for (var i = 0; i &lt; numRobots; i++) {
                 var xPos = buffer_read(receivedBuffer, buffer_f32);
