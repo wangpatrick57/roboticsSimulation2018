@@ -30,8 +30,9 @@
 ///general
 globalvar mode;
 mode = "online";
-globalvar masterTime;
+globalvar masterTime, gameTime;
 masterTime = -1;
+gameTime = (2 * 60 + 15) * room_speed;
 
 ///field
 globalvar px2cm;
@@ -104,6 +105,9 @@ forceII = 3;
 boostIIStart = 0; //inclusive
 boostIIEnd = 1; //inclusive
 noneII = 2;
+globalvar redLevitated, blueLevitated;
+redLevitated = false;
+blueLevitated = false;
 
 for (var i = 0; i &lt; 3; i++) {
     pointSide[i] = "none";
@@ -179,7 +183,8 @@ globalvar portalTimer;
 portalTimer=0;
 offset=377;
 var robotOffset = 150;
-
+globalvar gameInPlay;
+gameInPlay = false;
 
 ///power up field
 //walls
@@ -501,7 +506,7 @@ for (var i = 0; i &lt; 3; i++) {
     }
 }
 
-if (masterTime % room_speed == 1) {
+if (gameInPlay &amp;&amp; masterTime % room_speed == 1) {
     for (var i = 0; i &lt; 3; i++) {
         if (pointSide[i] == "r") {
             redScore += pointValue[i];
@@ -533,7 +538,13 @@ if (masterTime % room_speed == 1) {
           <argument>
             <kind>1</kind>
             <string>///timer
-if(masterTime != -1 &amp;&amp; masterTime%room_speed==1){
+if (masterTime &gt; gameTime) {
+    gameInPlay = false;
+} else if (masterTime != 0) {
+    gameInPlay = true;
+}
+
+/*if(masterTime != 0 &amp;&amp; masterTime%room_speed==1){
     ones=secondsOnes.num+1;
     if(ones&lt;10){
         secondsOnes.num++;
@@ -548,8 +559,17 @@ if(masterTime != -1 &amp;&amp; masterTime%room_speed==1){
             secondsOnes.num=0;
         }
     }
+}*/
+
+if (gameInPlay) {
+    secondsOnes.num = (masterTime / room_speed) % 10;
+    secondsTens.num = (masterTime / room_speed / 10) % 6;
+    minutes.num = (masterTime / room_speed / 60) % 10;
+} else {
+    secondsOnes.num = (gameTime / room_speed) % 10;
+    secondsTens.num = (gameTime / room_speed / 10) % 6;
+    minutes.num = (gameTime / room_speed / 60) % 10;
 }
-            
         
 </string>
           </argument>

@@ -7,11 +7,22 @@ var pickUp;
 var putDown;
 //var valueThrust=joystick_ypos(1);
 //thr=-valueThrust;
-if (controlScheme == "irl") {
+if (controlScheme == "jy") {
     var valueThrust=joystick_ypos(1);
     thr=-valueThrust;
     var valueSteer=joystick_xpos(1);
     stw=-valueSteer*90;
+    var turnGrace = 0.3;
+    var thrustGrace = 0.05;
+    
+    if (abs(valueSteer) > turnGrace && thr < 0) {
+        thr = 0;
+    }
+    
+    if (abs(valueThrust) < thrustGrace) {
+        thr = 0;
+    }
+    
     pickUp=joystick_check_button(1,1);
 } else if (controlScheme == "km") {
     //thrust (keyboard)
@@ -152,18 +163,14 @@ if (robotId.side == "r") {
         thisNumber = 2;
     }
     
-    if (thisNumber != -1 && redLockedOut[thisNumber]) {
-        thisNumber = -1;
-    }
-    
-    if (thisNumber != -1) {
+    if (thisNumber != -1 && !redLockedOut[thisNumber]) {
         if (redExchangeCube) {
             if (redPowerUp[thisNumber] < 3) {
                 redAddedCube.type = thisNumber;
                 redAddedCube.num = ds_list_find_index(cubeIds, redExchangeCubeId);
             }
         } else {
-            if (redPowerUp[thisNumber] > 0) {
+            if (thisNumber != 2 && redPowerUp[thisNumber] > 0 || thisNumber == 2 && redPowerUp[thisNumber] == 3) {
                 activatedPowerup.type = thisNumber;
                 activatedPowerup.side = "r";
             } else {
@@ -188,18 +195,14 @@ if (robotId.side == "r") {
         thisNumber = 2;
     }
     
-    if (thisNumber != -1 && blueLockedOut[thisNumber]) {
-        thisNumber = -1;
-    }
-    
-    if (thisNumber != -1) {
+    if (thisNumber != -1 && !blueLockedOut[thisNumber]) {
         if (blueExchangeCube) {
             if (bluePowerUp[thisNumber] < 3) {
                 blueAddedCube.type = thisNumber;
                 blueAddedCube.num = ds_list_find_index(cubeIds, blueExchangeCubeId);
             }
         } else {
-            if (bluePowerUp[thisNumber] > 0) {
+            if (thisNumber != 2 && bluePowerUp[thisNumber] > 0 || thisNumber == 2 && bluePowerUp[thisNumber] == 3) {
                 activatedPowerup.type = thisNumber;
                 activatedPowerup.side = "b";
             } else {

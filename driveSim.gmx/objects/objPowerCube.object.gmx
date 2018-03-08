@@ -57,8 +57,8 @@ if (endId == noone) {
 }
 
 if (endId != noone &amp;&amp; !placed) {
-    x = random_range(endId.startX, endId.endX);
-    y = random_range(endId.startY, endId.endY);
+    //x = random_range(endId.startX, endId.endX);
+    //y = random_range(endId.startY, endId.endY);
     placed = true;
 }
 

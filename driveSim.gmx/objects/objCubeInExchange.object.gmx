@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>///make visible
-for (var i = 0; i &lt; 3; i++) {
+/*for (var i = 0; i &lt; 3; i++) {
     if (redPowerUp[i] != lastRedPowerUp[i]) {
         redExchangeCube = false;
     }
@@ -44,7 +44,7 @@ if (redExchangeCube &amp;&amp; x &lt; room_width / 2 || blueExchangeCube &amp;&a
     visible = true;
 } else {
     visible = false;
-}
+}*/
 </string>
           </argument>
         </arguments>

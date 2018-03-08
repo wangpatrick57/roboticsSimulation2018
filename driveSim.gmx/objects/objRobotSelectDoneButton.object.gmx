@@ -64,7 +64,7 @@ with (a) {
 }
 
 var strings;
-strings[0] = "irl";
+strings[0] = "jy";
 strings[1] = "kr";
 strings[2] = "mo";
 

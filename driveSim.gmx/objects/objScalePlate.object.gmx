@@ -120,6 +120,12 @@ if (thisType != 255) {
     } else if (thisType == 1) {
         if (image_index &lt; boostIIStart || image_index &gt; boostIIEnd) {
             image_index = boostIIStart;
+        } else {
+            if (image_index &gt;= boostIIStart &amp;&amp; image_index &lt; boostIIEnd) {
+                image_index += boostImageSpeed;
+            } else {
+                image_index = boostIIStart;
+            }
         }
     }
 } else {

@@ -26,12 +26,27 @@
           <argument>
             <kind>1</kind>
             <string>///creation stuff
+mode = "debug";
+
 randomize();
 texture_set_interpolation(false);
-window_set_fullscreen(true);
+
+if (mode == "debug") {
+    window_set_fullscreen(false);
+} else {
+    window_set_fullscreen(true);
+}
 
 for (var i = 0; i &lt; 6; i++) {
     controlSchemes[i] = "none";
+}
+
+
+if (mode == "debug") {
+    controlSchemes[1] = "mo";
+    controlSchemes[4] = "jy";
+    ipString = "10.19.82.156";
+    room_goto(rmGame);
 }
 </string>
           </argument>

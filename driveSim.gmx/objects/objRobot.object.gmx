@@ -104,7 +104,7 @@ image_angle = dir;
           <argument>
             <kind>1</kind>
             <string>///actions
-if (masterTime != 0) {
+if (gameInPlay) {
     if (state == "driving") {
         pos = scrRobotMove(id, xPos, yPos, dXPos, dYPos); //moves straight in this dx and dy and handles collisions
         xPos = pos[0];

@@ -234,9 +234,19 @@ if (socketId == clientSocket) {
                 var yPos = buffer_read(receivedBuffer, buffer_s32);
                 var imageAngle = buffer_read(receivedBuffer, buffer_s32);
                 var cubeId = ds_list_find_value(cubeIds, cubeNum);
-                cubeId.x = xPos;
-                cubeId.y = yPos;
-                cubeId.image_angle = imageAngle;
+                var pickingUpOrPuttingDown = false;
+                
+                for (var j = 0; j &lt; numRobots; j++) {
+                    if (thisInControl[j] &amp;&amp; (robotIds[j].pickUpId == cubeId || (robotIds[j].holdingId == cubeId &amp;&amp; robotIds[j].state == "puttingDown"))) {
+                        pickingUpOrPuttingDown = true;
+                    }
+                }
+                
+                if (!pickingUpOrPuttingDown) {
+                    cubeId.x = xPos;
+                    cubeId.y = yPos;
+                    cubeId.image_angle = imageAngle;
+                }
             }
         } else if (type == "ac") { //powerup power level for ui
             for (var i = 0; i &lt; 3; i++) {
@@ -259,30 +269,48 @@ if (socketId == clientSocket) {
             for (var i = 0; i &lt; 3; i++) {
                 var powerupType = buffer_read(receivedBuffer, buffer_u8);
                 var powerupSide = buffer_read(receivedBuffer, buffer_string);
-                powerupEffects[i].type = powerupType;
-                powerupEffects[i].side = powerupSide;
                 
-                if (powerupType != 255) {
-                    activatedPowerup.type = 255;
-                }
-                
-                if (powerupSide == "r") {
-                    if (!redLockedOut[powerupType]) {
-                        var a = instance_create(room_width / 2, powerupBarYPos, objRedTimer);
-                        a.startTime = masterTime;
+                if (powerupType != 2) {
+                    powerupEffects[i].type = powerupType;
+                    powerupEffects[i].side = powerupSide;
+                    
+                    if (powerupType != 255) {
+                        activatedPowerup.type = 255;
                     }
-                
-                    redLockedOut[powerupType] = true;
-                }
-                
-                if (powerupSide == "b") {
-                    if (!blueLockedOut[powerupType]) {
-                        var a = instance_create(room_width / 2, powerupBarYPos, objBlueTimer);
-                        a.startTime = masterTime;
+                    
+                    if (powerupSide == "r") {
+                        if (!redLockedOut[powerupType]) {
+                            var a = instance_create(room_width / 2, powerupBarYPos, objRedTimer);
+                            a.startTime = masterTime;
+                        }
+                    
+                        redLockedOut[powerupType] = true;
                     }
-                
-                    blueLockedOut[powerupType] = true;
+                    
+                    if (powerupSide == "b") {
+                        if (!blueLockedOut[powerupType]) {
+                            var a = instance_create(room_width / 2, powerupBarYPos, objBlueTimer);
+                            a.startTime = masterTime;
+                        }
+                    
+                        blueLockedOut[powerupType] = true;
+                    }
                 }
+            }
+        } else if (type == "lv") { //levitate
+            var red = buffer_read(receivedBuffer, buffer_bool);
+            var blue = buffer_read(receivedBuffer, buffer_bool);
+            
+            if (red &amp;&amp; !redLevitated) {
+                redLevitated = true;
+                redLockedOut[2] = true;
+                redScore += 30;
+            }
+            
+            if (blue &amp;&amp; !blueLevitated) {
+                blueLevitated = true;
+                blueLockedOut[2] = true;
+                blueScore += 30;
             }
         }
     }

@@ -55,11 +55,15 @@ instance_create(x, y, objCubeInExchange);
     if(cube != noone){
         redExchangeCube=true;
         redExchangeCubeId = cube;
+        //cube.placed = true;
         
         with(cube){
-            x=-50;
-            y=-50;
+            //x=-50;
+            //y=-50;
         }
+    } else {
+        redExchangeCube = false;
+        redExchangeCubeId = noone;
     }
 }
 if(x&gt;room_width/2){
@@ -68,11 +72,15 @@ if(x&gt;room_width/2){
     if(cube != noone){
         blueExchangeCube=true;
         blueExchangeCubeId = cube;
+        //cube.placed = true;
         
         with(cube){
-            x=-50;
-            y=-50;
+            //x=-50;
+            //y=-50;
         }
+    } else {
+        blueExchangeCube = false;
+        blueExchangeCubeId = noone;
     }
 }
 </string>
