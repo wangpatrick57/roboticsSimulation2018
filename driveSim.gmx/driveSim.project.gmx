@@ -16,6 +16,8 @@
       <sprite>sprites\sprKeyboardRightSelected</sprite>
       <sprite>sprites\sprMouse</sprite>
       <sprite>sprites\sprMouseSelected</sprite>
+      <sprite>sprites\sprJoystick</sprite>
+      <sprite>sprites\sprJoystickSelected</sprite>
       <sprite>sprites\sprRobotChoice</sprite>
     </sprites>
     <sprites name="robot">
@@ -78,6 +80,8 @@
       <sprite>sprites\sprRedPowerCubeZone</sprite>
       <sprite>sprites\sprBlueTimer</sprite>
       <sprite>sprites\sprRedTimerBack</sprite>
+      <sprite>sprites\sprRedInQueue</sprite>
+      <sprite>sprites\sprBlueInQueue</sprite>
     </sprites>
   </sprites>
   <backgrounds name="background"/>
@@ -165,6 +169,7 @@
       <object>objects\objRedTimerBack</object>
       <object>objects\objBlueTimer</object>
       <object>objects\objBlueTimerBack</object>
+      <object>objects\objPowerupInQueue</object>
     </objects>
     <objects name="timer">
       <object>objects\objTimerMinutes</object>
@@ -182,6 +187,7 @@
       <object>objects\objKeyboardLeft</object>
       <object>objects\objKeyboardRight</object>
       <object>objects\objMouse</object>
+      <object>objects\objJoystick</object>
       <object>objects\objChoice</object>
     </objects>
     <objects name="other">

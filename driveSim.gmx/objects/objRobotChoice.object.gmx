@@ -32,12 +32,15 @@ robotSize = 64;
 obj[0] = objKeyboardLeft;
 obj[1] = objKeyboardRight;
 obj[2] = objMouse;
+obj[3] = objJoystick;
 sprSelected[0] = sprKeyboardLeftSelected;
 sprSelected[1] = sprKeyboardRightSelected;
 sprSelected[2] = sprMouseSelected;
+sprSelected[3] = sprJoystickSelected;
 sprNotSelected[0] = sprKeyboardLeft;
 sprNotSelected[1] = sprKeyboardRight;
 sprNotSelected[2] = sprMouse;
+sprNotSelected[3] = sprJoystick;
 iconSize = scrGetWidth(objKeyboardLeft);
 clicked = "none";
 sideId = noone;
@@ -151,10 +154,12 @@ if (clicked == "elsewhere") {
           <argument>
             <kind>1</kind>
             <string>///sprite and image
+var yIOffset = (numOptions - 1) / 2;
+
 if (display == "menu") {
     for (var i = 0; i &lt; numOptions; i++) {
         if (menu[i] == noone) {
-            menu[i] = instance_create(x + posNeg * (robotSize / 2 + iconSize / 2 + gap), y + (i - 1) * gap + (i - 1) * iconSize, obj[i]);
+            menu[i] = instance_create(x + posNeg * (robotSize / 2 + iconSize / 2 + gap), y + (i - yIOffset) * gap + (i - yIOffset) * iconSize, obj[i]);
             menu[i].image_index = imageIndex;
         }
         

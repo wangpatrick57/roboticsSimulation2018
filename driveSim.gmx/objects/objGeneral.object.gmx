@@ -77,6 +77,10 @@ globalvar redPowerUp, lastRedPowerUp, bluePowerUp, lastBluePowerUp, redLockedOut
 globalvar powerupEffects;
 globalvar boostImageSpeed;
 boostImageSpeed = 1 / 3;
+globalvar currInQueueId, currInQueueSide, currInQueueType;
+currInQueueId = noone;
+currInQueueSide = "none";
+currInQueueType = 255;
 
 for (var i = 0; i &lt; 3; i++) {
     redPowerUp[i] = 0;
@@ -542,33 +546,22 @@ if (masterTime &gt; gameTime) {
     gameInPlay = false;
 } else if (masterTime != 0) {
     gameInPlay = true;
+} else {
+    gameInPlay = false;
 }
-
-/*if(masterTime != 0 &amp;&amp; masterTime%room_speed==1){
-    ones=secondsOnes.num+1;
-    if(ones&lt;10){
-        secondsOnes.num++;
-    }else{
-        tens=secondsTens.num+1;
-        if(tens&lt;6){
-            secondsTens.num++;
-            secondsOnes.num=0;
-        }else{
-            minutes.num++;
-            secondsTens.num=0;
-            secondsOnes.num=0;
-        }
-    }
-}*/
 
 if (gameInPlay) {
     secondsOnes.num = (masterTime / room_speed) % 10;
     secondsTens.num = (masterTime / room_speed / 10) % 6;
     minutes.num = (masterTime / room_speed / 60) % 10;
-} else {
+} else if (masterTime &gt; gameTime) {
     secondsOnes.num = (gameTime / room_speed) % 10;
     secondsTens.num = (gameTime / room_speed / 10) % 6;
     minutes.num = (gameTime / room_speed / 60) % 10;
+} else {
+    secondsOnes.num = 0;
+    secondsTens.num = 0;
+    minutes.num = 0;
 }
         
 </string>

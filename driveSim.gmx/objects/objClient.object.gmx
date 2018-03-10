@@ -297,6 +297,50 @@ if (socketId == clientSocket) {
                     }
                 }
             }
+        } else if (type == "iq") { //in queue
+            var side = buffer_read(receivedBuffer, buffer_string);
+            var type = buffer_read(receivedBuffer, buffer_u8);
+            
+            if (instance_exists(currInQueueId) &amp;&amp; currInQueueSide != side || currInQueueType != type) {
+                with (currInQueueId) {
+                    instance_destroy();
+                }
+                
+                currInQueueId = noone;
+            }
+            
+            currInQueueSide = side;
+            currInQueueType = type;
+            
+            if (currInQueueId == noone &amp;&amp; type != 255) {
+                currInQueueId = instance_create(0, 0, objPowerupInQueue);
+                var obj;
+                
+                if (side == "r") {
+                    currInQueueId.sprite_index = sprRedInQueue;
+                    
+                    if (type == 0) {
+                        obj = redForce;
+                    } else if (type == 1) {
+                        obj = redBoost;
+                    } else if (type == 2) {
+                        obj = redLevitate;
+                    }
+                } else if (side == "b") {
+                    currInQueueId.sprite_index = sprBlueInQueue;
+                    
+                    if (type == 0) {
+                        obj = blueForce;
+                    } else if (type == 1) {
+                        obj = blueBoost;
+                    } else if (type == 2) {
+                        obj = blueLevitate;
+                    }
+                }
+                
+                currInQueueId.x = obj.x;
+                currInQueueId.y = obj.y;
+            }
         } else if (type == "lv") { //levitate
             var red = buffer_read(receivedBuffer, buffer_bool);
             var blue = buffer_read(receivedBuffer, buffer_bool);

@@ -64,9 +64,10 @@ with (a) {
 }
 
 var strings;
-strings[0] = "jy";
+strings[0] = "ko";
 strings[1] = "kr";
 strings[2] = "mo";
+strings[3] = "jy";
 
 if (hovering &amp;&amp; mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_enter)) {
     for (var i = 0; i &lt; numRobots; i++) {

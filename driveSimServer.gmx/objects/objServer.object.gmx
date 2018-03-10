@@ -270,6 +270,17 @@ for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     buffer_delete(bufferToSend);
 }
 
+//in queue
+for (var i = 0; i &lt; ds_list_size(ipList); i++) {
+    bufferToSend = buffer_create(256, buffer_fixed, 1);
+    buffer_seek(bufferToSend, buffer_seek_start, 0);
+    buffer_write(bufferToSend, buffer_string, "iq");
+    buffer_write(bufferToSend, buffer_string, inQueuePowerup.side);
+    buffer_write(bufferToSend, buffer_u8, inQueuePowerup.type);
+    network_send_udp(serverSocket, ds_list_find_value(ipList, i), ds_list_find_value(portList, i), bufferToSend, buffer_tell(bufferToSend));
+    buffer_delete(bufferToSend);
+}
+
 //levitate
 for (var i = 0; i &lt; ds_list_size(ipList); i++) {
     bufferToSend = buffer_create(256, buffer_fixed, 1);

@@ -13,9 +13,10 @@ if (controlScheme == "jy") {
     var valueSteer=joystick_xpos(1);
     stw=-valueSteer*90;
     var turnGrace = 0.3;
+    var turnBackThrustGrace = 0.5;
     var thrustGrace = 0.05;
     
-    if (abs(valueSteer) > turnGrace && thr < 0) {
+    if (abs(valueSteer) > turnGrace && thr < 0 && abs(thr) < turnBackThrustGrace) {
         thr = 0;
     }
     
@@ -164,11 +165,9 @@ if (robotId.side == "r") {
     }
     
     if (thisNumber != -1 && !redLockedOut[thisNumber]) {
-        if (redExchangeCube) {
-            if (redPowerUp[thisNumber] < 3) {
-                redAddedCube.type = thisNumber;
-                redAddedCube.num = ds_list_find_index(cubeIds, redExchangeCubeId);
-            }
+        if (redExchangeCube && redPowerUp[thisNumber] < 3) {
+            redAddedCube.type = thisNumber;
+            redAddedCube.num = ds_list_find_index(cubeIds, redExchangeCubeId);
         } else {
             if (thisNumber != 2 && redPowerUp[thisNumber] > 0 || thisNumber == 2 && redPowerUp[thisNumber] == 3) {
                 activatedPowerup.type = thisNumber;
@@ -196,11 +195,9 @@ if (robotId.side == "r") {
     }
     
     if (thisNumber != -1 && !blueLockedOut[thisNumber]) {
-        if (blueExchangeCube) {
-            if (bluePowerUp[thisNumber] < 3) {
-                blueAddedCube.type = thisNumber;
-                blueAddedCube.num = ds_list_find_index(cubeIds, blueExchangeCubeId);
-            }
+        if (blueExchangeCube && bluePowerUp[thisNumber] < 3) {
+            blueAddedCube.type = thisNumber;
+            blueAddedCube.num = ds_list_find_index(cubeIds, blueExchangeCubeId);
         } else {
             if (thisNumber != 2 && bluePowerUp[thisNumber] > 0 || thisNumber == 2 && bluePowerUp[thisNumber] == 3) {
                 activatedPowerup.type = thisNumber;
