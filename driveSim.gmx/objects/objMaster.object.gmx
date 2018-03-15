@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>///creation stuff
-mode = "debug";
+mode = "none";
 
 randomize();
 texture_set_interpolation(false);
@@ -46,8 +46,8 @@ if (mode == "debug") {
     controlSchemes[0] = "ko"
     controlSchemes[1] = "mo";
     controlSchemes[4] = "jy";
-    controlSchemes[5] = "kr";
-    ipString = "10.19.80.197";
+    controlSchemes[5] = "jy2";
+    ipString = "127.0.0.1";
     room_goto(rmGame);
 }
 </string>

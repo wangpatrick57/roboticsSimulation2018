@@ -25,6 +25,24 @@ if (controlScheme == "jy") {
     }
     
     pickUp=joystick_check_button(1,1);
+} else if (controlScheme == "jy2") {
+    var valueThrust=joystick_ypos(2);
+    thr=-valueThrust;
+    var valueSteer=joystick_xpos(2);
+    stw=-valueSteer*90;
+    var turnGrace = 0.3;
+    var turnBackThrustGrace = 0.5;
+    var thrustGrace = 0.05;
+    
+    if (abs(valueSteer) > turnGrace && thr < 0 && abs(thr) < turnBackThrustGrace) {
+        thr = 0;
+    }
+    
+    if (abs(valueThrust) < thrustGrace) {
+        thr = 0;
+    }
+    
+    pickUp=joystick_check_button(2,1);
 } else if (controlScheme == "km") {
     //thrust (keyboard)
     var one = keyboard_check_direct(ord("1"));

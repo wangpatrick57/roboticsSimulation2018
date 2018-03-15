@@ -28,7 +28,7 @@
             <string>///creation stuff
 globalvar numRobots, numOptions;
 numRobots = 6;
-numOptions = 4;
+numOptions = 5;
 
 for (var i = 0; i &lt; numRobots / 2; i++) {
     robotChoiceIds[i] = instance_create(room_width / 4, room_height * (i + 1) / 4, objRobotChoice);

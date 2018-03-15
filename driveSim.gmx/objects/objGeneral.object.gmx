@@ -504,18 +504,25 @@ if (scale.redCubes &gt; scale.blueCubes || (powerupEffects[1].type == 0 &amp;&am
 
 for (var i = 0; i &lt; 3; i++) {
     if (powerupEffects[i].type == 1) {
-        pointValue[i] = 2;
+        if (powerupEffects[i].side == "r") {
+            redPointValue[i] = 2;
+            bluePointValue[i] = 1;
+        } else if (powerupEffects[i].side == "b") {
+            bluePointValue[i] = 2;
+            redPointValue[i] = 1;
+        }
     } else {
-        pointValue[i] = 1;
+        redPointValue[i] = 1;
+        bluePointValue[i] = 1;
     }
 }
 
 if (gameInPlay &amp;&amp; masterTime % room_speed == 1) {
     for (var i = 0; i &lt; 3; i++) {
         if (pointSide[i] == "r") {
-            redScore += pointValue[i];
+            redScore += redPointValue[i];
         } else if (pointSide[i] == "b") {
-            blueScore += pointValue[i];
+            blueScore += bluePointValue[i];
         }
     }
 }
