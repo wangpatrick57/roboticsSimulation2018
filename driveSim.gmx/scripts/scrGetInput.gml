@@ -167,6 +167,24 @@ if (controlScheme == "jy") {
     } else {
         stw = 0;
     }
+} else if (controlScheme == "kc") {
+    pickUp = keyboard_check_direct(ord("U"));
+    
+    if (keyboard_check_direct(ord("Y"))) {
+        thr = 3 / 4;
+    } else if (keyboard_check_direct(ord("H"))) {
+        thr = -3 / 4;
+    } else {
+        thr = 0;
+    }
+    
+    if (keyboard_check(ord("G"))) {
+        stw = 90;
+    } else if (keyboard_check(ord("J"))) {
+        stw = -90;
+    } else {
+        stw = 0;
+    }
 } else {
     show_debug_message("you entered the wrong thing for controlScheme");
 }

@@ -18,6 +18,8 @@
       <sprite>sprites\sprMouseSelected</sprite>
       <sprite>sprites\sprJoystick</sprite>
       <sprite>sprites\sprJoystickSelected</sprite>
+      <sprite>sprites\sprKeyboardCenter</sprite>
+      <sprite>sprites\sprKeyboardCenterSelected</sprite>
       <sprite>sprites\sprRobotChoice</sprite>
     </sprites>
     <sprites name="robot">
@@ -188,6 +190,7 @@
       <object>objects\objKeyboardRight</object>
       <object>objects\objMouse</object>
       <object>objects\objJoystick</object>
+      <object>objects\objKeyboardCenter</object>
       <object>objects\objChoice</object>
     </objects>
     <objects name="other">

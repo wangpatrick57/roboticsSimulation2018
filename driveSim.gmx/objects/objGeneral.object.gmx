@@ -32,7 +32,7 @@ globalvar mode;
 mode = "online";
 globalvar masterTime, gameTime;
 masterTime = -1;
-gameTime = (2 * 60 + 15) * room_speed;
+gameTime = (1 * 60 + 45) * room_speed;
 
 ///field
 globalvar px2cm;
